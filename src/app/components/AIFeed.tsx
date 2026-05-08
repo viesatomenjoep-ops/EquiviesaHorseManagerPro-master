@@ -67,26 +67,26 @@ export function AIFeed() {
   const getColor = (type: string) => {
     switch (type) {
       case 'suggestion':
-        return 'bg-teal-50 text-teal-700 border-teal-100';
+        return 'bg-amber-50 text-[#8C7345] border-teal-100';
       case 'insight':
         return 'bg-blue-50 text-blue-700 border-blue-100';
       case 'alert':
         return 'bg-amber-50 text-amber-700 border-amber-100';
       default:
-        return 'bg-teal-50 text-teal-700 border-teal-100';
+        return 'bg-amber-50 text-[#8C7345] border-teal-100';
     }
   };
 
   return (
     <div className="bg-white rounded-xl p-6 border border-slate-200 h-full flex flex-col relative overflow-hidden group shadow-sm">
-      <div className="absolute top-0 right-0 w-32 h-32 bg-teal-50 rounded-full blur-3xl group-hover:bg-teal-100 transition-all"></div>
+      <div className="absolute top-0 right-0 w-32 h-32 bg-amber-50 rounded-full blur-3xl group-hover:bg-teal-100 transition-all"></div>
       <div className="flex items-center gap-3 mb-6 relative z-10">
         <div className="p-2 bg-slate-100 rounded-lg border border-slate-200">
           <Bot className="w-5 h-5 text-slate-700" />
         </div>
         <h2 className="text-xl font-serif font-bold text-slate-900 tracking-wide">Equiviesa AI</h2>
         <span className="ml-auto text-xs bg-white border border-slate-200 text-slate-600 px-2.5 py-1 rounded-full flex items-center gap-1.5 font-medium shadow-sm">
-          <span className="w-1.5 h-1.5 rounded-full bg-teal-500 animate-pulse"></span>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#C2A878] animate-pulse"></span>
           Live Feed
         </span>
       </div>

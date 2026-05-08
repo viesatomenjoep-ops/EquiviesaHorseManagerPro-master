@@ -40,7 +40,7 @@ export function InvoicesView() {
              <FileText className="w-12 h-12 text-slate-300 mx-auto mb-3" />
              <h3 className="text-slate-700 font-medium">Factuur Editor (In Ontwikkeling)</h3>
              <p className="text-sm text-slate-500 mt-1">Hier komt het formulier om regels uit de Producten catalogus te selecteren.</p>
-             <button onClick={() => setShowNewInvoice(false)} className="mt-4 text-teal-600 font-medium hover:underline">Annuleren</button>
+             <button onClick={() => setShowNewInvoice(false)} className="mt-4 text-[#A88D5A] font-medium hover:underline">Annuleren</button>
            </div>
         </div>
       ) : (
@@ -66,7 +66,7 @@ export function InvoicesView() {
               <input 
                 type="text" 
                 placeholder="Zoek op factuurnr of klant..." 
-                className="pl-9 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-teal-500 focus:border-teal-500 w-full sm:w-64"
+                className="pl-9 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-[#C2A878] focus:border-[#C2A878] w-full sm:w-64"
               />
             </div>
           </div>
@@ -99,7 +99,7 @@ export function InvoicesView() {
                     {invoice.status === 'overdue' && <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-red-50 text-red-700 text-xs rounded-full font-medium">Te laat</span>}
                   </td>
                   <td className="p-4 text-right">
-                    <button className="text-slate-400 hover:text-teal-600 p-1 opacity-0 group-hover:opacity-100 transition-opacity" title="Download PDF"><Download className="w-4 h-4" /></button>
+                    <button className="text-slate-400 hover:text-[#A88D5A] p-1 opacity-0 group-hover:opacity-100 transition-opacity" title="Download PDF"><Download className="w-4 h-4" /></button>
                   </td>
                 </tr>
               ))}

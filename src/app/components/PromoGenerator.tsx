@@ -60,7 +60,7 @@ export function PromoGenerator() {
           </div>
         </div>
         <select 
-          className="bg-slate-50 border border-slate-200 text-slate-900 text-sm font-medium rounded-lg focus:ring-teal-500 focus:border-teal-500 block p-2 max-w-[200px]"
+          className="bg-slate-50 border border-slate-200 text-slate-900 text-sm font-medium rounded-lg focus:ring-[#C2A878] focus:border-[#C2A878] block p-2 max-w-[200px]"
           onChange={(e) => setSelectedHorse(horses.find(h => h.id === e.target.value))}
           value={selectedHorse?.id || ''}
         >
@@ -72,7 +72,7 @@ export function PromoGenerator() {
 
       {selectedHorse && (
         <div className="flex-1 bg-slate-50 rounded-xl p-5 border border-slate-200 relative overflow-hidden group mb-6">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-teal-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4"></div>
+          <div className="absolute top-0 right-0 w-64 h-64 bg-amber-50 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4"></div>
           
           <div className="relative z-10 flex flex-col h-full">
             <div className="flex justify-between items-start mb-4">
@@ -83,7 +83,7 @@ export function PromoGenerator() {
                 </p>
               </div>
               <div className="text-right hidden sm:block">
-                <span className="inline-block px-2.5 py-1 bg-white border border-slate-200 text-teal-700 text-xs font-bold rounded-full">
+                <span className="inline-block px-2.5 py-1 bg-white border border-slate-200 text-[#8C7345] text-xs font-bold rounded-full">
                   Verified Data
                 </span>
               </div>
@@ -118,7 +118,7 @@ export function PromoGenerator() {
         onClick={handleCopyLink}
         className={`w-full py-3 px-4 rounded-lg font-medium flex items-center justify-center gap-2 transition-all ${
           copied 
-            ? 'bg-teal-50 text-teal-700 border border-teal-200' 
+            ? 'bg-amber-50 text-[#8C7345] border border-teal-200' 
             : 'bg-slate-900 text-white hover:bg-slate-800 shadow-md hover:shadow-lg'
         }`}
       >

@@ -49,7 +49,7 @@ export function KPICard({ title, value, subtitle, icon: Icon, trend, trendData, 
                   <Line
                     type="monotone"
                     dataKey="value"
-                    stroke="#0F766E"
+                    stroke="#C2A878"
                     strokeWidth={2}
                     dot={false}
                     isAnimationActive={false}

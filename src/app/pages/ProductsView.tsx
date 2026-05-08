@@ -84,7 +84,7 @@ export function ProductsView() {
         </div>
         <button 
           onClick={() => setShowAddForm(!showAddForm)}
-          className="flex items-center gap-2 bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded-lg font-medium transition-colors"
+          className="flex items-center gap-2 bg-[#C2A878] hover:bg-[#A88D5A] text-white px-4 py-2 rounded-lg font-medium transition-colors"
         >
           <Plus className="w-5 h-5" />
           {showAddForm ? 'Annuleren' : 'Nieuw Product'}
@@ -95,11 +95,11 @@ export function ProductsView() {
         <form onSubmit={handleAddProduct} className="bg-white p-6 rounded-xl shadow-sm border border-slate-200 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 items-end">
           <div className="space-y-1 lg:col-span-2">
             <label className="text-sm font-medium text-slate-700">Naam</label>
-            <input required type="text" value={name} onChange={e => setName(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md focus:ring-teal-500 focus:border-teal-500" placeholder="Bijv. Basisbrok Sport" />
+            <input required type="text" value={name} onChange={e => setName(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md focus:ring-[#C2A878] focus:border-[#C2A878]" placeholder="Bijv. Basisbrok Sport" />
           </div>
           <div className="space-y-1">
             <label className="text-sm font-medium text-slate-700">Categorie</label>
-            <select value={category} onChange={e => setCategory(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md focus:ring-teal-500 focus:border-teal-500">
+            <select value={category} onChange={e => setCategory(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md focus:ring-[#C2A878] focus:border-[#C2A878]">
               <option>Voer</option>
               <option>Supplementen</option>
               <option>Diensten</option>
@@ -108,11 +108,11 @@ export function ProductsView() {
           </div>
           <div className="space-y-1">
             <label className="text-sm font-medium text-slate-700">Prijs (€)</label>
-            <input required type="number" step="0.01" value={price} onChange={e => setPrice(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md focus:ring-teal-500 focus:border-teal-500" placeholder="0.00" />
+            <input required type="number" step="0.01" value={price} onChange={e => setPrice(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md focus:ring-[#C2A878] focus:border-[#C2A878]" placeholder="0.00" />
           </div>
           <div className="space-y-1">
             <label className="text-sm font-medium text-slate-700">Voorraad</label>
-            <input type="number" value={stock} onChange={e => setStock(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md focus:ring-teal-500 focus:border-teal-500" placeholder="Optioneel" />
+            <input type="number" value={stock} onChange={e => setStock(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md focus:ring-[#C2A878] focus:border-[#C2A878]" placeholder="Optioneel" />
           </div>
           <div className="lg:col-span-5 flex justify-end">
             <button type="submit" className="bg-slate-900 hover:bg-slate-800 text-white px-6 py-2 rounded-lg font-medium">Opslaan</button>
@@ -140,7 +140,7 @@ export function ProductsView() {
               products.map((product) => (
                 <tr key={product.id} className="hover:bg-slate-50 transition-colors group">
                   <td className="p-4 font-medium text-slate-900 flex items-center gap-3">
-                    <div className="bg-teal-50 text-teal-600 p-2 rounded-lg">
+                    <div className="bg-amber-50 text-[#A88D5A] p-2 rounded-lg">
                       <Package className="w-4 h-4" />
                     </div>
                     {product.name}
@@ -153,7 +153,7 @@ export function ProductsView() {
                   <td className="p-4 text-slate-700 font-medium">€ {product.price.toFixed(2)}</td>
                   <td className="p-4 text-slate-500">{product.stock > 0 ? product.stock : '-'}</td>
                   <td className="p-4 text-right">
-                    <button className="text-slate-400 hover:text-teal-600 p-1 opacity-0 group-hover:opacity-100 transition-opacity"><Edit className="w-4 h-4" /></button>
+                    <button className="text-slate-400 hover:text-[#A88D5A] p-1 opacity-0 group-hover:opacity-100 transition-opacity"><Edit className="w-4 h-4" /></button>
                     <button className="text-slate-400 hover:text-red-600 p-1 opacity-0 group-hover:opacity-100 transition-opacity ml-2"><Trash2 className="w-4 h-4" /></button>
                   </td>
                 </tr>

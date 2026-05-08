@@ -183,7 +183,7 @@ export function KanbanBoard() {
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
             <h2 className="text-xl font-serif font-bold text-slate-900">Stable Workflow</h2>
-            <span className="px-2.5 py-0.5 rounded-full bg-teal-50 text-teal-700 text-xs font-medium border border-teal-100 flex items-center gap-1.5"><Sparkles className="w-3 h-3" /> Live Data</span>
+            <span className="px-2.5 py-0.5 rounded-full bg-amber-50 text-[#8C7345] text-xs font-medium border border-teal-100 flex items-center gap-1.5"><Sparkles className="w-3 h-3" /> Live Data</span>
           </div>
           <button className="px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 hover:shadow-md transition-all font-medium text-sm">
             Add Task
