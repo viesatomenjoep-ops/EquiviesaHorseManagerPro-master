@@ -1,0 +1,41 @@
+Retrieving project…
+Deploying equivest/equiviesa-horse-manager-pro
+Uploading [--------------------] (0.0B/891.4KB)
+Uploading [=====---------------] (236.9KB/891.4KB)
+Uploading [==========----------] (460.9KB/891.4KB)
+Uploading [===============-----] (668.9KB/891.4KB)
+Uploading [====================] (891.4KB/891.4KB)
+Inspect: https://vercel.com/equivest/equiviesa-horse-manager-pro/2aCQn1fR3Z6JxhQA8BabdJBCwsGX [4s]
+Production: https://equiviesa-horse-manager-aycen6h7l-equivest.vercel.app [4s]
+https://equiviesa-horse-manager-aycen6h7l-equivest.vercel.appBuilding...
+Building...
+Building: Running build in Washington, D.C., USA (East) – iad1
+Building: Build machine configuration: 4 cores, 8 GB
+Building: Retrieving list of deployment files...
+Building: Previous build caches not available.
+Building: Downloading 80 deployment files...
+Building: Running "vercel build"
+Building: Vercel CLI 53.2.0
+Building: Installing dependencies...
+Building: added 296 packages in 10s
+Building: 35 packages are looking for funding
+Building: run `npm fund` for details
+Building: Running "npm run build"
+Building: > equiviesa-horse-manager-pro@0.0.1 build
+Building: > vite build
+Building: vite v6.3.5 building for production...
+Building: transforming...
+Building: ✓ 2370 modules transformed.
+Building: rendering chunks...
+Building: computing gzip size...
+Building: dist/index.html                   0.53 kB │ gzip:   0.33 kB
+Building: dist/assets/index-DNunL8Yu.css   94.50 kB │ gzip:  15.36 kB
+Building: dist/assets/index-BtyyIvgX.js   817.69 kB │ gzip: 228.04 kB
+Building: (!) Some chunks are larger than 500 kB after minification. Consider:
+Building: - Using dynamic import() to code-split the application
+Building: - Use build.rollupOptions.output.manualChunks to improve chunking: https://rollupjs.org/configuration-options/#output-manualchunks
+Building: - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+Building: ✓ built in 4.29s
+Building: Error: No Output Directory named "build" found after the Build completed. Configure the Output Directory in your Project Settings. Alternatively, configure vercel.json#outputDirectory.
+Building: Learn More: https://vercel.link/missing-public-directory
+Error: No Output Directory named "build" found after the Build completed. Configure the Output Directory in your Project Settings. Alternatively, configure vercel.json#outputDirectory.
