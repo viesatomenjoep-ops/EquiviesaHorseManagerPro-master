@@ -113,26 +113,26 @@ export function InvoicesView() {
            <form onSubmit={handleCreateInvoice} className="space-y-6 max-w-2xl">
              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Klant Naam (Mock)</label>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">{t('invoices.form.client_name')}</label>
                   <input type="text" value={newInvoiceClient} onChange={e => setNewInvoiceClient(e.target.value)} className="w-full p-2.5 border border-slate-300 rounded-lg" readOnly />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Totaal Bedrag (€)</label>
-                  <input type="number" step="0.01" required value={newInvoiceAmount} onChange={e => setNewInvoiceAmount(e.target.value)} className="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-[#C2A878] focus:border-[#C2A878]" placeholder="Bijv. 1250.00" />
+                  <label className="block text-sm font-medium text-slate-700 mb-1">{t('invoices.form.total_amount')}</label>
+                  <input type="number" step="0.01" required value={newInvoiceAmount} onChange={e => setNewInvoiceAmount(e.target.value)} className="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-[#C2A878] focus:border-[#C2A878]" placeholder={t('invoices.form.amount_placeholder')} />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-1">Status</label>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">{t('invoices.form.status')}</label>
                   <select value={newInvoiceStatus} onChange={e => setNewInvoiceStatus(e.target.value)} className="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-[#C2A878]">
-                    <option value="concept">Concept</option>
-                    <option value="sent">Verzonden</option>
-                    <option value="paid">Betaald</option>
+                    <option value="concept">{t('invoices.tabs.concept')}</option>
+                    <option value="sent">{t('invoices.tabs.sent')}</option>
+                    <option value="paid">{t('invoices.tabs.paid')}</option>
                   </select>
                 </div>
              </div>
 
              <div className="flex gap-4 pt-4 border-t border-slate-100">
                <button type="submit" className="bg-[#C2A878] hover:bg-[#B09665] text-white px-6 py-2.5 rounded-lg font-bold transition-colors">
-                 Factuur Aanmaken
+                 {t('invoices.form.submit')}
                </button>
                <button type="button" onClick={() => setShowNewInvoice(false)} className="px-6 py-2.5 rounded-lg font-medium text-slate-600 hover:bg-slate-100 transition-colors">
                  {t('invoices.cancel')}

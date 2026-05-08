@@ -137,9 +137,9 @@ export function HorseListView() {
   const displayHorses = horses.length > 0 ? horses : Array.from({ length: 6 }).map((_, i) => ({
     id: `mock-${i}`,
     name: selectedCategory === 'sales' ? 'Chacco Blue II' : `Equiviesa's Star #${i + 1}`,
-    discipline: 'Springpaard',
+    discipline: t('horse_list.mock.jumper'),
     age: 8,
-    sex: 'Ruin'
+    sex: t('horse_list.mock.gelding')
   }));
 
   return (
@@ -218,7 +218,7 @@ export function HorseListView() {
                   <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
                     <div className="flex items-center gap-2 text-xs font-medium text-slate-600">
                       <MapPin className="w-4 h-4 text-[#C2A878]" />
-                      <span>{currentBox ? `${currentLocation?.name}, Box ${currentBox.box_number}` : 'Niet toegewezen'}</span>
+                      <span>{currentBox ? `${currentLocation?.name}, Box ${currentBox.box_number}` : t('horse_list.card.unassigned')}</span>
                     </div>
                     <button 
                       onClick={() => {
@@ -247,13 +247,13 @@ export function HorseListView() {
               <div>
                 <label className="block text-sm font-medium mb-1">{t('locations.forms.select_box')}</label>
                 <select required value={selectedBoxId} onChange={e => setSelectedBoxId(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md">
-                  <option value="">Selecteer een box...</option>
+                  <option value="">{t('horse_list.card.select_box')}</option>
                   {boxes.map(b => {
                     const loc = locations.find(l => l.id === b.location_id);
                     const isCurrent = b.horse_id === activeHorseId;
                     return (
                       <option key={b.id} value={b.id} disabled={b.horse_id !== null && !isCurrent}>
-                        {loc?.name} - Box {b.box_number} {b.horse_id ? (isCurrent ? '(Huidig)' : '(Bezet)') : '(Vrij)'}
+                        {loc?.name} - Box {b.box_number} {b.horse_id ? (isCurrent ? t('horse_list.box.current') : t('horse_list.box.occupied')) : t('horse_list.box.free')}
                       </option>
                     );
                   })}

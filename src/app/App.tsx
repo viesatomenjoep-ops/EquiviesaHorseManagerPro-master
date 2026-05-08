@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router";
+import { useTranslation } from "react-i18next";
 import { Layout } from "./components/Layout";
 import { Dashboard } from "./pages/Dashboard";
 import { InvoicesView } from "./pages/InvoicesView";
@@ -14,11 +15,12 @@ import { LocationsView } from "./pages/LocationsView";
 import { ReportsView } from "./pages/ReportsView";
 
 // Placeholders for all the other routes
-function Placeholder({ title }: { title: string }) {
+function Placeholder({ titleKey }: { titleKey: string }) {
+  const { t } = useTranslation();
   return (
     <div className="p-8 bg-white rounded-xl shadow-sm border border-slate-200">
-      <h2 className="text-2xl font-bold text-slate-800">{title}</h2>
-      <p className="text-slate-500 mt-2">Deze module wordt momenteel ontwikkeld en is binnenkort beschikbaar.</p>
+      <h2 className="text-2xl font-bold text-slate-800">{t(titleKey)}</h2>
+      <p className="text-slate-500 mt-2">{t('app.placeholders.description')}</p>
     </div>
   );
 }
@@ -31,7 +33,7 @@ export default function App() {
         <Route index element={<Dashboard />} />
         <Route path="horses" element={<HorseListView />} />
         <Route path="agenda" element={<AgendaView />} />
-        <Route path="tasks" element={<Placeholder title="Takenbord" />} />
+        <Route path="tasks" element={<Placeholder titleKey="app.placeholders.tasks" />} />
 
         {/* VERZORGING & SPORT */}
         <Route path="health" element={<HealthView />} />
@@ -43,7 +45,7 @@ export default function App() {
         <Route path="invoices" element={<InvoicesView />} />
         <Route path="products" element={<ProductsView />} />
         <Route path="locations" element={<LocationsView />} />
-        <Route path="documents" element={<Placeholder title="Documenten & Media (Cloudinary)" />} />
+        <Route path="documents" element={<Placeholder titleKey="app.placeholders.documents" />} />
 
         {/* FOKKERIJ */}
         <Route path="breeding">
@@ -55,7 +57,7 @@ export default function App() {
 
         {/* SYSTEEM */}
         <Route path="reports" element={<ReportsView />} />
-        <Route path="settings" element={<Placeholder title="Systeem Instellingen" />} />
+        <Route path="settings" element={<Placeholder titleKey="app.placeholders.settings" />} />
       </Route>
     </Routes>
   );

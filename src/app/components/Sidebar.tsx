@@ -17,7 +17,7 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
   // Dynamic sidebar sections based on translations
   const sidebarSections = [
     {
-      title: "STABLE MANAGEMENT",
+      title: t('nav.categories.stable_management'),
       items: [
         { name: t('nav.dashboard'), path: "/", icon: LayoutDashboard },
         { name: t('nav.horses'), path: "/horses", icon: Hexagon },
@@ -26,7 +26,7 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
       ]
     },
     {
-      title: "CARE SUPPORT",
+      title: t('nav.categories.care_support'),
       items: [
         { name: t('nav.health'), path: "/health", icon: HeartPulse },
         { name: t('nav.feeding'), path: "/feeding", icon: Apple },
@@ -34,7 +34,7 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
       ]
     },
     {
-      title: "ADMINISTRATION & CRM",
+      title: t('nav.categories.administration'),
       items: [
         { name: t('nav.contacts'), path: "/contacts", icon: Users },
         { name: t('nav.invoices'), path: "/invoices", icon: Calculator },
@@ -44,16 +44,16 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
       ]
     },
     {
-      title: "BREEDING",
+      title: t('nav.categories.breeding'),
       items: [
-        { name: "Mare Lines", path: "/breeding/mares", icon: Dna },
-        { name: "Embryo Tracking", path: "/breeding/embryos", icon: Microscope },
-        { name: "Foal Rearing", path: "/breeding/foals", icon: Baby },
-        { name: "Stallion Selection", path: "/breeding/stallions", icon: Trophy },
+        { name: t('nav.breeding_items.mares'), path: "/breeding/mares", icon: Dna },
+        { name: t('nav.breeding_items.embryos'), path: "/breeding/embryos", icon: Microscope },
+        { name: t('nav.breeding_items.foals'), path: "/breeding/foals", icon: Baby },
+        { name: t('nav.breeding_items.stallions'), path: "/breeding/stallions", icon: Trophy },
       ]
     },
     {
-      title: "SYSTEM",
+      title: t('nav.categories.system'),
       items: [
         { name: t('nav.reports'), path: "/reports", icon: PieChart },
         { name: t('nav.settings'), path: "/settings", icon: Settings },
@@ -150,7 +150,7 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
       {/* Footer area inside sidebar (Mobile Language Selector + extra info) */}
       <div className="p-6 border-t border-white/10 mt-auto">
         <div className="lg:hidden flex items-center justify-between">
-          <span className="text-sm font-bold text-slate-400">Taal / Language</span>
+          <span className="text-sm font-bold text-slate-400">{t('nav.language')}</span>
           <LanguageSelector />
         </div>
       </div>

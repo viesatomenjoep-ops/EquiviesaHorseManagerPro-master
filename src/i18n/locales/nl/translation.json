@@ -1,6 +1,20 @@
 {
   "nav": {
     "dashboard": "Dashboard",
+    "language": "Taal / Language",
+    "categories": {
+      "stable_management": "Stalbeheer",
+      "care_support": "Verzorging",
+      "administration": "Administratie & CRM",
+      "breeding": "Fokkerij",
+      "system": "Systeem"
+    },
+    "breeding_items": {
+      "mares": "Fokmerries",
+      "embryos": "Embryo Tracking",
+      "foals": "Opfok & Veulens",
+      "stallions": "Hengstenkeuze"
+    },
     "horses": "Paarden",
     "agenda": "Agenda",
     "tasks": "Taken",
@@ -265,6 +279,14 @@
   "breeding": {
     "title_mares": "Mare Lines & Cycli",
     "desc_mares": "Beheer en analyseer specifieke data voor merrielijnen & cycli.",
+    "demo_notice": "Alleen 'Cycles' is volledig SQL gekoppeld voor deze demo.",
+    "add_new": "Nieuw item toevoegen",
+    "save": "Opslaan (SQL)",
+    "cancel": "Annuleren",
+    "cycle_start": "Cyclus Start",
+    "select_category": "Selecteer een categorie",
+    "item_dummy": "Item",
+    "dummy": "(Dummy)",
     "title_embryos": "Embryo Tracking",
     "desc_embryos": "Beheer en analyseer specifieke data voor embryo tracking.",
     "title_foals": "Foal Rearing",
@@ -305,6 +327,13 @@
     "editor_title": "Factuur Editor (In Ontwikkeling)",
     "editor_desc": "Hier komt het formulier om regels uit de Producten catalogus te selecteren.",
     "cancel": "Annuleren",
+    "form": {
+      "client_name": "Klant Naam (Mock)",
+      "total_amount": "Totaal Bedrag (€)",
+      "amount_placeholder": "Bijv. 1250.00",
+      "status": "Status",
+      "submit": "Factuur Aanmaken"
+    },
     "tabs": {
       "all": "Alle",
       "concept": "Concept",
@@ -424,6 +453,40 @@
     },
     "alert": {
       "error": "Er is een fout opgetreden of de database tabel bestaat nog niet."
+    }
+  },
+  "app": {
+    "placeholders": {
+      "tasks": "Takenbord",
+      "documents": "Documenten & Media (Cloudinary)",
+      "settings": "Systeem Instellingen",
+      "description": "Deze module wordt momenteel ontwikkeld en is binnenkort beschikbaar."
+    }
+  },
+  "horse_list": {
+    "search": "Zoek {{cat}}...",
+    "add_horse": "Paard Toevoegen",
+    "categories": {
+      "jumpers": "Springpaarden",
+      "dressage": "Dressuur",
+      "sales": "Handel & Verkoop",
+      "rearing": "Opfok & Pensioen"
+    },
+    "mock": {
+      "jumper": "Springpaard",
+      "gelding": "Ruin"
+    },
+    "card": {
+      "active": "Actief In Training",
+      "healthy": "Gezond & Fit",
+      "unassigned": "Niet toegewezen",
+      "assign_box": "Box Toewijzen",
+      "select_box": "Selecteer een box..."
+    },
+    "box": {
+      "current": "(Huidig)",
+      "occupied": "(Bezet)",
+      "free": "(Vrij)"
     }
   }
 }

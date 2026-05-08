@@ -123,7 +123,7 @@ export function BreedingView() {
         console.error(err);
       }
     } else {
-      alert("Alleen 'Cycles' is volledig SQL gekoppeld voor deze demo.");
+      alert(t('breeding.demo_notice'));
     }
   }
 
@@ -185,9 +185,9 @@ export function BreedingView() {
 
         {showAddForm && (
           <div className="mb-6 p-6 border border-slate-200 rounded-2xl">
-             <h3 className="font-bold mb-4">Nieuw item toevoegen</h3>
-             <button onClick={handleAddItem} className="px-4 py-2 bg-[#C2A878] text-white rounded-lg">Opslaan (SQL)</button>
-             <button onClick={() => setShowAddForm(false)} className="px-4 py-2 bg-slate-100 ml-2 rounded-lg">Annuleren</button>
+             <h3 className="font-bold mb-4">{t('breeding.add_new')}</h3>
+             <button onClick={handleAddItem} className="px-4 py-2 bg-[#C2A878] text-white rounded-lg">{t('breeding.save')}</button>
+             <button onClick={() => setShowAddForm(false)} className="px-4 py-2 bg-slate-100 ml-2 rounded-lg">{t('breeding.cancel')}</button>
           </div>
         )}
 
@@ -199,7 +199,7 @@ export function BreedingView() {
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <h4 className="text-lg font-bold text-slate-900">
-                      Cyclus Start: {item.start_date || 'N/A'}
+                      {t('breeding.cycle_start')}: {item.start_date || 'N/A'}
                     </h4>
                     <p className="text-slate-500 text-sm mt-1">{t('breeding.status')}</p>
                   </div>
@@ -217,7 +217,7 @@ export function BreedingView() {
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <h4 className="text-lg font-bold text-slate-900">
-                      {activeSubModule === 'overview' ? 'Selecteer een categorie' : `${subBlocks.find(b => b.id === activeSubModule)?.name} Item #${i} (Dummy)`}
+                      {activeSubModule === 'overview' ? t('breeding.select_category') : `${subBlocks.find(b => b.id === activeSubModule)?.name} ${t('breeding.item_dummy')} #${i} ${t('breeding.dummy')}`}
                     </h4>
                     <p className="text-slate-500 text-sm mt-1">{t('breeding.status')}</p>
                   </div>

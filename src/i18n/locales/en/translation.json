@@ -1,6 +1,20 @@
 {
   "nav": {
     "dashboard": "Dashboard",
+    "language": "Language / Taal",
+    "categories": {
+      "stable_management": "Stable Management",
+      "care_support": "Care Support",
+      "administration": "Administration & CRM",
+      "breeding": "Breeding",
+      "system": "System"
+    },
+    "breeding_items": {
+      "mares": "Mare Lines",
+      "embryos": "Embryo Tracking",
+      "foals": "Foal Rearing",
+      "stallions": "Stallion Selection"
+    },
     "horses": "Horses",
     "agenda": "Calendar",
     "tasks": "Tasks",
@@ -265,6 +279,14 @@
   "breeding": {
     "title_mares": "Mare Lines & Cycles",
     "desc_mares": "Manage and analyze specific data for mare lines & cycles.",
+    "demo_notice": "Only 'Cycles' is fully linked to SQL for this demo.",
+    "add_new": "Add new item",
+    "save": "Save (SQL)",
+    "cancel": "Cancel",
+    "cycle_start": "Cycle Start",
+    "select_category": "Select a category",
+    "item_dummy": "Item",
+    "dummy": "(Dummy)",
     "title_embryos": "Embryo Tracking",
     "desc_embryos": "Manage and analyze specific data for embryo tracking.",
     "title_foals": "Foal Rearing",
@@ -305,6 +327,13 @@
     "editor_title": "Invoice Editor (In Development)",
     "editor_desc": "The form to select items from the Products catalog will appear here.",
     "cancel": "Cancel",
+    "form": {
+      "client_name": "Client Name (Mock)",
+      "total_amount": "Total Amount (€)",
+      "amount_placeholder": "E.g. 1250.00",
+      "status": "Status",
+      "submit": "Create Invoice"
+    },
     "tabs": {
       "all": "All",
       "concept": "Concept",
@@ -424,6 +453,40 @@
     },
     "alert": {
       "error": "An error occurred or the database table does not exist yet."
+    }
+  },
+  "app": {
+    "placeholders": {
+      "tasks": "Task Board",
+      "documents": "Documents & Media (Cloudinary)",
+      "settings": "System Settings",
+      "description": "This module is currently under development and will be available soon."
+    }
+  },
+  "horse_list": {
+    "search": "Search {{cat}}...",
+    "add_horse": "Add Horse",
+    "categories": {
+      "jumpers": "Jumpers",
+      "dressage": "Dressage",
+      "sales": "Sales & Trading",
+      "rearing": "Rearing & Retirement"
+    },
+    "mock": {
+      "jumper": "Jumper",
+      "gelding": "Gelding"
+    },
+    "card": {
+      "active": "Active In Training",
+      "healthy": "Healthy & Fit",
+      "unassigned": "Unassigned",
+      "assign_box": "Assign Box",
+      "select_box": "Select a box..."
+    },
+    "box": {
+      "current": "(Current)",
+      "occupied": "(Occupied)",
+      "free": "(Free)"
     }
   }
 }
