@@ -99,7 +99,7 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
                   onClick={() => toggleSection(section.title)}
                   className="w-full flex items-center justify-between px-6 py-2 group"
                 >
-                  <h2 className="text-xs font-bold text-[#8C7345] tracking-wider uppercase group-hover:text-[#C2A878] transition-colors">
+                  <h2 className="text-sm font-bold text-[#8C7345] tracking-wide uppercase group-hover:text-[#C2A878] transition-colors">
                     {section.title}
                   </h2>
                   {isOpen ? (
