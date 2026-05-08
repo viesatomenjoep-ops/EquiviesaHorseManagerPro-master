@@ -4,7 +4,7 @@ import {
   HeartPulse, Apple, Trophy,
   Users, Calculator, Package, MapPin, FolderOpen,
   Dna, Microscope, Baby,
-  PieChart, Settings 
+  PieChart, Settings, X 
 } from "lucide-react";
 import { LanguageSelector } from "./LanguageSelector";
 
@@ -53,11 +53,21 @@ const sidebarSections = [
   }
 ];
 
-export function Sidebar() {
+export function Sidebar({ onClose }: { onClose?: () => void }) {
   const location = useLocation();
 
   return (
-    <aside className="w-72 bg-[#111111] text-white min-h-screen flex flex-col shadow-2xl">
+    <aside className="w-72 bg-[#111111] text-white min-h-screen flex flex-col shadow-2xl relative">
+      {/* Mobile close button */}
+      {onClose && (
+        <button 
+          onClick={onClose}
+          className="lg:hidden absolute top-4 right-4 p-2 text-slate-400 hover:text-white bg-white/5 rounded-lg"
+        >
+          <X className="w-5 h-5" />
+        </button>
+      )}
+
       <div className="p-6 flex items-center justify-center border-b border-white/10">
         <div className="flex flex-col items-center">
           <img src="/viesa-logo.png" alt="Logo" className="w-20 h-20 object-contain mb-3 drop-shadow-xl" />
@@ -87,8 +97,8 @@ export function Sidebar() {
                             : "text-slate-400 hover:text-white hover:bg-white/5 border-r-4 border-transparent"
                         }`}
                       >
-                        <Icon className={`w-5 h-5 ${isActive ? 'text-[#C2A878]' : 'text-slate-500'}`} />
-                        {item.name}
+                        <Icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-[#C2A878]' : 'text-slate-500'}`} />
+                        <span className="truncate">{item.name}</span>
                       </Link>
                     </li>
                   );

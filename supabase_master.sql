@@ -217,6 +217,19 @@ CREATE TABLE IF NOT EXISTS iot_devices (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- 19. TABEL: CARE EVENTS (Agenda / Zorgplanning)
+CREATE TABLE IF NOT EXISTS care_events (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  horse_id UUID REFERENCES horses(id) ON DELETE CASCADE,
+  category TEXT NOT NULL, -- Bijv. 'Immunisatie' of 'Hoefsmid & Beslag'
+  title TEXT NOT NULL,    -- Bijv. 'Jaarlijkse Enting'
+  date DATE NOT NULL,
+  status TEXT DEFAULT 'gepland', -- gepland, voltooid, geannuleerd
+  provider TEXT,          -- Naam van de smid of dierenarts
+  notes TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- ==========================================
 -- TEST DATA
 -- ==========================================

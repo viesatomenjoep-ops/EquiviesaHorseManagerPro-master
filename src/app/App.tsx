@@ -3,6 +3,7 @@ import { Layout } from "./components/Layout";
 import { Dashboard } from "./pages/Dashboard";
 import { InvoicesView } from "./pages/InvoicesView";
 import { ProductsView } from "./pages/ProductsView";
+import { AgendaView } from "./pages/AgendaView";
 
 // Placeholders for all the other routes
 function Placeholder({ title }: { title: string }) {
@@ -21,7 +22,7 @@ export default function App() {
         {/* STALBEHEER */}
         <Route index element={<Dashboard />} />
         <Route path="horses" element={<Placeholder title="Mijn Paarden" />} />
-        <Route path="agenda" element={<Placeholder title="Agenda & Planning" />} />
+        <Route path="agenda" element={<AgendaView />} />
         <Route path="tasks" element={<Placeholder title="Takenbord" />} />
 
         {/* VERZORGING & SPORT */}
