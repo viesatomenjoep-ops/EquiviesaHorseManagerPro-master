@@ -4,6 +4,8 @@ import { Dashboard } from "./pages/Dashboard";
 import { InvoicesView } from "./pages/InvoicesView";
 import { ProductsView } from "./pages/ProductsView";
 import { AgendaView } from "./pages/AgendaView";
+import { AdministrationView } from "./pages/AdministrationView";
+import { BreedingView } from "./pages/BreedingView";
 
 // Placeholders for all the other routes
 function Placeholder({ title }: { title: string }) {
@@ -31,16 +33,16 @@ export default function App() {
         <Route path="competitions" element={<Placeholder title="Wedstrijdsport" />} />
 
         {/* ADMINISTRATIE & CRM */}
-        <Route path="contacts" element={<Placeholder title="Relaties & Contacten" />} />
+        <Route path="contacts" element={<AdministrationView />} />
         <Route path="invoices" element={<InvoicesView />} />
         <Route path="products" element={<ProductsView />} />
         <Route path="locations" element={<Placeholder title="Stallen & Locaties" />} />
         <Route path="documents" element={<Placeholder title="Documenten & Media (Cloudinary)" />} />
 
         {/* FOKKERIJ */}
-        <Route path="mares" element={<Placeholder title="Merrie Lijnen" />} />
-        <Route path="embryos" element={<Placeholder title="Embryo Tracking" />} />
-        <Route path="foals" element={<Placeholder title="Veulen Opfok" />} />
+        <Route path="mares" element={<BreedingView />} />
+        <Route path="embryos" element={<BreedingView />} />
+        <Route path="foals" element={<BreedingView />} />
 
         {/* SYSTEEM */}
         <Route path="reports" element={<Placeholder title="Rapporten & Analytics" />} />
