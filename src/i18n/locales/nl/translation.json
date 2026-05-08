@@ -312,6 +312,7 @@
       "paid": "Betaald"
     },
     "search": "Zoek op factuurnr of klant...",
+    "no_invoices": "Geen facturen gevonden voor deze status.",
     "table": {
       "number": "Factuurnummer",
       "client": "Klant",

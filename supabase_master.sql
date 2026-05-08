@@ -26,10 +26,14 @@ EXCEPTION
     WHEN duplicate_object THEN null;
 END $$;
 
-CREATE TYPE competition_type AS ENUM (
+DO $$ BEGIN
+    CREATE TYPE competition_type AS ENUM (
   'National', 'International (CSI1*)', 'International (CSI2*)', 'International (CSI3*)', 
   'International (CSI4*)', 'International (CSI5*)', 'Grand Prix', 'Hunters', 'Jumpers', 'Equitation'
 );
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 -- 1. TABEL: HORSES (Inclusief stamboom, scouting info, discipline en foto)
 CREATE TABLE IF NOT EXISTS horses (

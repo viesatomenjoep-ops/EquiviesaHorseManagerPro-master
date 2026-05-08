@@ -45,7 +45,7 @@ export function InvoicesView() {
         date: inv.date,
         total_amount: inv.total_amount,
         status: inv.status,
-        client_name: 'Equivest B.V.' // We're mocking the client name because we don't have a reliable CRM link setup yet in the UI
+        client_name: 'Stal Van Dijk' // We're mocking the client name because we don't have a reliable CRM link setup yet in the UI
       }));
 
       setInvoices(mapped);
@@ -174,7 +174,7 @@ export function InvoicesView() {
           ) : filteredInvoices.length === 0 ? (
             <div className="p-12 text-center flex flex-col items-center justify-center text-slate-500">
               <FileText className="w-12 h-12 text-slate-300 mb-3" />
-              <p>Geen facturen gevonden voor deze status.</p>
+              <p>{t('invoices.no_invoices')}</p>
             </div>
           ) : (
             <table className="w-full text-left border-collapse">

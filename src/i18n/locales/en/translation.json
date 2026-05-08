@@ -312,6 +312,7 @@
       "paid": "Paid"
     },
     "search": "Search by invoice no. or client...",
+    "no_invoices": "No invoices found for this status.",
     "table": {
       "number": "Invoice Number",
       "client": "Client",

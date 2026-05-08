@@ -208,7 +208,9 @@ export function LocationsView() {
                       )}
                       <div>
                         <h2 className="font-bold text-slate-900 text-lg">{loc.name}</h2>
-                        <p className="text-xs font-medium text-slate-500">{loc.type}</p>
+                        <p className="text-xs font-medium text-slate-500">
+                          {loc.type === 'Hoofdstal' ? t('locations.main_stable') : loc.type}
+                        </p>
                       </div>
                     </div>
                     <span className="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-bold">

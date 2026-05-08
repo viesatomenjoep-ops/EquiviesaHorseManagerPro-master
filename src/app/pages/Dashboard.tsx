@@ -27,7 +27,7 @@ export function Dashboard() {
   const [recentInvoices, setRecentInvoices] = useState<RecentInvoice[]>([
     { client: "Stal Jansen", amount: "+ €1.250", status: t('dashboard.invoices.status_paid'), color: "text-emerald-500", bg: "bg-emerald-50" },
     { client: "Hoefsmid De Vries", amount: "- €450", status: t('dashboard.invoices.status_debited'), color: "text-rose-500", bg: "bg-rose-50" },
-    { client: "Equivest B.V.", amount: "+ €3.400", status: t('dashboard.invoices.status_processing'), color: "text-amber-500", bg: "bg-amber-50" },
+    { client: "Stal Van Dijk", amount: "+ €3.400", status: t('dashboard.invoices.status_processing'), color: "text-amber-500", bg: "bg-amber-50" },
   ]);
   const [isLoading, setIsLoading] = useState(true);
   const trendData = [45, 52, 48, 61, 58, 67, 72];
@@ -71,7 +71,7 @@ export function Dashboard() {
             }
 
             return {
-              client: 'Equivest B.V.', // Mock CRM relation
+              client: 'Stal Van Dijk', // Mock CRM relation
               amount: `€${Number(inv.total_amount).toLocaleString('nl-NL')}`,
               status: statusText,
               color,
@@ -226,7 +226,7 @@ export function Dashboard() {
 
       {/* ROW 4: STABLE WORKFLOW (FULL WIDTH) */}
       <div className="w-full">
-        <div className="h-[400px]">
+        <div className="min-h-[400px]">
           <KanbanBoard />
         </div>
       </div>
