@@ -70,7 +70,7 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
   };
 
   return (
-    <aside className="w-72 bg-[#111111] text-white min-h-screen flex flex-col shadow-2xl relative">
+    <aside className="w-72 bg-[#111111] text-white h-full flex flex-col shadow-2xl relative">
       {/* Mobile close button */}
       {onClose && (
         <button 
