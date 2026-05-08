@@ -16,6 +16,7 @@ interface Location {
   name: string;
   type: string;
   capacity: number;
+  image_url?: string;
 }
 
 interface Box {
@@ -51,6 +52,7 @@ export function LocationsView() {
   const [locName, setLocName] = useState('');
   const [locType, setLocType] = useState('Hoofdstal');
   const [locCapacity, setLocCapacity] = useState('30');
+  const [locImageUrl, setLocImageUrl] = useState('');
   
   const [assignHorseId, setAssignHorseId] = useState('');
   const [assignBoxId, setAssignBoxId] = useState('');
@@ -89,7 +91,8 @@ export function LocationsView() {
       const { data, error } = await supabase.from('locations').insert([{
         name: locName,
         type: locType,
-        capacity: parseInt(locCapacity)
+        capacity: parseInt(locCapacity),
+        image_url: locImageUrl || null
       }]).select();
 
       if (!error && data) {
@@ -109,6 +112,7 @@ export function LocationsView() {
         
         setShowLocationModal(false);
         setLocName('');
+        setLocImageUrl('');
       } else {
         alert(t('products.alert.error'));
       }
@@ -194,9 +198,18 @@ export function LocationsView() {
               return (
                 <div key={loc.id} className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
                   <div className="p-5 border-b border-slate-200 flex justify-between items-center bg-slate-50/50">
-                    <div className="flex items-center gap-3">
-                      <Home className="w-5 h-5 text-slate-600" />
-                      <h2 className="font-bold text-slate-900">{loc.name}</h2>
+                    <div className="flex items-center gap-4">
+                      {loc.image_url ? (
+                        <img src={loc.image_url} alt={loc.name} className="w-12 h-12 rounded-full object-cover border-2 border-white shadow-sm" />
+                      ) : (
+                        <div className="w-12 h-12 rounded-full bg-[#C2A878]/10 flex items-center justify-center border-2 border-white shadow-sm">
+                          <Home className="w-6 h-6 text-[#C2A878]" />
+                        </div>
+                      )}
+                      <div>
+                        <h2 className="font-bold text-slate-900 text-lg">{loc.name}</h2>
+                        <p className="text-xs font-medium text-slate-500">{loc.type}</p>
+                      </div>
                     </div>
                     <span className="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-xs font-bold">
                       {occupied}/{loc.capacity} {t('locations.occupied')}
