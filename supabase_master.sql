@@ -52,14 +52,17 @@ CREATE TABLE IF NOT EXISTS horses (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 2. TABEL: PROFILES (Profielen: Eigenaren, ruiters, medewerkers)
+-- 2. TABEL: PROFILES (Equivest Base: Personeel, Eigenaren, Ruiters)
 CREATE TABLE IF NOT EXISTS profiles (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  role TEXT NOT NULL, -- Bijv. Eigenaar, Ruiter, Groom, Admin
+  role TEXT NOT NULL,         -- Bijv. Eigenaar, Ruiter, Groom, Admin, Manager
+  employee_id TEXT,           -- Specifiek voor Equivest Base
   first_name TEXT NOT NULL,
   last_name TEXT NOT NULL,
   email TEXT UNIQUE NOT NULL,
   phone TEXT,
+  hourly_rate DECIMAL(10, 2), -- Voor loonadministratie
+  department TEXT,            -- Bijv. 'Stalpersoneel', 'Administratie', 'Sport'
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
@@ -424,6 +427,37 @@ CREATE TABLE IF NOT EXISTS boxes (
   box_number TEXT NOT NULL,
   status TEXT DEFAULT 'available', -- available, occupied, maintenance
   price_per_month DECIMAL(10, 2),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- ==========================================
+-- NIEUWE MODULES: EQUIVEST BASE (Personeel & HR)
+-- ==========================================
+
+-- 25. TABEL: EQUIVEST BASE SHIFTS (Inklokken / Uitklokken)
+CREATE TABLE IF NOT EXISTS equivest_base_shifts (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  staff_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  location_id UUID REFERENCES locations(id),
+  clock_in TIMESTAMP WITH TIME ZONE NOT NULL,
+  clock_out TIMESTAMP WITH TIME ZONE,
+  break_minutes INTEGER DEFAULT 0,
+  total_hours DECIMAL(5, 2),
+  status TEXT DEFAULT 'active', -- 'active', 'completed', 'approved'
+  notes TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 26. TABEL: EQUIVEST BASE TIME OFF (Vakanties & Ziekte)
+CREATE TABLE IF NOT EXISTS equivest_base_time_off (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  staff_id UUID REFERENCES profiles(id) ON DELETE CASCADE,
+  type TEXT NOT NULL,           -- 'vacation', 'sick_leave', 'unpaid_leave'
+  start_date DATE NOT NULL,
+  end_date DATE NOT NULL,
+  status TEXT DEFAULT 'pending', -- 'pending', 'approved', 'rejected'
+  manager_id UUID REFERENCES profiles(id),
+  reason TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
