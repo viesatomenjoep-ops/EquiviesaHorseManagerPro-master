@@ -357,14 +357,20 @@ CREATE TABLE IF NOT EXISTS breeding_embryos (
 );
 
 -- ==========================================
--- NIEUWE MODULES: STALLENBEHEER (Locaties)
+-- NIEUWE MODULES: STALLENBEHEER & B2B DATA SYNC
 -- ==========================================
 
 -- 23. TABEL: LOCATIONS (Stallen / Locaties)
 CREATE TABLE IF NOT EXISTS locations (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   name TEXT NOT NULL,
-  type TEXT NOT NULL, -- Hoofdstal, Pensionstal, Weide
+  type TEXT NOT NULL,         -- Hoofdstal, Pensionstal, Weide, Quarantainestal
+  ownership_type TEXT DEFAULT 'internal', -- 'internal' (Eigen Stal) of 'external' (Stal van iemand anders)
+  
+  -- B2B SaaS Data Exchange (Equiviesa Network)
+  equiviesa_network_id TEXT,  -- Unieke credentials/ID van de externe partij als zij ook Equiviesa Pro gebruiken
+  sync_enabled BOOLEAN DEFAULT false, -- Mogen we medische/paspoort data delen met deze locatie?
+  
   address TEXT,
   capacity INTEGER,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
