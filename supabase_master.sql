@@ -3,6 +3,21 @@
 -- ==========================================
 -- Kopieer deze volledige code en plak het in de 'SQL Editor' van Supabase om je gehele database structuur in één keer aan te maken!
 
+-- ==========================================
+-- ENUMS (Vaste categorieën voor dropdowns en strict rules)
+-- ==========================================
+CREATE TYPE care_category_type AS ENUM (
+  'Clinical Agreements',
+  'Parasite prevention',
+  'Immunization',
+  'Daily Well-being',
+  'Medical Interventions',
+  'Dental check-up',
+  'Farrier & Shoeing'
+);
+
+CREATE TYPE task_status_type AS ENUM ('todo', 'in_progress', 'done');
+
 -- 1. TABEL: HORSES (Inclusief stamboom, scouting info, discipline en foto)
 CREATE TABLE IF NOT EXISTS horses (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -49,7 +64,7 @@ CREATE TABLE IF NOT EXISTS tasks (
   horse_id UUID REFERENCES horses(id) ON DELETE CASCADE,
   assigned_to UUID REFERENCES profiles(id) ON DELETE SET NULL,
   title TEXT NOT NULL,
-  status TEXT DEFAULT 'todo',
+  status task_status_type DEFAULT 'todo',
   time TEXT,
   priority TEXT DEFAULT 'medium',
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -82,30 +97,44 @@ CREATE TABLE IF NOT EXISTS horse_competitions (
   name TEXT NOT NULL,
   date DATE NOT NULL,
   location TEXT,
-  result TEXT,
+  class_level TEXT,       -- Bijv. 1.40m, Grand Prix, Z2
+  result INTEGER,         -- Plaatsing (bijv. 1e, 5e)
+  faults INTEGER,         -- Strafpunten
+  time DECIMAL(10, 2),    -- Tijd in seconden
+  prize_money DECIMAL(10, 2),
+  video_url TEXT,         -- Link naar rit op YouTube/Cloudinary
   notes TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 7. TABEL: INVOICES (Facturatie)
+-- 7. TABEL: INVOICES & QUOTES (Facturen, Offertes en Orders)
 CREATE TABLE IF NOT EXISTS invoices (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   client_id UUID REFERENCES profiles(id),
-  invoice_number TEXT UNIQUE NOT NULL,
+  company_id UUID REFERENCES crm_companies(id), -- Kan ook aan een bedrijf gekoppeld zijn
+  document_number TEXT UNIQUE NOT NULL, -- Factuur-, Offerte- of Ordernummer
+  type TEXT DEFAULT 'invoice', -- 'quote' (offerte), 'order', 'invoice' (factuur)
   date DATE NOT NULL,
-  due_date DATE NOT NULL,
-  status TEXT DEFAULT 'concept', -- concept, sent, paid, overdue
+  due_date DATE,
+  status TEXT DEFAULT 'concept', -- concept, sent, accepted, paid, overdue, cancelled
+  subtotal DECIMAL(10, 2) DEFAULT 0,
+  tax_amount DECIMAL(10, 2) DEFAULT 0,
+  discount_amount DECIMAL(10, 2) DEFAULT 0,
   total_amount DECIMAL(10, 2) NOT NULL,
+  notes TEXT,
+  terms TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 8. TABEL: INVOICE ITEMS (Factuurregels)
+-- 8. TABEL: INVOICE ITEMS (Factuur/Offerte regels)
 CREATE TABLE IF NOT EXISTS invoice_items (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   invoice_id UUID REFERENCES invoices(id) ON DELETE CASCADE,
+  product_id UUID, -- Optioneel gekoppeld aan de catalogus
   description TEXT NOT NULL,
   quantity DECIMAL(10, 2) NOT NULL,
   unit_price DECIMAL(10, 2) NOT NULL,
+  tax_rate DECIMAL(5, 2) DEFAULT 21.00, -- BTW percentage
   total_price DECIMAL(10, 2) NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
@@ -156,7 +185,7 @@ CREATE TABLE IF NOT EXISTS horse_training (
 CREATE TABLE IF NOT EXISTS horse_health (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   horse_id UUID REFERENCES horses(id) ON DELETE CASCADE,
-  record_type TEXT NOT NULL,
+  record_type care_category_type NOT NULL,
   date DATE NOT NULL,
   veterinarian TEXT,
   cost DECIMAL(10, 2),
@@ -164,7 +193,20 @@ CREATE TABLE IF NOT EXISTS horse_health (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 14. TABEL: UITGAVEN (Kosten per paard)
+-- 14. TABEL: VOEDINGSSCHEMA'S (Nutrition Plans)
+CREATE TABLE IF NOT EXISTS horse_nutrition_plans (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  horse_id UUID REFERENCES horses(id) ON DELETE CASCADE,
+  feed_type TEXT NOT NULL,      -- Bijv. Ruwvoer, Krachtvoer, Supplementen
+  amount_kg DECIMAL(5, 2),      -- Hoeveelheid per portie
+  frequency TEXT NOT NULL,      -- Bijv. 3x per dag, Ochtend/Avond
+  special_instructions TEXT,    -- Bijv. Nat maken voor het voeren
+  start_date DATE NOT NULL,
+  end_date DATE,                -- Kan leeg zijn als het doorlopend is
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 15. TABEL: UITGAVEN (Kosten per paard)
 CREATE TABLE IF NOT EXISTS horse_expenses (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   horse_id UUID REFERENCES horses(id) ON DELETE CASCADE,
@@ -221,7 +263,7 @@ CREATE TABLE IF NOT EXISTS iot_devices (
 CREATE TABLE IF NOT EXISTS care_events (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   horse_id UUID REFERENCES horses(id) ON DELETE CASCADE,
-  category TEXT NOT NULL, -- Bijv. 'Immunisatie' of 'Hoefsmid & Beslag'
+  category care_category_type NOT NULL, -- Gebruikt de vaste Care Enum
   title TEXT NOT NULL,    -- Bijv. 'Jaarlijkse Enting'
   date DATE NOT NULL,
   status TEXT DEFAULT 'gepland', -- gepland, voltooid, geannuleerd
@@ -238,12 +280,18 @@ CREATE TABLE IF NOT EXISTS care_events (
 CREATE TABLE IF NOT EXISTS crm_companies (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   name TEXT NOT NULL,
-  type TEXT NOT NULL, -- Klant, Dierenarts, Hoefsmid, Leverancier
-  vat_number TEXT,
+  type TEXT NOT NULL, -- Klant, Dierenarts, Hoefsmid, Leverancier, Sponsor
+  vat_number TEXT,    -- BTW Nummer
+  kvk_number TEXT,    -- KvK Nummer
+  iban TEXT,          -- Bankrekeningnummer
   address TEXT,
   city TEXT,
+  postal_code TEXT,
   country TEXT,
+  billing_address TEXT,
   website TEXT,
+  general_email TEXT,
+  general_phone TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
@@ -255,7 +303,9 @@ CREATE TABLE IF NOT EXISTS crm_contacts (
   last_name TEXT NOT NULL,
   email TEXT,
   phone TEXT,
-  role TEXT,
+  mobile TEXT,
+  role TEXT,          -- Bijv. Eigenaar, Groom, Accountmanager
+  birthday DATE,
   notes TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
