@@ -18,6 +18,11 @@ CREATE TYPE care_category_type AS ENUM (
 
 CREATE TYPE task_status_type AS ENUM ('todo', 'in_progress', 'done');
 
+CREATE TYPE competition_type AS ENUM (
+  'National', 'International (CSI1*)', 'International (CSI2*)', 'International (CSI3*)', 
+  'International (CSI4*)', 'International (CSI5*)', 'Grand Prix', 'Hunters', 'Jumpers', 'Equitation'
+);
+
 -- 1. TABEL: HORSES (Inclusief stamboom, scouting info, discipline en foto)
 CREATE TABLE IF NOT EXISTS horses (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -100,6 +105,7 @@ CREATE TABLE IF NOT EXISTS horse_competitions (
   name TEXT NOT NULL,
   date DATE NOT NULL,
   location TEXT,
+  competition_category competition_type, -- FEI Stars, Hunters, Jumpers, etc.
   class_level TEXT,       -- Bijv. 1.40m, Grand Prix, Z2
   result INTEGER,         -- Plaatsing (bijv. 1e, 5e)
   faults INTEGER,         -- Strafpunten
@@ -108,6 +114,20 @@ CREATE TABLE IF NOT EXISTS horse_competitions (
   video_url TEXT,         -- Link naar rit op YouTube/Cloudinary
   notes TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 6B. TABEL: ANALYTICS & STATS (HorseStats, FEI Punten, Winstsom)
+CREATE TABLE IF NOT EXISTS analytics_horse_stats (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  horse_id UUID REFERENCES horses(id) ON DELETE CASCADE,
+  year INTEGER NOT NULL,
+  fei_points INTEGER DEFAULT 0,
+  hunter_jumper_points INTEGER DEFAULT 0,
+  total_prize_money DECIMAL(12, 2) DEFAULT 0,
+  clear_rounds_percentage DECIMAL(5, 2) DEFAULT 0,
+  ranking_national INTEGER,
+  ranking_international INTEGER,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- 7. TABEL: INVOICES & QUOTES (Facturen, Offertes en Orders)
