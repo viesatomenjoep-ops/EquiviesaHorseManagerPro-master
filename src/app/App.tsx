@@ -1,6 +1,8 @@
 import { Routes, Route } from "react-router";
 import { Layout } from "./components/Layout";
 import { Dashboard } from "./pages/Dashboard";
+import { InvoicesView } from "./pages/InvoicesView";
+import { ProductsView } from "./pages/ProductsView";
 
 // Placeholders for all the other routes
 function Placeholder({ title }: { title: string }) {
@@ -22,8 +24,8 @@ export default function App() {
         <Route path="tasks" element={<Placeholder title="Taken" />} />
         <Route path="media" element={<Placeholder title="Media & Cloudinary Uploads" />} />
         <Route path="competitions" element={<Placeholder title="Wedstrijden" />} />
-        <Route path="invoices" element={<Placeholder title="Facturatie Systeem" />} />
-        <Route path="products" element={<Placeholder title="Producten" />} />
+        <Route path="invoices" element={<InvoicesView />} />
+        <Route path="products" element={<ProductsView />} />
         <Route path="breeding" element={<Placeholder title="Fokkerij & Veulens" />} />
         <Route path="reports" element={<Placeholder title="Rapporten" />} />
         <Route path="settings" element={<Placeholder title="Instellingen" />} />
