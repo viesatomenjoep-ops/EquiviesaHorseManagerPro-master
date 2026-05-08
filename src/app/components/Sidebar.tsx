@@ -5,9 +5,10 @@ import {
   HeartPulse, Apple, Trophy,
   Users, Calculator, Package, MapPin, FolderOpen,
   Dna, Microscope, Baby,
-  PieChart, Settings, X, ChevronDown, ChevronRight
+  PieChart, Settings, X, ChevronDown, ChevronRight, Globe
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { LanguageSelector } from "./LanguageSelector";
 
 export function Sidebar({ onClose }: { onClose?: () => void }) {
   const location = useLocation();
@@ -74,7 +75,7 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
   };
 
   return (
-    <aside className="w-72 bg-[#111111] text-white h-full flex flex-col shadow-2xl relative">
+    <aside className="w-full md:w-72 bg-[#111111] text-white h-full flex flex-col shadow-2xl relative">
       {/* Mobile close button */}
       {onClose && (
         <button 
@@ -146,7 +147,13 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
         </div>
       </nav>
       
-      {/* We removed LanguageSelector from here, as it's now in the top bar */}
+      {/* Footer area inside sidebar (Mobile Language Selector + extra info) */}
+      <div className="p-6 border-t border-white/10 mt-auto">
+        <div className="lg:hidden flex items-center justify-between">
+          <span className="text-sm font-bold text-slate-400">Taal / Language</span>
+          <LanguageSelector />
+        </div>
+      </div>
     </aside>
   );
 }
