@@ -56,13 +56,13 @@ const sidebarSections = [
 
 export function Sidebar({ onClose }: { onClose?: () => void }) {
   const location = useLocation();
-  // All sections collapsed by default
+  // All sections expanded by default as requested
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
-    "STABLE MANAGEMENT": false,
-    "CARE SUPPORT": false,
-    "ADMINISTRATION & CRM": false,
-    "BREEDING": false,
-    "SYSTEM": false
+    "STABLE MANAGEMENT": true,
+    "CARE SUPPORT": true,
+    "ADMINISTRATION & CRM": true,
+    "BREEDING": true,
+    "SYSTEM": true
   });
 
   const toggleSection = (title: string) => {
@@ -121,7 +121,7 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
                             <Link
                               to={item.path}
                               onClick={onClose} // Auto close sidebar on mobile when an item is clicked
-                              className={`flex items-center gap-4 px-6 py-2.5 text-sm font-medium transition-all duration-200 ${
+                              className={`flex items-center gap-4 px-6 py-3 md:py-2.5 text-base md:text-sm font-medium transition-all duration-200 ${
                                 isActive 
                                   ? "bg-white/5 border-r-4 border-[#C2A878] text-[#C2A878]" 
                                   : "text-slate-400 hover:text-white hover:bg-white/5 border-r-4 border-transparent"
