@@ -142,6 +142,18 @@ CREATE TABLE IF NOT EXISTS invoice_items (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- 8B. TABEL: DOCUMENT & INVOICE SHARES (Equiviesa Network & E-mail Log)
+CREATE TABLE IF NOT EXISTS document_shares (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  document_id UUID,           -- Kan een invoice_id, horse_id, of media_id zijn
+  document_type TEXT,         -- 'invoice', 'horse_profile', 'medical_record', 'xray'
+  share_method TEXT NOT NULL, -- 'email', 'equiviesa_network', 'whatsapp'
+  recipient_email TEXT,       -- Vul in bij email
+  recipient_network_id TEXT,  -- Vul in bij Equiviesa Network (andere stal)
+  status TEXT DEFAULT 'sent', -- 'sent', 'delivered', 'read', 'failed'
+  sent_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- 9. TABEL: PRODUCTS CATALOGUS (Handelspaarden, Diensten, Voer)
 CREATE TABLE IF NOT EXISTS products (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -181,7 +193,7 @@ CREATE TABLE IF NOT EXISTS horse_sales_logistics (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 10. TABEL: FOALS (Veulens / Fokkerij / Welpoosten)
+-- 10. TABEL: FOALS (Veulens / Fokkerij / Opfok)
 CREATE TABLE IF NOT EXISTS foals (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   mare_id UUID REFERENCES horses(id) ON DELETE CASCADE, -- Moeder
@@ -189,6 +201,9 @@ CREATE TABLE IF NOT EXISTS foals (
   name TEXT,
   date_of_birth DATE,
   sex TEXT,
+  chip_number TEXT,
+  registration_number TEXT, -- Stamboeknummer
+  weaning_date DATE,        -- Geplande of daadwerkelijke speendatum
   image_url TEXT, -- Cloudinary upload voor veulen
   notes TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -266,7 +281,9 @@ CREATE TABLE IF NOT EXISTS breeding_mare (
   horse_id UUID REFERENCES horses(id) ON DELETE CASCADE,
   date DATE NOT NULL,
   stallion_name TEXT NOT NULL,
-  scan_result TEXT,
+  insemination_type TEXT, -- 'fresh', 'frozen', 'natural', 'embryo_transfer'
+  cycle_status TEXT,      -- 'in_heat', 'ovulated', 'pregnant', 'empty'
+  scan_result TEXT,       -- Bijv. '18 dagen drachtig', 'Tweeling weggedrukt'
   due_date DATE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
