@@ -4,10 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 const languages = [
   { code: 'nl', name: 'Nederlands' },
-  { code: 'en', name: 'English' },
-  { code: 'de', name: 'Deutsch' },
-  { code: 'fr', name: 'Français' },
-  { code: 'es', name: 'Español' },
+  { code: 'en', name: 'English' }
 ];
 
 export function LanguageSelector() {
