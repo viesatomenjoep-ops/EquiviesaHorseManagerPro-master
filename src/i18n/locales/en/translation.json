@@ -14,7 +14,8 @@
     "documents": "Documents & Media",
     "breeding": "Breeding",
     "reports": "Reports & Analytics",
-    "settings": "Settings"
+    "settings": "Settings",
+    "search_ph": "Search horses, invoices, tasks..."
   },
   "dashboard": {
     "greeting_morning": "Good morning",

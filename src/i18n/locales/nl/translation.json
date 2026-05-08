@@ -14,7 +14,8 @@
     "documents": "Documenten",
     "breeding": "Fokkerij",
     "reports": "Rapporten",
-    "settings": "Instellingen"
+    "settings": "Instellingen",
+    "search_ph": "Zoek paarden, facturen, taken..."
   },
   "dashboard": {
     "greeting_morning": "Goedemorgen",
