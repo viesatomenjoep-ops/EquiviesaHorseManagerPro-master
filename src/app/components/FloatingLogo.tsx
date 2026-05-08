@@ -25,9 +25,9 @@ export function FloatingLogo() {
         style={{ transform: `rotate(${rotation}deg)` }}
       >
         <img 
-          src="/logo.png" 
+          src="/viesa-logo.png" 
           alt="Equivest Logo" 
-          className="w-full h-full object-cover"
+          className="w-full h-full object-contain p-2 drop-shadow-md"
         />
       </div>
     </div>

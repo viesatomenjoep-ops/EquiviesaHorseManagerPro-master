@@ -25,9 +25,9 @@ export function DashboardHeader() {
           style={{ transform: `rotate(${rotation}deg)` }}
         >
           <img 
-            src="/logo-new.png" 
+            src="/viesa-logo.png" 
             alt="Equivest Logo" 
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain p-1"
           />
         </div>
         <div>
