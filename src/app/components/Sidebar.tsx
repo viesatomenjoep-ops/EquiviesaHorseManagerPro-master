@@ -56,11 +56,11 @@ const sidebarSections = [
 
 export function Sidebar({ onClose }: { onClose?: () => void }) {
   const location = useLocation();
-  // By default, open the first 3 sections, keep Breeding and System closed as requested
+  // All sections collapsed by default
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
-    "STABLE MANAGEMENT": true,
-    "CARE SUPPORT": true,
-    "ADMINISTRATION & CRM": true,
+    "STABLE MANAGEMENT": false,
+    "CARE SUPPORT": false,
+    "ADMINISTRATION & CRM": false,
     "BREEDING": false,
     "SYSTEM": false
   });
@@ -109,30 +109,33 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
                   )}
                 </button>
                 
-                <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 opacity-100 mt-1' : 'max-h-0 opacity-0'}`}>
-                  <ul className="space-y-1">
-                    {section.items.map((item) => {
-                      const Icon = item.icon;
-                      const isActive = location.pathname === item.path || (item.path !== "/" && location.pathname.startsWith(item.path));
-                      
-                      return (
-                        <li key={item.path}>
-                          <Link
-                            to={item.path}
-                            className={`flex items-center gap-4 px-6 py-2.5 text-sm font-medium transition-all duration-200 ${
-                              isActive 
-                                ? "bg-white/5 border-r-4 border-[#C2A878] text-[#C2A878]" 
-                                : "text-slate-400 hover:text-white hover:bg-white/5 border-r-4 border-transparent"
-                            }`}
-                          >
-                            <Icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-[#C2A878]' : 'text-slate-500'}`} />
-                            <span className="truncate">{item.name}</span>
-                          </Link>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
+                {isOpen && (
+                  <div className="mt-1">
+                    <ul className="space-y-1">
+                      {section.items.map((item) => {
+                        const Icon = item.icon;
+                        const isActive = location.pathname === item.path || (item.path !== "/" && location.pathname.startsWith(item.path));
+                        
+                        return (
+                          <li key={item.path}>
+                            <Link
+                              to={item.path}
+                              onClick={onClose} // Auto close sidebar on mobile when an item is clicked
+                              className={`flex items-center gap-4 px-6 py-2.5 text-sm font-medium transition-all duration-200 ${
+                                isActive 
+                                  ? "bg-white/5 border-r-4 border-[#C2A878] text-[#C2A878]" 
+                                  : "text-slate-400 hover:text-white hover:bg-white/5 border-r-4 border-transparent"
+                              }`}
+                            >
+                              <Icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-[#C2A878]' : 'text-slate-500'}`} />
+                              <span className="truncate">{item.name}</span>
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                )}
               </div>
             );
           })}

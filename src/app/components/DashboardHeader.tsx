@@ -1,10 +1,13 @@
-import { Search, Bell } from 'lucide-react';
+import { Search, Bell, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export function DashboardHeader() {
   const currentHour = new Date().getHours();
-  const greeting = currentHour < 12 ? 'Good morning' : currentHour < 18 ? 'Good afternoon' : 'Good evening';
+  const greeting = currentHour < 12 ? 'Goedemorgen' : currentHour < 18 ? 'Goedemiddag' : 'Goedenavond';
   const [rotation, setRotation] = useState(0);
+  const [isVisible, setIsVisible] = useState(true);
+
+  if (!isVisible) return null;
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,7 +21,15 @@ export function DashboardHeader() {
   }, []);
 
   return (
-    <header className="sticky top-0 z-50 flex flex-col md:flex-row items-start md:items-center justify-between p-4 md:p-6 bg-white/95 backdrop-blur-sm border-b border-slate-200 gap-4 md:gap-0 shadow-sm">
+    <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between p-6 bg-white rounded-2xl border border-slate-200 gap-6 shadow-sm mb-6">
+      {/* Dismiss Button for Mobile */}
+      <button 
+        onClick={() => setIsVisible(false)}
+        className="absolute top-4 right-4 p-2 text-slate-400 hover:bg-slate-100 rounded-full lg:hidden"
+      >
+        <X className="w-5 h-5" />
+      </button>
+
       <div className="flex items-center gap-4 md:gap-6 w-full md:w-auto">
         <div 
           className="w-12 h-12 flex-shrink-0 bg-white rounded-xl shadow-sm border border-slate-200 flex items-center justify-center overflow-hidden transition-transform duration-75 ease-out"
@@ -31,8 +42,8 @@ export function DashboardHeader() {
           />
         </div>
         <div>
-          <h1 className="text-xl md:text-2xl font-serif font-bold text-slate-900">{greeting}, Thomas</h1>
-          <p className="text-xs md:text-sm text-slate-500 font-medium tracking-wide">Equiviesa Stable Manager Pro</p>
+          <h1 className="text-xl md:text-2xl font-bold text-slate-900">{greeting}, Thomas</h1>
+          <p className="text-xs md:text-sm text-slate-500 font-medium mt-1">Waar kan ik je vandaag mee helpen?</p>
         </div>
       </div>
 
@@ -41,8 +52,8 @@ export function DashboardHeader() {
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 md:w-5 md:h-5 text-slate-400" />
           <input
             type="text"
-            placeholder="Search horses, invoices, tasks..."
-            className="w-full md:w-96 pl-9 md:pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm md:text-base text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-400 transition-shadow"
+            placeholder="Zoek paarden, facturen, taken..."
+            className="w-full md:w-96 pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm md:text-base text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#C2A878] transition-shadow"
           />
         </div>
 
@@ -51,6 +62,6 @@ export function DashboardHeader() {
           <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
         </button>
       </div>
-    </header>
+    </div>
   );
 }
