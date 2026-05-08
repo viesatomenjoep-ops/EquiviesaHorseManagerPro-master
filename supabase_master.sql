@@ -216,21 +216,7 @@ CREATE TABLE IF NOT EXISTS horse_sales_logistics (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 10. TABEL: FOALS (Veulens / Fokkerij / Opfok)
-CREATE TABLE IF NOT EXISTS foals (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  mare_id UUID REFERENCES horses(id) ON DELETE CASCADE, -- Moeder
-  sire_name TEXT NOT NULL, -- Vader
-  name TEXT,
-  date_of_birth DATE,
-  sex TEXT,
-  chip_number TEXT,
-  registration_number TEXT, -- Stamboeknummer
-  weaning_date DATE,        -- Geplande of daadwerkelijke speendatum
-  image_url TEXT, -- Cloudinary upload voor veulen
-  notes TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+-- Foals moved to Breeding Module 3
 
 -- 11. TABEL: SETTINGS (Instellingen)
 CREATE TABLE IF NOT EXISTS settings (
@@ -287,29 +273,7 @@ CREATE TABLE IF NOT EXISTS horse_expenses (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 15. TABEL: HENGST (Dekkingsinformatie)
-CREATE TABLE IF NOT EXISTS breeding_stallion (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  horse_id UUID REFERENCES horses(id) ON DELETE CASCADE,
-  date DATE NOT NULL,
-  mare_name TEXT NOT NULL,
-  location TEXT,
-  status TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- 16. TABEL: MERRIE (Cyclus en drachtinformatie)
-CREATE TABLE IF NOT EXISTS breeding_mare (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  horse_id UUID REFERENCES horses(id) ON DELETE CASCADE,
-  date DATE NOT NULL,
-  stallion_name TEXT NOT NULL,
-  insemination_type TEXT, -- 'fresh', 'frozen', 'natural', 'embryo_transfer'
-  cycle_status TEXT,      -- 'in_heat', 'ovulated', 'pregnant', 'empty'
-  scan_result TEXT,       -- Bijv. '18 dagen drachtig', 'Tweeling weggedrukt'
-  due_date DATE,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+-- Stallion and Mare tables moved to Breeding Modules 1 & 4
 
 -- 17. TABEL: AI INSIGHTS (Voor je AI Feed)
 CREATE TABLE IF NOT EXISTS ai_insights (
@@ -382,22 +346,7 @@ CREATE TABLE IF NOT EXISTS crm_contacts (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- ==========================================
--- NIEUWE MODULES: FOKKERIJ (Uitbreiding)
--- ==========================================
-
--- 22. TABEL: EMBRYOS (Embryo Tracking)
-CREATE TABLE IF NOT EXISTS breeding_embryos (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  mare_id UUID REFERENCES horses(id) ON DELETE CASCADE, -- Biologische Moeder
-  sire_name TEXT NOT NULL, -- Biologische Vader
-  recipient_mare TEXT, -- Draagmoeder (indien van toepassing)
-  flush_date DATE,
-  transfer_date DATE,
-  status TEXT DEFAULT 'frozen', -- frozen, transferred, lost, born
-  storage_location TEXT, -- Waar is het embryo opgeslagen?
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
+-- Embryo tracking moved to Breeding Module 2
 
 -- ==========================================
 -- NIEUWE MODULES: STALLENBEHEER & B2B DATA SYNC
@@ -458,6 +407,172 @@ CREATE TABLE IF NOT EXISTS equivest_base_time_off (
   status TEXT DEFAULT 'pending', -- 'pending', 'approved', 'rejected'
   manager_id UUID REFERENCES profiles(id),
   reason TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- ==========================================
+-- THE ULTIMATE BREEDING ENGINE (Fase 4 Uitbreidingen)
+-- ==========================================
+
+-- ---------------------------------------------------------
+-- BREEDING MODULE 1: MARE LINES & CYCLES
+-- ---------------------------------------------------------
+CREATE TYPE mare_cycle_status AS ENUM ('in_heat', 'ovulating', 'pregnant', 'empty', 'reabsorbing');
+CREATE TYPE treatment_type AS ENUM ('oxytocin', 'pg', 'antibiotics', 'flush', 'other');
+
+CREATE TABLE IF NOT EXISTS breeding_mare_cycles (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  horse_id UUID REFERENCES horses(id) ON DELETE CASCADE,
+  start_date DATE NOT NULL,
+  status mare_cycle_status DEFAULT 'in_heat',
+  behavior_notes TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS breeding_mare_scans (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  cycle_id UUID REFERENCES breeding_mare_cycles(id) ON DELETE CASCADE,
+  scan_date TIMESTAMP WITH TIME ZONE NOT NULL,
+  veterinarian_id UUID REFERENCES profiles(id),
+  follicle_size_left_mm DECIMAL(5,2),
+  follicle_size_right_mm DECIMAL(5,2),
+  uterus_fluid BOOLEAN DEFAULT false,
+  uterine_edema_score INTEGER,
+  vet_notes TEXT,
+  next_scan_due TIMESTAMP WITH TIME ZONE,
+  magic_link_token UUID DEFAULT gen_random_uuid() UNIQUE,
+  magic_link_expires_at TIMESTAMP WITH TIME ZONE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS breeding_mare_treatments (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  cycle_id UUID REFERENCES breeding_mare_cycles(id) ON DELETE CASCADE,
+  treatment treatment_type NOT NULL,
+  dosage TEXT,
+  administered_by UUID REFERENCES profiles(id),
+  administration_date TIMESTAMP WITH TIME ZONE NOT NULL,
+  notes TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- ---------------------------------------------------------
+-- BREEDING MODULE 2: EMBRYO TRACKING
+-- ---------------------------------------------------------
+CREATE TYPE embryo_status AS ENUM ('frozen', 'transferred', 'lost', 'born', 'sold');
+CREATE TYPE embryo_quality AS ENUM ('Grade 1', 'Grade 2', 'Grade 3', 'Grade 4');
+
+CREATE TABLE IF NOT EXISTS breeding_embryo_flushes (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  mare_id UUID REFERENCES horses(id) ON DELETE CASCADE,
+  sire_name TEXT NOT NULL,
+  flush_date DATE NOT NULL,
+  veterinarian_id UUID REFERENCES profiles(id),
+  embryos_recovered INTEGER DEFAULT 0,
+  flush_notes TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS breeding_embryos (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  flush_id UUID REFERENCES breeding_embryo_flushes(id) ON DELETE SET NULL,
+  mare_id UUID REFERENCES horses(id),
+  sire_name TEXT NOT NULL,
+  creation_method TEXT DEFAULT 'ET',
+  quality embryo_quality,
+  status embryo_status DEFAULT 'frozen',
+  storage_facility TEXT,
+  nitrogen_tank TEXT,
+  canister_number TEXT,
+  straw_color TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS breeding_embryo_transfers (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  embryo_id UUID REFERENCES breeding_embryos(id) ON DELETE CASCADE,
+  recipient_mare_name TEXT NOT NULL,
+  transfer_date DATE NOT NULL,
+  veterinarian_id UUID REFERENCES profiles(id),
+  scan_18_days_pregnant BOOLEAN,
+  scan_40_days_pregnant BOOLEAN,
+  expected_due_date DATE,
+  magic_link_token UUID DEFAULT gen_random_uuid() UNIQUE,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- ---------------------------------------------------------
+-- BREEDING MODULE 3: FOAL REARING
+-- ---------------------------------------------------------
+CREATE TABLE IF NOT EXISTS breeding_foal_registration (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  horse_id UUID REFERENCES horses(id) ON DELETE CASCADE,
+  chip_number TEXT,
+  dna_kit_sent_date DATE,
+  dna_result_received BOOLEAN DEFAULT false,
+  studbook_registration_number TEXT,
+  studbook TEXT,
+  passport_received BOOLEAN DEFAULT false,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS breeding_foal_protocols (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  horse_id UUID REFERENCES horses(id) ON DELETE CASCADE,
+  event_type TEXT NOT NULL,
+  scheduled_date DATE NOT NULL,
+  completed_date DATE,
+  administered_by TEXT,
+  notes TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS breeding_foal_training (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  horse_id UUID REFERENCES horses(id) ON DELETE CASCADE,
+  training_type TEXT NOT NULL,
+  status TEXT DEFAULT 'planned',
+  trainer_id UUID REFERENCES profiles(id),
+  progress_notes TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- ---------------------------------------------------------
+-- BREEDING MODULE 4: STALLION SELECTION & SPERM
+-- ---------------------------------------------------------
+CREATE TABLE IF NOT EXISTS breeding_stallion_collections (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  stallion_id UUID REFERENCES horses(id) ON DELETE CASCADE,
+  collection_date TIMESTAMP WITH TIME ZONE NOT NULL,
+  volume_ml DECIMAL(5, 2),
+  motility_percentage INTEGER,
+  concentration_mil_ml DECIMAL(8, 2),
+  straws_produced INTEGER,
+  collection_type TEXT,
+  veterinarian_id UUID REFERENCES profiles(id),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS breeding_semen_shipping (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  collection_id UUID REFERENCES breeding_stallion_collections(id) ON DELETE SET NULL,
+  recipient_mare_owner TEXT NOT NULL,
+  destination_address TEXT NOT NULL,
+  shipping_date DATE NOT NULL,
+  courier_company TEXT,
+  tracking_number TEXT,
+  shipping_status TEXT DEFAULT 'in_transit',
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS breeding_stud_fees (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  stallion_id UUID REFERENCES horses(id) ON DELETE CASCADE,
+  season_year INTEGER NOT NULL,
+  price_fresh DECIMAL(10, 2),
+  price_frozen DECIMAL(10, 2),
+  pregnancy_fee DECIMAL(10, 2),
+  gust_arrangement TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
