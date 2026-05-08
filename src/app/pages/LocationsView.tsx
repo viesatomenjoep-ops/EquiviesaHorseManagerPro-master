@@ -196,7 +196,7 @@ export function LocationsView() {
               const occupied = locBoxes.filter(b => b.horse_id !== null).length;
               
               return (
-                <div key={loc.id} className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6">
+                <div key={loc.id} className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden mb-6 magnetic-card">
                   <div className="p-5 border-b border-slate-200 flex justify-between items-center bg-slate-50/50">
                     <div className="flex items-center gap-4">
                       {loc.image_url ? (

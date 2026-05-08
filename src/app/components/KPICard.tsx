@@ -16,7 +16,7 @@ export function KPICard({ title, value, subtitle, icon: Icon, trend, trendData, 
   const chartData = trendData?.map((value, index) => ({ id: index, value })) || [];
 
   return (
-    <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-all duration-300">
+    <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm transition-all duration-300 magnetic-card">
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-slate-100 rounded-lg">

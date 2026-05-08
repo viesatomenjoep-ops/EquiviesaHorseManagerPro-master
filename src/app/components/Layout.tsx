@@ -47,8 +47,8 @@ export function Layout() {
               <Menu className="w-6 h-6" />
             </button>
             <div className="hidden lg:block">
-              <h1 className="text-xl font-bold text-slate-900 leading-tight">{greeting}, Tom</h1>
-              <p className="text-xs text-slate-500 font-medium">{t('dashboard.subtitle')}</p>
+              <h1 className="text-xl font-bold text-slate-900 leading-tight">Hi Mia, {greeting.toLowerCase()}!</h1>
+              <p className="text-xs text-slate-500 font-medium">Is there anything I can help you with today?</p>
             </div>
             {/* Mobile Title Replacement */}
             <span className="lg:hidden font-bold text-[#C2A878] tracking-widest uppercase text-sm">Equiviesa Pro</span>

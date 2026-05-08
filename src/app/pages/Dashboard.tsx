@@ -141,7 +141,7 @@ export function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Weer & Stal Klimaat */}
-        <div className="bg-gradient-to-br from-blue-900 to-indigo-900 rounded-2xl p-6 text-white relative overflow-hidden shadow-sm">
+        <div className="bg-gradient-to-br from-blue-900 to-indigo-900 rounded-2xl p-6 text-white relative overflow-hidden shadow-sm magnetic-card">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
           <h3 className="font-bold flex items-center gap-2 mb-6">
             <CloudRain className="w-5 h-5 text-blue-300" /> {t('dashboard.weather.title')}
@@ -165,7 +165,7 @@ export function Dashboard() {
         </div>
 
         {/* Urgente Gezondheids Alerts */}
-        <div className="bg-white rounded-2xl border border-rose-100 p-6 shadow-sm relative overflow-hidden">
+        <div className="bg-white rounded-2xl border border-rose-100 p-6 shadow-sm relative overflow-hidden magnetic-card">
           <div className="absolute top-0 right-0 w-2 h-full bg-rose-500"></div>
           <h3 className="font-bold text-slate-900 flex items-center gap-2 mb-4">
             <AlertCircle className="w-5 h-5 text-rose-500" /> {t('dashboard.alerts.title')}
@@ -192,7 +192,7 @@ export function Dashboard() {
         </div>
 
         {/* Komende Wedstrijden */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm magnetic-card">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-bold text-slate-900 flex items-center gap-2">
               <Trophy className="w-5 h-5 text-[#C2A878]" /> {t('dashboard.competitions.title')}
@@ -235,7 +235,7 @@ export function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
         {/* Recente Facturen */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
+        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm magnetic-card">
           <h3 className="font-bold text-slate-900 flex items-center gap-2 mb-4">
             <CreditCard className="w-5 h-5 text-emerald-500" /> {t('dashboard.invoices.title')}
           </h3>
