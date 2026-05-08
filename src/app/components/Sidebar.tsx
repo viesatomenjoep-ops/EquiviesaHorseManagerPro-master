@@ -7,56 +7,59 @@ import {
   Dna, Microscope, Baby,
   PieChart, Settings, X, ChevronDown, ChevronRight
 } from "lucide-react";
-import { LanguageSelector } from "./LanguageSelector";
-
-const sidebarSections = [
-  {
-    title: "STABLE MANAGEMENT",
-    items: [
-      { name: "Dashboard", path: "/", icon: LayoutDashboard },
-      { name: "Mijn Paarden", path: "/horses", icon: Hexagon },
-      { name: "Agenda & Planning", path: "/agenda", icon: CalendarDays },
-      { name: "Takenbord", path: "/tasks", icon: ListTodo },
-    ]
-  },
-  {
-    title: "CARE SUPPORT",
-    items: [
-      { name: "Gezondheid & Medisch", path: "/health", icon: HeartPulse },
-      { name: "Voedingsschema's", path: "/feeding", icon: Apple },
-      { name: "Wedstrijdsport", path: "/competitions", icon: Trophy },
-    ]
-  },
-  {
-    title: "ADMINISTRATION & CRM",
-    items: [
-      { name: "Relaties & Contacten", path: "/contacts", icon: Users },
-      { name: "Facturatie", path: "/invoices", icon: Calculator },
-      { name: "Producten Catalogus", path: "/products", icon: Package },
-      { name: "Stallen & Locaties", path: "/locations", icon: MapPin },
-      { name: "Documenten & Media", path: "/documents", icon: FolderOpen },
-    ]
-  },
-  {
-    title: "BREEDING",
-    items: [
-      { name: "Mare Lines", path: "/breeding/mares", icon: Dna },
-      { name: "Embryo Tracking", path: "/breeding/embryos", icon: Microscope },
-      { name: "Foal Rearing", path: "/breeding/foals", icon: Baby },
-      { name: "Stallion Selection", path: "/breeding/stallions", icon: Trophy },
-    ]
-  },
-  {
-    title: "SYSTEM",
-    items: [
-      { name: "Rapporten & Analytics", path: "/reports", icon: PieChart },
-      { name: "Systeem Instellingen", path: "/settings", icon: Settings },
-    ]
-  }
-];
+import { useTranslation } from "react-i18next";
 
 export function Sidebar({ onClose }: { onClose?: () => void }) {
   const location = useLocation();
+  const { t } = useTranslation();
+  
+  // Dynamic sidebar sections based on translations
+  const sidebarSections = [
+    {
+      title: "STABLE MANAGEMENT",
+      items: [
+        { name: t('nav.dashboard'), path: "/", icon: LayoutDashboard },
+        { name: t('nav.horses'), path: "/horses", icon: Hexagon },
+        { name: t('nav.agenda'), path: "/agenda", icon: CalendarDays },
+        { name: t('nav.tasks'), path: "/tasks", icon: ListTodo },
+      ]
+    },
+    {
+      title: "CARE SUPPORT",
+      items: [
+        { name: t('nav.health'), path: "/health", icon: HeartPulse },
+        { name: t('nav.feeding'), path: "/feeding", icon: Apple },
+        { name: t('nav.competitions'), path: "/competitions", icon: Trophy },
+      ]
+    },
+    {
+      title: "ADMINISTRATION & CRM",
+      items: [
+        { name: t('nav.contacts'), path: "/contacts", icon: Users },
+        { name: t('nav.invoices'), path: "/invoices", icon: Calculator },
+        { name: t('nav.products'), path: "/products", icon: Package },
+        { name: t('nav.locations'), path: "/locations", icon: MapPin },
+        { name: t('nav.documents'), path: "/documents", icon: FolderOpen },
+      ]
+    },
+    {
+      title: "BREEDING",
+      items: [
+        { name: "Mare Lines", path: "/breeding/mares", icon: Dna },
+        { name: "Embryo Tracking", path: "/breeding/embryos", icon: Microscope },
+        { name: "Foal Rearing", path: "/breeding/foals", icon: Baby },
+        { name: "Stallion Selection", path: "/breeding/stallions", icon: Trophy },
+      ]
+    },
+    {
+      title: "SYSTEM",
+      items: [
+        { name: t('nav.reports'), path: "/reports", icon: PieChart },
+        { name: t('nav.settings'), path: "/settings", icon: Settings },
+      ]
+    }
+  ];
+
   // All sections expanded by default as requested
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
     "STABLE MANAGEMENT": true,

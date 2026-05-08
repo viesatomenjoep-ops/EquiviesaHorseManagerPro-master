@@ -1,0 +1,23 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "horses": "Horses",
+    "agenda": "Calendar",
+    "tasks": "Tasks",
+    "health": "Health & Medical",
+    "feeding": "Feeding & Nutrition",
+    "competitions": "Competitions",
+    "contacts": "CRM & Contacts",
+    "invoices": "Invoices",
+    "products": "Products & Services",
+    "locations": "Locations & Stables",
+    "documents": "Documents & Media",
+    "breeding": "Breeding",
+    "reports": "Reports & Analytics",
+    "settings": "Settings"
+  },
+  "dashboard": {
+    "greeting": "Good morning",
+    "subtitle": "Here is today's overview."
+  }
+}

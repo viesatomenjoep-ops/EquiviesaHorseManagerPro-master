@@ -1,0 +1,23 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "horses": "Paarden",
+    "agenda": "Agenda",
+    "tasks": "Taken",
+    "health": "Gezondheid",
+    "feeding": "Voeding",
+    "competitions": "Wedstrijden",
+    "contacts": "Contacten",
+    "invoices": "Facturen",
+    "products": "Producten",
+    "locations": "Locaties",
+    "documents": "Documenten",
+    "breeding": "Fokkerij",
+    "reports": "Rapporten",
+    "settings": "Instellingen"
+  },
+  "dashboard": {
+    "greeting": "Goedemorgen",
+    "subtitle": "Hier is het overzicht van vandaag."
+  }
+}
