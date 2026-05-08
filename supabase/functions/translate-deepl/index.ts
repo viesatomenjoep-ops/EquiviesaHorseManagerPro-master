@@ -23,8 +23,8 @@ serve(async (req) => {
       throw new Error("DEEPL_API_KEY is niet ingesteld in Supabase Secrets")
     }
 
-    // Call DeepL Free API (use api.deepl.com for Pro)
-    const url = 'https://api-free.deepl.com/v2/translate'
+    // Call DeepL PRO API (omdat de gebruiker het Pro plan heeft)
+    const url = 'https://api.deepl.com/v2/translate'
     
     const response = await fetch(url, {
       method: 'POST',
