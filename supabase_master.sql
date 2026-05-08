@@ -6,7 +6,8 @@
 -- ==========================================
 -- ENUMS (Vaste categorieën voor dropdowns en strict rules)
 -- ==========================================
-CREATE TYPE care_category_type AS ENUM (
+DO $$ BEGIN
+    CREATE TYPE care_category_type AS ENUM (
   'Clinical Agreements',
   'Parasite prevention',
   'Immunization',
@@ -15,8 +16,15 @@ CREATE TYPE care_category_type AS ENUM (
   'Dental check-up',
   'Farrier & Shoeing'
 );
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
-CREATE TYPE task_status_type AS ENUM ('todo', 'in_progress', 'done');
+DO $$ BEGIN
+    CREATE TYPE task_status_type AS ENUM ('todo', 'in_progress', 'done');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 CREATE TYPE competition_type AS ENUM (
   'National', 'International (CSI1*)', 'International (CSI2*)', 'International (CSI3*)', 
@@ -429,8 +437,16 @@ CREATE TABLE IF NOT EXISTS equivest_base_time_off (
 -- ---------------------------------------------------------
 -- BREEDING MODULE 1: MARE LINES & CYCLES
 -- ---------------------------------------------------------
-CREATE TYPE mare_cycle_status AS ENUM ('in_heat', 'ovulating', 'pregnant', 'empty', 'reabsorbing');
-CREATE TYPE treatment_type AS ENUM ('oxytocin', 'pg', 'antibiotics', 'flush', 'other');
+DO $$ BEGIN
+    CREATE TYPE mare_cycle_status AS ENUM ('in_heat', 'ovulating', 'pregnant', 'empty', 'reabsorbing');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
+DO $$ BEGIN
+    CREATE TYPE treatment_type AS ENUM ('oxytocin', 'pg', 'antibiotics', 'flush', 'other');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 CREATE TABLE IF NOT EXISTS breeding_mare_cycles (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -471,8 +487,16 @@ CREATE TABLE IF NOT EXISTS breeding_mare_treatments (
 -- ---------------------------------------------------------
 -- BREEDING MODULE 2: EMBRYO TRACKING
 -- ---------------------------------------------------------
-CREATE TYPE embryo_status AS ENUM ('frozen', 'transferred', 'lost', 'born', 'sold');
-CREATE TYPE embryo_quality AS ENUM ('Grade 1', 'Grade 2', 'Grade 3', 'Grade 4');
+DO $$ BEGIN
+    CREATE TYPE embryo_status AS ENUM ('frozen', 'transferred', 'lost', 'born', 'sold');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
+DO $$ BEGIN
+    CREATE TYPE embryo_quality AS ENUM ('Grade 1', 'Grade 2', 'Grade 3', 'Grade 4');
+EXCEPTION
+    WHEN duplicate_object THEN null;
+END $$;
 
 CREATE TABLE IF NOT EXISTS breeding_embryo_flushes (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
