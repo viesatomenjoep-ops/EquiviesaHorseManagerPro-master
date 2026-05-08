@@ -80,13 +80,16 @@ CREATE TABLE IF NOT EXISTS diary_entries (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 5. TABEL: MEDIA (Foto's en video's via Cloudinary)
+-- 5. TABEL: DOCUMENTS & MEDIA (Cloudinary Uploads)
 CREATE TABLE IF NOT EXISTS media_assets (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   horse_id UUID REFERENCES horses(id) ON DELETE CASCADE,
-  url TEXT NOT NULL, -- Cloudinary URL
-  type TEXT, -- image of video
+  url TEXT NOT NULL,          -- Cloudinary URL
+  file_name TEXT,
+  file_type TEXT,             -- image/jpeg, video/mp4, application/pdf
+  document_category TEXT,     -- Bijv. 'FEI Paspoort', 'HorseTelex', 'X-Ray', 'Video', 'Algemene Foto'
   description TEXT,
+  uploaded_by UUID REFERENCES profiles(id) ON DELETE SET NULL,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
