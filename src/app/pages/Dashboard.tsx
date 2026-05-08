@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router';
 import { KPICard } from '../components/KPICard';
 import { KanbanBoard } from '../components/KanbanBoard';
 import { AIFeed } from '../components/AIFeed';
@@ -21,6 +22,7 @@ interface RecentInvoice {
 
 export function Dashboard() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [totalHorses, setTotalHorses] = useState<number>(42);
   const [openTasks, setOpenTasks] = useState<string>("8/12");
   const [totalRevenue, setTotalRevenue] = useState<string>("€12.450");
@@ -112,7 +114,7 @@ export function Dashboard() {
             return (
               <button 
                 key={idx}
-                onClick={() => window.location.href = mod.path}
+                onClick={() => navigate(mod.path)}
                 className="relative overflow-hidden bg-[#111111] border border-slate-800 rounded-2xl p-5 text-left transition-all duration-300 hover:scale-[1.02] hover:shadow-xl group"
               >
                 <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${mod.color} opacity-10 rounded-full blur-2xl transform translate-x-10 -translate-y-10 group-hover:opacity-20 transition-opacity`} />
@@ -252,7 +254,7 @@ export function Dashboard() {
               </div>
             ))}
           </div>
-          <button onClick={() => window.location.href = '/finance/invoices'} className="w-full mt-4 text-xs font-bold text-slate-400 hover:text-[#C2A878] transition-colors">
+          <button onClick={() => navigate('/finance/invoices')} className="w-full mt-4 text-xs font-bold text-slate-400 hover:text-[#C2A878] transition-colors">
             {t('dashboard.invoices.btn_all')} &rarr;
           </button>
         </div>
