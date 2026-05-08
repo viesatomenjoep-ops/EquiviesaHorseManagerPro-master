@@ -4,7 +4,6 @@ import { KPICard } from '../components/KPICard';
 import { KanbanBoard } from '../components/KanbanBoard';
 import { AIFeed } from '../components/AIFeed';
 import { IoTTracker } from '../components/IoTTracker';
-import { PromoGenerator } from '../components/PromoGenerator';
 import { PawPrint, CheckCircle, DollarSign, Image, Home, Activity, Briefcase, Dna, Settings } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
@@ -88,7 +87,6 @@ export function Dashboard() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-6">
-          <PromoGenerator />
           <KanbanBoard />
         </div>
         <div className="space-y-6">

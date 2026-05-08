@@ -132,6 +132,44 @@ CREATE TABLE IF NOT EXISTS analytics_horse_stats (
   ranking_international INTEGER,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+-- ==========================================
+-- NIEUWE MODULES: ADMINISTRATIE & CRM
+-- ==========================================
+
+-- 20. TABEL: CRM COMPANIES (Bedrijven / Relaties)
+CREATE TABLE IF NOT EXISTS crm_companies (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  name TEXT NOT NULL,
+  type TEXT NOT NULL, -- Klant, Dierenarts, Hoefsmid, Leverancier, Sponsor
+  vat_number TEXT,    -- BTW Nummer
+  kvk_number TEXT,    -- KvK Nummer
+  iban TEXT,          -- Bankrekeningnummer
+  address TEXT,
+  city TEXT,
+  postal_code TEXT,
+  country TEXT,
+  billing_address TEXT,
+  website TEXT,
+  general_email TEXT,
+  general_phone TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 21. TABEL: CRM CONTACTS (Contactpersonen)
+CREATE TABLE IF NOT EXISTS crm_contacts (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  company_id UUID REFERENCES crm_companies(id) ON DELETE SET NULL,
+  first_name TEXT NOT NULL,
+  last_name TEXT NOT NULL,
+  email TEXT,
+  phone TEXT,
+  mobile TEXT,
+  role TEXT,          -- Bijv. Eigenaar, Groom, Accountmanager
+  birthday DATE,
+  notes TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 
 -- 7. TABEL: INVOICES & QUOTES (Facturen, Offertes en Orders)
 CREATE TABLE IF NOT EXISTS invoices (
@@ -304,44 +342,6 @@ CREATE TABLE IF NOT EXISTS care_events (
   date DATE NOT NULL,
   status TEXT DEFAULT 'gepland', -- gepland, voltooid, geannuleerd
   provider TEXT,          -- Naam van de smid of dierenarts
-  notes TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- ==========================================
--- NIEUWE MODULES: ADMINISTRATIE & CRM
--- ==========================================
-
--- 20. TABEL: CRM COMPANIES (Bedrijven / Relaties)
-CREATE TABLE IF NOT EXISTS crm_companies (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  name TEXT NOT NULL,
-  type TEXT NOT NULL, -- Klant, Dierenarts, Hoefsmid, Leverancier, Sponsor
-  vat_number TEXT,    -- BTW Nummer
-  kvk_number TEXT,    -- KvK Nummer
-  iban TEXT,          -- Bankrekeningnummer
-  address TEXT,
-  city TEXT,
-  postal_code TEXT,
-  country TEXT,
-  billing_address TEXT,
-  website TEXT,
-  general_email TEXT,
-  general_phone TEXT,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
-);
-
--- 21. TABEL: CRM CONTACTS (Contactpersonen)
-CREATE TABLE IF NOT EXISTS crm_contacts (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  company_id UUID REFERENCES crm_companies(id) ON DELETE SET NULL,
-  first_name TEXT NOT NULL,
-  last_name TEXT NOT NULL,
-  email TEXT,
-  phone TEXT,
-  mobile TEXT,
-  role TEXT,          -- Bijv. Eigenaar, Groom, Accountmanager
-  birthday DATE,
   notes TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
