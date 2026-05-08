@@ -577,6 +577,132 @@ CREATE TABLE IF NOT EXISTS breeding_stud_fees (
 );
 
 -- ==========================================
+-- NIEUWE MODULES: HEALTH & MEDICAL (Gedetailleerd)
+-- ==========================================
+
+CREATE TABLE IF NOT EXISTS health_vaccinations (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  horse_id UUID REFERENCES horses(id) ON DELETE CASCADE,
+  disease TEXT NOT NULL, -- Bijv. Influenza, Tetanus, Rhinopneumonie
+  date_given DATE NOT NULL,
+  next_due DATE NOT NULL,
+  veterinarian TEXT,
+  batch_number TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS health_dental (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  horse_id UUID REFERENCES horses(id) ON DELETE CASCADE,
+  date DATE NOT NULL,
+  findings TEXT,
+  treatment TEXT,
+  next_due DATE,
+  veterinarian TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS health_farrier (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  horse_id UUID REFERENCES horses(id) ON DELETE CASCADE,
+  date DATE NOT NULL,
+  shoeing_type TEXT NOT NULL, -- Bijv. Rondom beslagen, Alleen voor, Bekappen
+  next_due DATE,
+  farrier_name TEXT,
+  notes TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS health_vet_visits (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  horse_id UUID REFERENCES horses(id) ON DELETE CASCADE,
+  date TIMESTAMP WITH TIME ZONE NOT NULL,
+  reason TEXT NOT NULL,
+  diagnosis TEXT,
+  treatment TEXT,
+  medication_prescribed TEXT,
+  cost DECIMAL(10, 2),
+  veterinarian_id UUID REFERENCES profiles(id),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- ==========================================
+-- NIEUWE MODULES: NUTRITION & WEBSHOP (Magic Links)
+-- ==========================================
+
+CREATE TABLE IF NOT EXISTS nutrition_webshop_products (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  name TEXT NOT NULL,
+  brand TEXT NOT NULL,
+  category TEXT, -- Krachtvoer, Supplement, Ruwvoer
+  webshop_url TEXT UNIQUE, -- De Magic Link URL (Scrape bron)
+  price DECIMAL(10, 2),
+  weight_kg DECIMAL(10, 2),
+  ingredients TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS nutrition_inventory (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  product_id UUID REFERENCES nutrition_webshop_products(id) ON DELETE CASCADE,
+  current_stock_kg DECIMAL(10, 2) DEFAULT 0,
+  alert_threshold_kg DECIMAL(10, 2) DEFAULT 50, -- Geef een waarschuwing als het bijna op is
+  location_id UUID REFERENCES locations(id),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS nutrition_horse_rations (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  horse_id UUID REFERENCES horses(id) ON DELETE CASCADE,
+  product_id UUID REFERENCES nutrition_webshop_products(id) ON DELETE RESTRICT,
+  meal_time TEXT NOT NULL, -- 'Breakfast', 'Lunch', 'Dinner'
+  amount_kg DECIMAL(5, 2) NOT NULL,
+  special_instructions TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- ==========================================
+-- NIEUWE MODULES: COMPETITIONS & SPORTS (Gedetailleerd)
+-- ==========================================
+
+CREATE TABLE IF NOT EXISTS competition_events (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  name TEXT NOT NULL,
+  start_date DATE NOT NULL,
+  end_date DATE NOT NULL,
+  location TEXT,
+  country TEXT,
+  level TEXT, -- CSI1*, CSI5*, Nationaal
+  fei_approved BOOLEAN DEFAULT false,
+  website_url TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS competition_entries (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  competition_id UUID REFERENCES competition_events(id) ON DELETE CASCADE,
+  horse_id UUID REFERENCES horses(id) ON DELETE CASCADE,
+  rider_id UUID REFERENCES profiles(id) ON DELETE SET NULL,
+  class_name TEXT NOT NULL, -- Bijv. 1.45m Grand Prix Qualifier
+  entry_fee DECIMAL(10, 2),
+  status TEXT DEFAULT 'entered', -- entered, withdrawn, completed
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS competition_results (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  entry_id UUID REFERENCES competition_entries(id) ON DELETE CASCADE UNIQUE,
+  position INTEGER,
+  faults INTEGER DEFAULT 0,
+  time_seconds DECIMAL(10, 2),
+  prize_money DECIMAL(12, 2) DEFAULT 0,
+  fei_points_earned INTEGER DEFAULT 0,
+  video_url TEXT, -- Link naar YouTube of ClipMyHorse
+  judge_notes TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- ==========================================
 -- TEST DATA
 -- ==========================================
 INSERT INTO horses (

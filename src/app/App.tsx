@@ -7,6 +7,11 @@ import { AgendaView } from "./pages/AgendaView";
 import { AdministrationView } from "./pages/AdministrationView";
 import { BreedingView } from "./pages/BreedingView";
 import { HorseListView } from "./pages/HorseListView";
+import { HealthView } from "./pages/HealthView";
+import { FeedingView } from "./pages/FeedingView";
+import { CompetitionsView } from "./pages/CompetitionsView";
+import { LocationsView } from "./pages/LocationsView";
+import { ReportsView } from "./pages/ReportsView";
 
 // Placeholders for all the other routes
 function Placeholder({ title }: { title: string }) {
@@ -29,15 +34,15 @@ export default function App() {
         <Route path="tasks" element={<Placeholder title="Takenbord" />} />
 
         {/* VERZORGING & SPORT */}
-        <Route path="health" element={<Placeholder title="Gezondheid & Medisch" />} />
-        <Route path="feeding" element={<Placeholder title="Voedingsschema's" />} />
-        <Route path="competitions" element={<Placeholder title="Wedstrijdsport" />} />
+        <Route path="health" element={<HealthView />} />
+        <Route path="feeding" element={<FeedingView />} />
+        <Route path="competitions" element={<CompetitionsView />} />
 
         {/* ADMINISTRATIE & CRM */}
         <Route path="contacts" element={<AdministrationView />} />
         <Route path="invoices" element={<InvoicesView />} />
         <Route path="products" element={<ProductsView />} />
-        <Route path="locations" element={<Placeholder title="Stallen & Locaties" />} />
+        <Route path="locations" element={<LocationsView />} />
         <Route path="documents" element={<Placeholder title="Documenten & Media (Cloudinary)" />} />
 
         {/* FOKKERIJ */}
@@ -49,7 +54,7 @@ export default function App() {
         </Route>
 
         {/* SYSTEEM */}
-        <Route path="reports" element={<Placeholder title="Rapporten & Analytics" />} />
+        <Route path="reports" element={<ReportsView />} />
         <Route path="settings" element={<Placeholder title="Systeem Instellingen" />} />
       </Route>
     </Routes>
