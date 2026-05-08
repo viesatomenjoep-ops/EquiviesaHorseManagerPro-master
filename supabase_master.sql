@@ -231,6 +231,78 @@ CREATE TABLE IF NOT EXISTS care_events (
 );
 
 -- ==========================================
+-- NIEUWE MODULES: ADMINISTRATIE & CRM
+-- ==========================================
+
+-- 20. TABEL: CRM COMPANIES (Bedrijven / Relaties)
+CREATE TABLE IF NOT EXISTS crm_companies (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  name TEXT NOT NULL,
+  type TEXT NOT NULL, -- Klant, Dierenarts, Hoefsmid, Leverancier
+  vat_number TEXT,
+  address TEXT,
+  city TEXT,
+  country TEXT,
+  website TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 21. TABEL: CRM CONTACTS (Contactpersonen)
+CREATE TABLE IF NOT EXISTS crm_contacts (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  company_id UUID REFERENCES crm_companies(id) ON DELETE SET NULL,
+  first_name TEXT NOT NULL,
+  last_name TEXT NOT NULL,
+  email TEXT,
+  phone TEXT,
+  role TEXT,
+  notes TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- ==========================================
+-- NIEUWE MODULES: FOKKERIJ (Uitbreiding)
+-- ==========================================
+
+-- 22. TABEL: EMBRYOS (Embryo Tracking)
+CREATE TABLE IF NOT EXISTS breeding_embryos (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  mare_id UUID REFERENCES horses(id) ON DELETE CASCADE, -- Biologische Moeder
+  sire_name TEXT NOT NULL, -- Biologische Vader
+  recipient_mare TEXT, -- Draagmoeder (indien van toepassing)
+  flush_date DATE,
+  transfer_date DATE,
+  status TEXT DEFAULT 'frozen', -- frozen, transferred, lost, born
+  storage_location TEXT, -- Waar is het embryo opgeslagen?
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- ==========================================
+-- NIEUWE MODULES: STALLENBEHEER (Locaties)
+-- ==========================================
+
+-- 23. TABEL: LOCATIONS (Stallen / Locaties)
+CREATE TABLE IF NOT EXISTS locations (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  name TEXT NOT NULL,
+  type TEXT NOT NULL, -- Hoofdstal, Pensionstal, Weide
+  address TEXT,
+  capacity INTEGER,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 24. TABEL: BOXES (Boxen in een locatie)
+CREATE TABLE IF NOT EXISTS boxes (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  location_id UUID REFERENCES locations(id) ON DELETE CASCADE,
+  horse_id UUID REFERENCES horses(id) ON DELETE SET NULL, -- Wie staat er nu in?
+  box_number TEXT NOT NULL,
+  status TEXT DEFAULT 'available', -- available, occupied, maintenance
+  price_per_month DECIMAL(10, 2),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- ==========================================
 -- TEST DATA
 -- ==========================================
 INSERT INTO horses (
