@@ -9,22 +9,81 @@ import {
   Trophy, Calendar, CreditCard, ChevronRight
 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { useTranslation } from 'react-i18next';
+
+interface RecentInvoice {
+  client: string;
+  amount: string;
+  status: string;
+  color: string;
+  bg: string;
+}
 
 export function Dashboard() {
+  const { t } = useTranslation();
   const [totalHorses, setTotalHorses] = useState<number>(42);
+  const [openTasks, setOpenTasks] = useState<string>("8/12");
+  const [totalRevenue, setTotalRevenue] = useState<string>("€12.450");
+  const [recentInvoices, setRecentInvoices] = useState<RecentInvoice[]>([
+    { client: "Stal Jansen", amount: "+ €1.250", status: t('dashboard.invoices.status_paid'), color: "text-emerald-500", bg: "bg-emerald-50" },
+    { client: "Hoefsmid De Vries", amount: "- €450", status: t('dashboard.invoices.status_debited'), color: "text-rose-500", bg: "bg-rose-50" },
+    { client: "Equivest B.V.", amount: "+ €3.400", status: t('dashboard.invoices.status_processing'), color: "text-amber-500", bg: "bg-amber-50" },
+  ]);
   const [isLoading, setIsLoading] = useState(true);
   const trendData = [45, 52, 48, 61, 58, 67, 72];
 
   useEffect(() => {
     async function fetchDashboardData() {
       try {
-        const { count, error } = await supabase
+        // Fetch horses count
+        const { count: hCount, error: hError } = await supabase
           .from('horses')
           .select('*', { count: 'exact', head: true });
-        
-        if (!error && count !== null) {
-          setTotalHorses(count);
+        if (!hError && hCount !== null) setTotalHorses(hCount);
+
+        // Fetch tasks stats
+        const { data: tData } = await supabase.from('tasks').select('status');
+        if (tData) {
+          const open = tData.filter(t => t.status !== 'done').length;
+          const total = tData.length;
+          setOpenTasks(`${open}/${total}`);
         }
+
+        // Fetch invoices
+        const { data: iData } = await supabase.from('invoices').select('total_amount, status').order('created_at', { ascending: false });
+        if (iData) {
+          const revenue = iData.reduce((acc, inv) => acc + Number(inv.total_amount || 0), 0);
+          setTotalRevenue(`€${revenue.toLocaleString('nl-NL', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`);
+
+          const mappedInvoices = iData.slice(0, 3).map(inv => {
+            let color = "text-amber-500";
+            let bg = "bg-amber-50";
+            let statusText = t('dashboard.invoices.status_processing');
+            
+            if (inv.status === 'paid') {
+              color = "text-emerald-500";
+              bg = "bg-emerald-50";
+              statusText = t('dashboard.invoices.status_paid');
+            } else if (inv.status === 'overdue') {
+              color = "text-rose-500";
+              bg = "bg-rose-50";
+              statusText = t('invoices.table.status_overdue');
+            }
+
+            return {
+              client: 'Equivest B.V.', // Mock CRM relation
+              amount: `€${Number(inv.total_amount).toLocaleString('nl-NL')}`,
+              status: statusText,
+              color,
+              bg
+            };
+          });
+
+          if (mappedInvoices.length > 0) {
+            setRecentInvoices(mappedInvoices);
+          }
+        }
+
       } catch (err) {
         console.error('Error fetching from Supabase:', err);
       } finally {
@@ -33,21 +92,21 @@ export function Dashboard() {
     }
 
     fetchDashboardData();
-  }, []);
+  }, [t]);
 
   return (
     <div className="space-y-6">
       
       {/* ROW 1: QUICK MODULE ACCESS BLOCKS */}
       <div>
-        <h2 className="text-xl font-bold text-slate-900 mb-4">Snelmenu Modules</h2>
+        <h2 className="text-xl font-bold text-slate-900 mb-4">{t('dashboard.quick_menu_title')}</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {[
-            { title: "Stalbeheer", path: "/horses", icon: Home, color: "from-blue-600 to-blue-400" },
-            { title: "Verzorging", path: "/health", icon: HeartPulse, color: "from-rose-600 to-rose-400" },
-            { title: "Administratie", path: "/contacts", icon: Briefcase, color: "from-purple-600 to-purple-400" },
-            { title: "Fokkerij", path: "/breeding/mares", icon: Dna, color: "from-pink-600 to-pink-400" },
-            { title: "Analytics", path: "/reports", icon: Activity, color: "from-emerald-600 to-emerald-400" }
+            { title: t('dashboard.quick_menu.stable'), path: "/horses", icon: Home, color: "from-blue-600 to-blue-400" },
+            { title: t('dashboard.quick_menu.care'), path: "/health", icon: HeartPulse, color: "from-rose-600 to-rose-400" },
+            { title: t('dashboard.quick_menu.admin'), path: "/contacts", icon: Briefcase, color: "from-purple-600 to-purple-400" },
+            { title: t('dashboard.quick_menu.breeding'), path: "/breeding/mares", icon: Dna, color: "from-pink-600 to-pink-400" },
+            { title: t('dashboard.quick_menu.analytics'), path: "/reports", icon: Activity, color: "from-emerald-600 to-emerald-400" }
           ].map((mod, idx) => {
             const Icon = mod.icon;
             return (
@@ -61,7 +120,7 @@ export function Dashboard() {
                   <Icon className="w-6 h-6 text-white" />
                 </div>
                 <h3 className="font-semibold text-white group-hover:text-[#C2A878] transition-colors">{mod.title}</h3>
-                <p className="text-xs text-slate-400 mt-1 flex items-center gap-1">Open Module <ChevronRight className="w-3 h-3" /></p>
+                <p className="text-xs text-slate-400 mt-1 flex items-center gap-1">{t('dashboard.quick_menu.open')} <ChevronRight className="w-3 h-3" /></p>
               </button>
             )
           })}
@@ -70,12 +129,12 @@ export function Dashboard() {
 
       {/* ROW 2: KPI CARDS */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <KPICard title="Actieve Paarden" value={isLoading ? "..." : totalHorses} subtitle="+3 deze maand" icon={PawPrint} trend="up" showChart={true} trendData={trendData} />
-        <KPICard title="Openstaande Taken" value="8/12" subtitle="67% Voltooid" icon={CheckCircle}>
-          <div className="text-sm">Vandaag</div>
+        <KPICard title={t('dashboard.kpi.active_horses')} value={isLoading ? "..." : totalHorses} subtitle={t('dashboard.kpi.active_horses_sub')} icon={PawPrint} trend="up" showChart={true} trendData={trendData} />
+        <KPICard title={t('dashboard.kpi.open_tasks')} value={isLoading ? "..." : openTasks} subtitle={t('dashboard.kpi.open_tasks_sub')} icon={CheckCircle}>
+          <div className="text-sm">{t('dashboard.kpi.open_tasks_today')}</div>
         </KPICard>
-        <KPICard title="Totale Omzet (Mnd)" value="€12.450" subtitle="€2.340 nog te innen" icon={DollarSign} trend="up" />
-        <KPICard title="Media & Documenten" value={127} subtitle="Nieuwe bestanden" icon={Image} trend="up" />
+        <KPICard title={t('dashboard.kpi.total_revenue')} value={isLoading ? "..." : totalRevenue} subtitle={t('dashboard.kpi.total_revenue_sub')} icon={DollarSign} trend="up" />
+        <KPICard title={t('dashboard.kpi.media')} value={127} subtitle={t('dashboard.kpi.media_sub')} icon={Image} trend="up" />
       </div>
 
       {/* ROW 3: NEW BLOCKS (WEATHER, ALERTS, FINANCIALS) */}
@@ -85,21 +144,21 @@ export function Dashboard() {
         <div className="bg-gradient-to-br from-blue-900 to-indigo-900 rounded-2xl p-6 text-white relative overflow-hidden shadow-sm">
           <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
           <h3 className="font-bold flex items-center gap-2 mb-6">
-            <CloudRain className="w-5 h-5 text-blue-300" /> Klimaat & Weer
+            <CloudRain className="w-5 h-5 text-blue-300" /> {t('dashboard.weather.title')}
           </h3>
           <div className="flex justify-between items-center relative z-10">
             <div>
               <p className="text-5xl font-black mb-1">14°C</p>
-              <p className="text-blue-200 text-sm">Licht bewolkt, 15% neerslag</p>
+              <p className="text-blue-200 text-sm">{t('dashboard.weather.desc')}</p>
             </div>
             <div className="text-right space-y-2">
               <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-lg">
                 <Thermometer className="w-4 h-4 text-rose-300" />
-                <span className="text-sm">Stal: 18°C</span>
+                <span className="text-sm">{t('dashboard.weather.stable')}: 18°C</span>
               </div>
               <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-lg">
                 <Wind className="w-4 h-4 text-emerald-300" />
-                <span className="text-sm">Vocht: 45%</span>
+                <span className="text-sm">{t('dashboard.weather.humidity')}: 45%</span>
               </div>
             </div>
           </div>
@@ -109,26 +168,26 @@ export function Dashboard() {
         <div className="bg-white rounded-2xl border border-rose-100 p-6 shadow-sm relative overflow-hidden">
           <div className="absolute top-0 right-0 w-2 h-full bg-rose-500"></div>
           <h3 className="font-bold text-slate-900 flex items-center gap-2 mb-4">
-            <AlertCircle className="w-5 h-5 text-rose-500" /> Gezondheid Alerts
+            <AlertCircle className="w-5 h-5 text-rose-500" /> {t('dashboard.alerts.title')}
           </h3>
           <ul className="space-y-4">
             <li className="flex items-start gap-3">
               <div className="w-2 h-2 rounded-full bg-rose-500 mt-1.5"></div>
               <div>
-                <p className="text-sm font-bold text-slate-800">Vaccinatie Verlopen: Bella</p>
-                <p className="text-xs text-slate-500">Influenza (2 dagen over tijd)</p>
+                <p className="text-sm font-bold text-slate-800">{t('dashboard.alerts.vaccine')}</p>
+                <p className="text-xs text-slate-500">{t('dashboard.alerts.vaccine_desc')}</p>
               </div>
             </li>
             <li className="flex items-start gap-3">
               <div className="w-2 h-2 rounded-full bg-amber-500 mt-1.5"></div>
               <div>
-                <p className="text-sm font-bold text-slate-800">Hoefsmid Gepland: Don Juan</p>
-                <p className="text-xs text-slate-500">Morgen om 10:00 (Nieuw beslag)</p>
+                <p className="text-sm font-bold text-slate-800">{t('dashboard.alerts.farrier')}</p>
+                <p className="text-xs text-slate-500">{t('dashboard.alerts.farrier_desc')}</p>
               </div>
             </li>
           </ul>
           <button className="w-full mt-4 py-2 bg-rose-50 text-rose-600 rounded-lg text-sm font-semibold hover:bg-rose-100 transition-colors">
-            Bekijk Medisch Dossier
+            {t('dashboard.alerts.btn')}
           </button>
         </div>
 
@@ -136,7 +195,7 @@ export function Dashboard() {
         <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
           <div className="flex justify-between items-center mb-4">
             <h3 className="font-bold text-slate-900 flex items-center gap-2">
-              <Trophy className="w-5 h-5 text-[#C2A878]" /> Komende Wedstrijden
+              <Trophy className="w-5 h-5 text-[#C2A878]" /> {t('dashboard.competitions.title')}
             </h3>
             <button className="text-slate-400 hover:text-[#C2A878]"><Calendar className="w-4 h-4" /></button>
           </div>
@@ -147,8 +206,8 @@ export function Dashboard() {
                 <p className="text-lg font-black text-slate-900 -mt-1">12</p>
               </div>
               <div>
-                <p className="text-sm font-bold text-slate-900">CSI3* Eindhoven</p>
-                <p className="text-xs text-slate-500">Luna & Maestro (1.40m)</p>
+                <p className="text-sm font-bold text-slate-900">{t('dashboard.competitions.comp1')}</p>
+                <p className="text-xs text-slate-500">{t('dashboard.competitions.comp1_desc')}</p>
               </div>
             </div>
             <div className="flex items-center gap-4 p-3 bg-slate-50 rounded-xl border border-slate-100">
@@ -157,28 +216,31 @@ export function Dashboard() {
                 <p className="text-lg font-black text-slate-900 -mt-1">05</p>
               </div>
               <div>
-                <p className="text-sm font-bold text-slate-900">NK Dressuur Ermelo</p>
-                <p className="text-xs text-slate-500">Don Juan (Grand Prix)</p>
+                <p className="text-sm font-bold text-slate-900">{t('dashboard.competitions.comp2')}</p>
+                <p className="text-xs text-slate-500">{t('dashboard.competitions.comp2_desc')}</p>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* ROW 4: RECENT INVOICES, KANBAN, IOT */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      {/* ROW 4: STABLE WORKFLOW (FULL WIDTH) */}
+      <div className="w-full">
+        <div className="h-[400px]">
+          <KanbanBoard />
+        </div>
+      </div>
+
+      {/* ROW 5: INVOICES & IOT TRACKER */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
         {/* Recente Facturen */}
-        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm col-span-1">
+        <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
           <h3 className="font-bold text-slate-900 flex items-center gap-2 mb-4">
-            <CreditCard className="w-5 h-5 text-emerald-500" /> Recente Betalingen
+            <CreditCard className="w-5 h-5 text-emerald-500" /> {t('dashboard.invoices.title')}
           </h3>
           <div className="space-y-4">
-            {[
-              { client: "Stal Jansen", amount: "+ €1.250", status: "Betaald", color: "text-emerald-500", bg: "bg-emerald-50" },
-              { client: "Hoefsmid De Vries", amount: "- €450", status: "Afgeschreven", color: "text-rose-500", bg: "bg-rose-50" },
-              { client: "Equivest B.V.", amount: "+ €3.400", status: "In Verwerking", color: "text-amber-500", bg: "bg-amber-50" },
-            ].map((inv, i) => (
+            {recentInvoices.map((inv, i) => (
               <div key={i} className="flex justify-between items-center border-b border-slate-50 pb-3 last:border-0 last:pb-0">
                 <div>
                   <p className="text-sm font-bold text-slate-800">{inv.client}</p>
@@ -190,22 +252,14 @@ export function Dashboard() {
               </div>
             ))}
           </div>
-          <button className="w-full mt-4 text-xs font-bold text-slate-400 hover:text-[#C2A878] transition-colors">
-            Alle facturen bekijken &rarr;
+          <button onClick={() => window.location.href = '/finance/invoices'} className="w-full mt-4 text-xs font-bold text-slate-400 hover:text-[#C2A878] transition-colors">
+            {t('dashboard.invoices.btn_all')} &rarr;
           </button>
         </div>
 
-        {/* Existing AI & IoT Blocks */}
-        <div className="col-span-1 lg:col-span-2 space-y-6">
-          <div className="h-[400px]">
-            <KanbanBoard />
-          </div>
-        </div>
-
-        <div className="col-span-1 space-y-6">
-          <div className="h-[400px]">
-             <IoTTracker />
-          </div>
+        {/* IoT Tracker */}
+        <div className="h-[400px] md:h-auto">
+           <IoTTracker />
         </div>
         
       </div>

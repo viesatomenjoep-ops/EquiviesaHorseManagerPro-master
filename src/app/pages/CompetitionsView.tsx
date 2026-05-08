@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { 
   Trophy, 
   Calendar, 
@@ -12,13 +13,14 @@ import {
 } from 'lucide-react';
 
 export function CompetitionsView() {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'calendar' | 'ranking' | 'video'>('calendar');
 
   const stats = [
-    { label: 'Gewonnen Prijzengeld', value: '€ 45.200', icon: Trophy, color: 'text-yellow-500', bg: 'bg-yellow-500/10' },
-    { label: 'FEI Punten (YTD)', value: '1.240', icon: Star, color: 'text-blue-500', bg: 'bg-blue-500/10' },
-    { label: 'Aankomende Concours', value: '3', icon: Calendar, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
-    { label: 'Clear Rounds', value: '68%', icon: Award, color: 'text-purple-500', bg: 'bg-purple-500/10' },
+    { label: t('competitions.stats.prize'), value: '€ 45.200', icon: Trophy, color: 'text-yellow-500', bg: 'bg-yellow-500/10' },
+    { label: t('competitions.stats.fei'), value: '1.240', icon: Star, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+    { label: t('competitions.stats.upcoming'), value: '3', icon: Calendar, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
+    { label: t('competitions.stats.clear'), value: '68%', icon: Award, color: 'text-purple-500', bg: 'bg-purple-500/10' },
   ];
 
   return (
@@ -28,15 +30,15 @@ export function CompetitionsView() {
         <div>
           <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
             <Trophy className="w-6 h-6 text-[#C2A878]" />
-            Wedstrijdsport & Prestaties
+            {t('competitions.title')}
           </h1>
           <p className="text-sm text-slate-500 mt-1">
-            Beheer concoursplanning, FEI-punten, en bekijk rit-video's.
+            {t('competitions.subtitle')}
           </p>
         </div>
         <button className="flex items-center gap-2 px-4 py-2 bg-[#C2A878] text-white rounded-xl text-sm font-medium hover:bg-[#B0986A] transition-colors">
           <Plus className="w-4 h-4" />
-          Nieuwe Inschrijving
+          {t('competitions.new')}
         </button>
       </div>
 
@@ -63,13 +65,13 @@ export function CompetitionsView() {
           {/* Calendar List */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             <div className="p-5 border-b border-slate-200 flex justify-between items-center bg-slate-50/50">
-              <h2 className="font-bold text-slate-900">Wedstrijdkalender (CSI & Nationaal)</h2>
+              <h2 className="font-bold text-slate-900">{t('competitions.calendar.title')}</h2>
             </div>
             <div className="divide-y divide-slate-100">
               {[
-                { name: 'CSI3* Valkenswaard', date: '12 - 15 Aug', location: 'Tops International Arena', horses: ['Luna', 'Don Juan'], status: 'entered' },
-                { name: 'CSI5* CHIO Aachen', date: '28 Jun - 02 Jul', location: 'Aachen, GER', horses: ['Zangersheide Z'], status: 'completed' },
-                { name: 'Subtop Dressuur', date: '10 Sep', location: 'Ermelo, NED', horses: ['Bella'], status: 'planned' }
+                { name: 'CSI3* Valkenswaard', date: '12 - 15 Aug', location: 'Tops International Arena', horses: ['Luna', 'Don Juan'], status: 'entered', translatedStatus: t('competitions.calendar.status_entered') },
+                { name: 'CSI5* CHIO Aachen', date: '28 Jun - 02 Jul', location: 'Aachen, GER', horses: ['Zangersheide Z'], status: 'completed', translatedStatus: t('competitions.calendar.status_completed') },
+                { name: 'Subtop Dressuur', date: '10 Sep', location: 'Ermelo, NED', horses: ['Bella'], status: 'planned', translatedStatus: t('competitions.calendar.status_planned') }
               ].map((comp, idx) => (
                 <div key={idx} className="p-5 hover:bg-slate-50 transition-colors flex items-center justify-between">
                   <div className="flex gap-4">
@@ -97,7 +99,7 @@ export function CompetitionsView() {
                       comp.status === 'entered' ? 'bg-blue-100 text-blue-700' :
                       'bg-slate-100 text-slate-700'
                     }`}>
-                      {comp.status.toUpperCase()}
+                      {comp.translatedStatus}
                     </span>
                   </div>
                 </div>
@@ -115,7 +117,7 @@ export function CompetitionsView() {
             <div className="p-4 border-b border-slate-800 flex justify-between items-center bg-slate-800/50">
               <h2 className="font-bold flex items-center gap-2">
                 <Video className="w-5 h-5 text-red-500" />
-                ClipMyHorse Integratie
+                {t('competitions.video.title')}
               </h2>
             </div>
             <div className="p-4 space-y-4">
@@ -125,12 +127,12 @@ export function CompetitionsView() {
                   <PlayCircle className="w-12 h-12 text-white/80 group-hover:scale-110 transition-transform" />
                 </div>
                 <div className="absolute bottom-3 left-3">
-                  <p className="font-bold text-sm">Luna - 1.45m Grand Prix</p>
-                  <p className="text-xs text-white/70">CSI3* Valkenswaard</p>
+                  <p className="font-bold text-sm">{t('competitions.video.ride')}</p>
+                  <p className="text-xs text-white/70">{t('competitions.video.event')}</p>
                 </div>
               </div>
               <button className="w-full py-2 bg-white/10 hover:bg-white/20 rounded-xl text-sm font-medium transition-colors">
-                Bekijk alle ritten &rarr;
+                {t('competitions.video.btn')} &rarr;
               </button>
             </div>
           </div>
@@ -139,7 +141,7 @@ export function CompetitionsView() {
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
             <h3 className="font-bold text-slate-900 mb-4 flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-emerald-500" />
-              Top Paarden (Ranking)
+              {t('competitions.ranking.title')}
             </h3>
             <div className="space-y-4">
               {[
@@ -152,7 +154,7 @@ export function CompetitionsView() {
                     <span className="text-slate-400 font-bold text-sm">#{horse.rank}</span>
                     <span className="font-medium text-slate-900">{horse.name}</span>
                   </div>
-                  <span className="text-[#C2A878] font-bold text-sm">{horse.points} pts</span>
+                  <span className="text-[#C2A878] font-bold text-sm">{horse.points} {t('competitions.ranking.pts')}</span>
                 </div>
               ))}
             </div>

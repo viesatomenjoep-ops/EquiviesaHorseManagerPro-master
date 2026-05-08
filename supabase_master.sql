@@ -379,6 +379,18 @@ CREATE TABLE IF NOT EXISTS boxes (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- 24B. TABEL: PASTURE SCHEDULES (Weidegang Schema)
+CREATE TABLE IF NOT EXISTS pasture_schedules (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  location_id UUID REFERENCES locations(id) ON DELETE CASCADE,
+  horse_id UUID REFERENCES horses(id) ON DELETE CASCADE,
+  start_time TIME NOT NULL,
+  end_time TIME NOT NULL,
+  days_of_week TEXT[], -- Bijv. ['Monday', 'Tuesday']
+  notes TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- ==========================================
 -- NIEUWE MODULES: EQUIVEST BASE (Personeel & HR)
 -- ==========================================

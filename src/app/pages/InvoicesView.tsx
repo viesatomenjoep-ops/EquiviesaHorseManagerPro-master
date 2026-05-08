@@ -1,47 +1,144 @@
 import { useState, useEffect } from 'react';
-import { Plus, FileText, Download, CheckCircle, Search } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { Plus, FileText, Download, CheckCircle, Search, AlertCircle } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
+interface Invoice {
+  id: string;
+  document_number: string;
+  date: string;
+  total_amount: number;
+  status: string;
+  client_id?: string;
+  client_name?: string; // We'll compute this if we can, else mock
+}
+
 export function InvoicesView() {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('all');
   const [showNewInvoice, setShowNewInvoice] = useState(false);
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Mock data for initial render if Supabase tables are empty/missing
-  const mockInvoices = [
-    { id: '1', number: 'FACT-2026-001', client: 'Stal de Vries', date: '2026-05-01', amount: 1450.00, status: 'paid' },
-    { id: '2', number: 'FACT-2026-002', client: 'Jansen Sportpaarden', date: '2026-05-05', amount: 350.50, status: 'concept' },
-    { id: '3', number: 'FACT-2026-003', client: 'Manege de Hoef', date: '2026-04-20', amount: 890.00, status: 'overdue' },
-  ];
+  // New Invoice State
+  const [newInvoiceAmount, setNewInvoiceAmount] = useState<string>('');
+  const [newInvoiceClient, setNewInvoiceClient] = useState<string>('Standard Client');
+  const [newInvoiceStatus, setNewInvoiceStatus] = useState<string>('concept');
+
+  useEffect(() => {
+    fetchInvoices();
+  }, []);
+
+  async function fetchInvoices() {
+    setIsLoading(true);
+    try {
+      const { data, error } = await supabase
+        .from('invoices')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      
+      const mapped = (data || []).map(inv => ({
+        id: inv.id,
+        document_number: inv.document_number,
+        date: inv.date,
+        total_amount: inv.total_amount,
+        status: inv.status,
+        client_name: 'Equivest B.V.' // We're mocking the client name because we don't have a reliable CRM link setup yet in the UI
+      }));
+
+      setInvoices(mapped);
+    } catch (err) {
+      console.error('Error fetching invoices:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function handleCreateInvoice(e: React.FormEvent) {
+    e.preventDefault();
+    if (!newInvoiceAmount) return;
+
+    try {
+      const docNum = `FACT-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`;
+      const { error } = await supabase.from('invoices').insert({
+        document_number: docNum,
+        type: 'invoice',
+        date: new Date().toISOString().split('T')[0],
+        total_amount: parseFloat(newInvoiceAmount),
+        status: newInvoiceStatus
+      });
+
+      if (!error) {
+        setShowNewInvoice(false);
+        setNewInvoiceAmount('');
+        fetchInvoices();
+      } else {
+        alert("Failed to create invoice.");
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  // Filter invoices based on active tab
+  const filteredInvoices = invoices.filter(inv => {
+    if (activeTab === 'all') return true;
+    return inv.status === activeTab;
+  });
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Facturatie Systeem</h1>
-          <p className="text-slate-500">Beheer facturen, betalingen en openstaande posten.</p>
+          <h1 className="text-2xl font-bold text-slate-900">{t('invoices.title')}</h1>
+          <p className="text-slate-500">{t('invoices.subtitle')}</p>
         </div>
         <button 
           onClick={() => setShowNewInvoice(!showNewInvoice)}
           className="flex items-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-5 py-2.5 rounded-lg font-medium transition-colors shadow-sm"
         >
           <Plus className="w-5 h-5" />
-          Nieuwe Factuur
+          {t('invoices.new_invoice')}
         </button>
       </div>
 
       {showNewInvoice ? (
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-           <h2 className="text-lg font-bold text-slate-900 mb-4 border-b border-slate-100 pb-4">Nieuwe Factuur Aanmaken</h2>
-           <p className="text-slate-500 mb-6">Selecteer een klant en voeg producten/diensten toe aan de factuur.</p>
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 animate-in fade-in slide-in-from-top-4">
+           <h2 className="text-lg font-bold text-slate-900 mb-4 border-b border-slate-100 pb-4">{t('invoices.create_title')}</h2>
+           <p className="text-slate-500 mb-6">{t('invoices.create_desc')}</p>
            
-           {/* Placeholder for actual invoice editor logic */}
-           <div className="bg-slate-50 p-8 rounded-lg text-center border-2 border-dashed border-slate-200">
-             <FileText className="w-12 h-12 text-slate-300 mx-auto mb-3" />
-             <h3 className="text-slate-700 font-medium">Factuur Editor (In Ontwikkeling)</h3>
-             <p className="text-sm text-slate-500 mt-1">Hier komt het formulier om regels uit de Producten catalogus te selecteren.</p>
-             <button onClick={() => setShowNewInvoice(false)} className="mt-4 text-[#A88D5A] font-medium hover:underline">Annuleren</button>
-           </div>
+           <form onSubmit={handleCreateInvoice} className="space-y-6 max-w-2xl">
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Klant Naam (Mock)</label>
+                  <input type="text" value={newInvoiceClient} onChange={e => setNewInvoiceClient(e.target.value)} className="w-full p-2.5 border border-slate-300 rounded-lg" readOnly />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Totaal Bedrag (€)</label>
+                  <input type="number" step="0.01" required value={newInvoiceAmount} onChange={e => setNewInvoiceAmount(e.target.value)} className="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-[#C2A878] focus:border-[#C2A878]" placeholder="Bijv. 1250.00" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1">Status</label>
+                  <select value={newInvoiceStatus} onChange={e => setNewInvoiceStatus(e.target.value)} className="w-full p-2.5 border border-slate-300 rounded-lg focus:ring-[#C2A878]">
+                    <option value="concept">Concept</option>
+                    <option value="sent">Verzonden</option>
+                    <option value="paid">Betaald</option>
+                  </select>
+                </div>
+             </div>
+
+             <div className="flex gap-4 pt-4 border-t border-slate-100">
+               <button type="submit" className="bg-[#C2A878] hover:bg-[#B09665] text-white px-6 py-2.5 rounded-lg font-bold transition-colors">
+                 Factuur Aanmaken
+               </button>
+               <button type="button" onClick={() => setShowNewInvoice(false)} className="px-6 py-2.5 rounded-lg font-medium text-slate-600 hover:bg-slate-100 transition-colors">
+                 {t('invoices.cancel')}
+               </button>
+             </div>
+           </form>
         </div>
       ) : (
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
@@ -56,7 +153,7 @@ export function InvoicesView() {
                     activeTab === tab ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-900'
                   }`}
                 >
-                  {tab === 'all' ? 'Alle' : tab}
+                  {tab === 'all' ? t('invoices.tabs.all') : t(`invoices.tabs.${tab}`)}
                 </button>
               ))}
             </div>
@@ -65,46 +162,56 @@ export function InvoicesView() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
               <input 
                 type="text" 
-                placeholder="Zoek op factuurnr of klant..." 
+                placeholder={t('invoices.search')}
                 className="pl-9 pr-4 py-2 border border-slate-300 rounded-lg text-sm focus:ring-[#C2A878] focus:border-[#C2A878] w-full sm:w-64"
               />
             </div>
           </div>
 
           {/* Table */}
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 text-sm font-medium">
-                <th className="p-4">Factuurnummer</th>
-                <th className="p-4">Klant</th>
-                <th className="p-4">Datum</th>
-                <th className="p-4">Bedrag</th>
-                <th className="p-4">Status</th>
-                <th className="p-4 text-right">Acties</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {mockInvoices.map((invoice) => (
-                <tr key={invoice.id} className="hover:bg-slate-50 transition-colors group">
-                  <td className="p-4 font-medium text-slate-900 flex items-center gap-3">
-                    <FileText className="w-4 h-4 text-slate-400" />
-                    {invoice.number}
-                  </td>
-                  <td className="p-4 text-slate-700">{invoice.client}</td>
-                  <td className="p-4 text-slate-500">{invoice.date}</td>
-                  <td className="p-4 font-medium text-slate-900">€ {invoice.amount.toFixed(2)}</td>
-                  <td className="p-4">
-                    {invoice.status === 'paid' && <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-green-50 text-green-700 text-xs rounded-full font-medium"><CheckCircle className="w-3 h-3"/> Betaald</span>}
-                    {invoice.status === 'concept' && <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-100 text-slate-700 text-xs rounded-full font-medium">Concept</span>}
-                    {invoice.status === 'overdue' && <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-red-50 text-red-700 text-xs rounded-full font-medium">Te laat</span>}
-                  </td>
-                  <td className="p-4 text-right">
-                    <button className="text-slate-400 hover:text-[#A88D5A] p-1 opacity-0 group-hover:opacity-100 transition-opacity" title="Download PDF"><Download className="w-4 h-4" /></button>
-                  </td>
+          {isLoading ? (
+            <div className="p-12 text-center text-slate-500">Laden van facturen...</div>
+          ) : filteredInvoices.length === 0 ? (
+            <div className="p-12 text-center flex flex-col items-center justify-center text-slate-500">
+              <FileText className="w-12 h-12 text-slate-300 mb-3" />
+              <p>Geen facturen gevonden voor deze status.</p>
+            </div>
+          ) : (
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="bg-slate-50 border-b border-slate-200 text-slate-600 text-sm font-medium">
+                  <th className="p-4">{t('invoices.table.number')}</th>
+                  <th className="p-4">{t('invoices.table.client')}</th>
+                  <th className="p-4">{t('invoices.table.date')}</th>
+                  <th className="p-4">{t('invoices.table.amount')}</th>
+                  <th className="p-4">{t('invoices.table.status')}</th>
+                  <th className="p-4 text-right">{t('invoices.table.actions')}</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {filteredInvoices.map((invoice) => (
+                  <tr key={invoice.id} className="hover:bg-slate-50 transition-colors group">
+                    <td className="p-4 font-medium text-slate-900 flex items-center gap-3">
+                      <FileText className="w-4 h-4 text-slate-400" />
+                      {invoice.document_number}
+                    </td>
+                    <td className="p-4 text-slate-700">{invoice.client_name}</td>
+                    <td className="p-4 text-slate-500">{invoice.date}</td>
+                    <td className="p-4 font-medium text-slate-900">€ {Number(invoice.total_amount).toFixed(2)}</td>
+                    <td className="p-4">
+                      {invoice.status === 'paid' && <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-green-50 text-green-700 text-xs rounded-full font-medium"><CheckCircle className="w-3 h-3"/> {t('invoices.table.status_paid')}</span>}
+                      {invoice.status === 'concept' && <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-slate-100 text-slate-700 text-xs rounded-full font-medium">{t('invoices.table.status_concept')}</span>}
+                      {invoice.status === 'sent' && <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-blue-50 text-blue-700 text-xs rounded-full font-medium">Verzonden</span>}
+                      {invoice.status === 'overdue' && <span className="inline-flex items-center gap-1 px-2.5 py-1 bg-red-50 text-red-700 text-xs rounded-full font-medium">{t('invoices.table.status_overdue')}</span>}
+                    </td>
+                    <td className="p-4 text-right">
+                      <button className="text-slate-400 hover:text-[#A88D5A] p-1 opacity-0 group-hover:opacity-100 transition-opacity" title="Download PDF"><Download className="w-4 h-4" /></button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       )}
     </div>

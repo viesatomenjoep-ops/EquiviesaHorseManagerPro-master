@@ -6,5 +6,6 @@
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ]
+  ],
+  "name": "equiviesa-horse-manager"
 }

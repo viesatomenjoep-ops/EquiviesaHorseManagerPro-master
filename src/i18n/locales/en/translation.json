@@ -20,6 +20,408 @@
     "greeting_morning": "Good morning",
     "greeting_afternoon": "Good afternoon",
     "greeting_evening": "Good evening",
-    "subtitle": "What can I help you with?"
+    "subtitle": "What can I help you with?",
+    "quick_menu_title": "Quick Access Modules",
+    "quick_menu": {
+      "stable": "Stable Management",
+      "care": "Care Support",
+      "admin": "Administration",
+      "breeding": "Breeding",
+      "analytics": "Analytics",
+      "open": "Open Module"
+    },
+    "kpi": {
+      "active_horses": "Active Horses",
+      "active_horses_sub": "+3 this month",
+      "open_tasks": "Pending Tasks",
+      "open_tasks_sub": "67% Completed",
+      "open_tasks_today": "Today",
+      "total_revenue": "Total Revenue (Mo)",
+      "total_revenue_sub": "€2,340 pending",
+      "media": "Media & Documents",
+      "media_sub": "New files"
+    },
+    "weather": {
+      "title": "Climate & Weather",
+      "desc": "Partly cloudy, 15% rain",
+      "stable": "Stable",
+      "humidity": "Humidity"
+    },
+    "alerts": {
+      "title": "Health Alerts",
+      "vaccine": "Vaccine Expired: Bella",
+      "vaccine_desc": "Influenza (2 days overdue)",
+      "farrier": "Farrier Scheduled: Don Juan",
+      "farrier_desc": "Tomorrow at 10:00 (New shoes)",
+      "btn": "View Medical Record"
+    },
+    "competitions": {
+      "title": "Upcoming Competitions",
+      "comp1": "CSI3* Eindhoven",
+      "comp1_desc": "Luna & Maestro (1.40m)",
+      "comp2": "NC Dressage Ermelo",
+      "comp2_desc": "Don Juan (Grand Prix)"
+    },
+    "invoices": {
+      "title": "Recent Payments",
+      "status_paid": "Paid",
+      "status_debited": "Debited",
+      "status_processing": "Processing",
+      "btn_all": "View all invoices"
+    },
+    "kanban": {
+      "title": "Stable Workflow",
+      "live_data": "Live Data",
+      "add_task": "Add Task",
+      "pinned": "Pinned:",
+      "pinned_msg": "Morning feed schedule starts at 07:00 - All grooms report to main stable",
+      "col_todo": "To Do",
+      "col_inprogress": "In Progress",
+      "col_done": "Done",
+      "modal_title": "Add New Task",
+      "modal_ph": "Task title...",
+      "modal_assignee": "Assignee",
+      "modal_save": "Save",
+      "modal_cancel": "Cancel"
+    },
+    "iot": {
+      "title": "Live IoT Tracker",
+      "connected": "Connected",
+      "min": "min",
+      "dev_girth": "Smart Girth",
+      "dev_halter": "IoT Halter",
+      "act_treadmill": "Treadmill",
+      "act_solarium": "Solarium",
+      "act_rest": "Rest"
+    }
+  },
+  "health": {
+    "title": "Health & Medical",
+    "subtitle": "Manage vaccinations, vet visits, and farrier planning.",
+    "search": "Search horse or record...",
+    "new": "New Record",
+    "stats": {
+      "healthy": "Healthy Horses",
+      "vaccinations": "Upcoming Vaccinations",
+      "farrier": "Farrier Scheduled",
+      "records": "Medical Records"
+    },
+    "tabs": {
+      "overview": "Overview",
+      "vaccinations": "Vaccinations",
+      "farrier": "Farrier Planning",
+      "dental": "Dental Checks"
+    },
+    "alerts": {
+      "title": "Current Notifications",
+      "due_7": "Within 7 days",
+      "due_tomorrow": "Tomorrow",
+      "due_week": "Next week",
+      "due_30": "Within 30 days",
+      "action": "Take action"
+    },
+    "quick_log": {
+      "title": "Quick Log",
+      "vaccine": "Log Vaccination",
+      "vaccine_desc": "Update medical passport",
+      "vet": "Vet Visit",
+      "vet_desc": "Clinical or x-ray",
+      "farrier": "Farrier Visit",
+      "farrier_desc": "Log shoeing or trimming"
+    },
+    "contacts": {
+      "title": "Contacts (Care)",
+      "add": "+ Add care provider"
+    }
+  },
+  "feeding": {
+    "title": "Feeding Schedules & Inventory",
+    "subtitle": "Manage rations per horse, feed types, and automatic webshop orders.",
+    "rations": {
+      "title": "Current Rations (Per Horse)",
+      "new": "+ New schedule",
+      "edit": "Edit",
+      "morning": "Morning",
+      "evening": "Evening",
+      "continuous": "Continuous"
+    },
+    "magic_link": {
+      "title": "Magic Link Importer",
+      "desc": "Paste a webshop URL (e.g. Agradi or Pavo) to instantly load the product and ingredients.",
+      "placeholder": "https://www.agradi.com/pavo-sportsfit...",
+      "btn": "Fetch product data",
+      "loading": "Loading...",
+      "success": "Product successfully scraped from webshop!"
+    },
+    "inventory": {
+      "title": "Inventory Warning",
+      "low": "Only 45 kg left (Running low)"
+    }
+  },
+  "competitions": {
+    "title": "Competitions & Performance",
+    "subtitle": "Manage competition planning, FEI points, and watch ride videos.",
+    "new": "New Entry",
+    "stats": {
+      "prize": "Prize Money Won",
+      "fei": "FEI Points (YTD)",
+      "upcoming": "Upcoming Competitions",
+      "clear": "Clear Rounds"
+    },
+    "calendar": {
+      "title": "Competition Calendar (CSI & National)",
+      "status_entered": "ENTERED",
+      "status_completed": "COMPLETED",
+      "status_planned": "PLANNED"
+    },
+    "video": {
+      "title": "ClipMyHorse Integration",
+      "ride": "Luna - 1.45m Grand Prix",
+      "event": "CSI3* Valkenswaard",
+      "btn": "View all rides"
+    },
+    "ranking": {
+      "title": "Top Horses (Ranking)",
+      "pts": "pts"
+    }
+  },
+  "locations": {
+    "title": "Stables & Locations",
+    "subtitle": "Manage stables, box layouts, and pasture overview.",
+    "new": "New Location",
+    "main_stable": "Main Stable",
+    "occupied": "BOXES OCCUPIED",
+    "box": "BOX",
+    "empty": "Empty",
+    "management": {
+      "title": "Stable Management",
+      "assign": "Assign Box",
+      "assign_desc": "Move a horse",
+      "pasture": "Pasture Schedule",
+      "pasture_desc": "Manage paddock times"
+    },
+    "forms": {
+      "new_location": "Add New Location",
+      "name": "Location Name",
+      "type": "Type",
+      "capacity": "Total Boxes (Capacity)",
+      "assign_box": "Assign Box",
+      "select_horse": "Select Horse",
+      "select_box": "Select Box",
+      "pasture_title": "Pasture Schedule",
+      "start_time": "Start Time",
+      "end_time": "End Time",
+      "save": "Save",
+      "cancel": "Cancel",
+      "loading": "Loading...",
+      "no_locations": "No locations found."
+    }
+  },
+  "horse_list": {
+    "title": "My Horses",
+    "subtitle": "Select a category to view the stable overview.",
+    "add_horse": "Add Horse",
+    "search": "Search in {{cat}}...",
+    "horses_count": "Horses",
+    "categories": {
+      "jumpers": "Showjumpers",
+      "dressage": "Dressage Horses",
+      "sales": "Sales Horses",
+      "rearing": "Rearing & Retirement"
+    },
+    "card": {
+      "active": "Active",
+      "healthy": "Healthy",
+      "assign_box": "Assign Box",
+      "box": "Main Stable, Box A{{i}}"
+    }
+  },
+  "agenda": {
+    "title": "Care Support Dashboard",
+    "subtitle": "Select a care category to manage planning and history.",
+    "planned": "Planned",
+    "back": "Back to Dashboard",
+    "overview": "Care Overview",
+    "tabs": {
+      "planning": "Planning",
+      "history": "History"
+    },
+    "new_entry": "New Entry",
+    "today": "Today",
+    "upcoming": "Upcoming",
+    "no_history": "No history found",
+    "no_history_desc": "There are no completed actions in the category {{cat}}.",
+    "categories": {
+      "clinical": "Clinical Appointments",
+      "parasite": "Parasite Prevention",
+      "immune": "Immunization",
+      "daily": "Daily Well-being",
+      "medical": "Medical Interventions",
+      "dental": "Dental Check-up",
+      "farrier": "Farrier & Shoeing"
+    }
+  },
+  "breeding": {
+    "title_mares": "Mare Lines & Cycles",
+    "desc_mares": "Manage and analyze specific data for mare lines & cycles.",
+    "title_embryos": "Embryo Tracking",
+    "desc_embryos": "Manage and analyze specific data for embryo tracking.",
+    "title_foals": "Foal Rearing",
+    "desc_foals": "Manage and analyze specific data for foal rearing.",
+    "title_stallions": "Stallion Selection",
+    "desc_stallions": "Manage and analyze specific data for stallion selection.",
+    "items": "Items",
+    "search": "Search in {{sub}}...",
+    "add_item": "Add Item",
+    "active": "Active",
+    "date": "Date",
+    "today": "Today",
+    "action": "Action",
+    "action_req": "Requires attention",
+    "status": "Status: Active and up to date",
+    "blocks": {
+      "cycles": "Cycle Registration",
+      "scans": "Vet Scans",
+      "treatments": "Hormone Treatments",
+      "magic": "Vet Magic Links",
+      "flushes": "Embryo Flushes",
+      "storage": "Freezer & Canisters",
+      "transfers": "Surrogate Transfers",
+      "registration": "Passport & DNA",
+      "health": "Health Schedule",
+      "training": "Training Log",
+      "collections": "Semen Collections",
+      "shipping": "Shipping & Logistics",
+      "fees": "Stud Fees Management"
+    }
+  },
+  "invoices": {
+    "title": "Invoicing System",
+    "subtitle": "Manage invoices, payments, and outstanding balances.",
+    "new_invoice": "New Invoice",
+    "create_title": "Create New Invoice",
+    "create_desc": "Select a client and add products/services to the invoice.",
+    "editor_title": "Invoice Editor (In Development)",
+    "editor_desc": "The form to select items from the Products catalog will appear here.",
+    "cancel": "Cancel",
+    "tabs": {
+      "all": "All",
+      "concept": "Concept",
+      "sent": "Sent",
+      "paid": "Paid"
+    },
+    "search": "Search by invoice no. or client...",
+    "table": {
+      "number": "Invoice Number",
+      "client": "Client",
+      "date": "Date",
+      "amount": "Amount",
+      "status": "Status",
+      "actions": "Actions",
+      "status_paid": "Paid",
+      "status_concept": "Concept",
+      "status_overdue": "Overdue"
+    }
+  },
+  "admin": {
+    "title": "Administration & CRM",
+    "subtitle": "Select a category to manage relationships, stables, or companies.",
+    "categories": {
+      "title": "CRM Categories",
+      "clients": "Clients & Owners",
+      "vets": "Vets & Clinics",
+      "suppliers": "Suppliers",
+      "locations": "Stables & Locations",
+      "companies": "Business Relations",
+      "relations": "Relations"
+    },
+    "back": "Back to Dashboard",
+    "search": "Search in {{cat}}...",
+    "add_new": "Add New",
+    "modal": {
+      "title": "Add New Relation",
+      "type": "Relation Type *",
+      "type_client": "Client",
+      "type_owner": "Owner (Horse)",
+      "type_vet": "Vet",
+      "type_farrier": "Farrier",
+      "type_supplier": "Supplier",
+      "first_name": "First Name",
+      "last_name": "Last Name",
+      "company": "Company Name (Optional)",
+      "phone": "Phone Number",
+      "email": "Email Address",
+      "cancel": "Cancel",
+      "save": "Save"
+    },
+    "card": {
+      "active": "B2B Client • Active"
+    }
+  },
+  "reports": {
+    "title": "Reports & Analytics",
+    "subtitle": "Financial, medical, and sports data analysis in one place.",
+    "export": "PDF Export",
+    "kpis": {
+      "revenue": "Total Revenue (YTD)",
+      "margin": "Profit Margin",
+      "feed": "Feed Cost per Horse",
+      "sick": "Avg. Sick Days (Horses)",
+      "fei": "FEI Points Total",
+      "occupancy": "Stable Occupancy"
+    },
+    "charts": {
+      "revenue_cost": "Revenue vs Cost Trends",
+      "revenue": "Revenue",
+      "cost": "Cost",
+      "categories": "Expenses by Category",
+      "cat_training": "Training Costs",
+      "cat_feed": "Feed & Supplements",
+      "cat_vet": "Vet & Medical",
+      "cat_housing": "Housing & Stables",
+      "cat_other": "Other",
+      "breeding": "Breeding ROI",
+      "breed_preg": "Pregnancy Rate",
+      "breed_cycle": "Avg. Cycles to Preg.",
+      "breed_live": "Foals Born Alive",
+      "breed_roi": "ROI per Embryo (Est.)",
+      "top": "Most Profitable Horses",
+      "col_horse": "Horse",
+      "col_revenue": "Revenue / Prize Money",
+      "col_cost": "Costs",
+      "col_roi": "Net ROI"
+    }
+  },
+  "products": {
+    "title": "Products Catalog",
+    "subtitle": "Manage feed, services, and supplements for invoicing.",
+    "new": "New Product",
+    "cancel": "Cancel",
+    "form": {
+      "name": "Name",
+      "name_ph": "e.g. Basic Sport Feed",
+      "category": "Category",
+      "cat_feed": "Feed",
+      "cat_supplements": "Supplements",
+      "cat_services": "Services",
+      "cat_other": "Other",
+      "price": "Price (€)",
+      "price_ph": "0.00",
+      "stock": "Stock",
+      "stock_ph": "Optional",
+      "save": "Save"
+    },
+    "table": {
+      "product": "Product / Service",
+      "category": "Category",
+      "price": "Price",
+      "stock": "Stock",
+      "actions": "Actions",
+      "loading": "Loading...",
+      "empty": "No products found."
+    },
+    "alert": {
+      "error": "An error occurred or the database table does not exist yet."
+    }
   }
 }

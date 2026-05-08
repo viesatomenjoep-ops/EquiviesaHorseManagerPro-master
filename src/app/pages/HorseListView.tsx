@@ -1,4 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { supabase } from '../../lib/supabase';
 import { 
   Trophy,
   Euro,
@@ -7,18 +9,90 @@ import {
   Plus,
   Search,
   MapPin,
-  Heart
+  Heart,
+  Home
 } from 'lucide-react';
 
-const horseCategories = [
-  { id: 'jumpers', name: 'Springpaarden', count: 18, icon: Trophy, color: 'text-blue-500', bg: 'bg-blue-50', hover: 'hover:bg-blue-50 hover:border-blue-200' },
-  { id: 'dressage', name: 'Dressuurpaarden', count: 4, icon: Activity, color: 'text-purple-500', bg: 'bg-purple-50', hover: 'hover:bg-purple-50 hover:border-purple-200' },
-  { id: 'sales', name: 'Handelspaarden', count: 12, icon: Euro, color: 'text-emerald-500', bg: 'bg-emerald-50', hover: 'hover:bg-emerald-50 hover:border-emerald-200' },
-  { id: 'rearing', name: 'Opfok & Pensioen', count: 8, icon: Tent, color: 'text-rose-500', bg: 'bg-rose-50', hover: 'hover:bg-rose-50 hover:border-rose-200' },
-];
+interface Horse {
+  id: string;
+  name: string;
+  discipline: string;
+  age: number;
+  sex: string;
+}
+
+interface Location {
+  id: string;
+  name: string;
+}
+
+interface Box {
+  id: string;
+  box_number: string;
+  location_id: string;
+  horse_id: string | null;
+}
 
 export function HorseListView() {
+  const { t } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  
+  const [horses, setHorses] = useState<Horse[]>([]);
+  const [locations, setLocations] = useState<Location[]>([]);
+  const [boxes, setBoxes] = useState<Box[]>([]);
+  
+  const [showAssignModal, setShowAssignModal] = useState(false);
+  const [activeHorseId, setActiveHorseId] = useState<string | null>(null);
+  const [selectedBoxId, setSelectedBoxId] = useState('');
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  async function fetchData() {
+    try {
+      const [horseRes, locRes, boxRes] = await Promise.all([
+        supabase.from('horses').select('*'),
+        supabase.from('locations').select('*'),
+        supabase.from('boxes').select('*')
+      ]);
+
+      if (horseRes.data) setHorses(horseRes.data);
+      if (locRes.data) setLocations(locRes.data);
+      if (boxRes.data) setBoxes(boxRes.data);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function handleAssignBox(e: React.FormEvent) {
+    e.preventDefault();
+    if (!activeHorseId || !selectedBoxId) return;
+
+    try {
+      // Free old box
+      await supabase.from('boxes').update({ horse_id: null, status: 'available' }).eq('horse_id', activeHorseId);
+      
+      // Assign new box
+      const { error } = await supabase.from('boxes').update({ horse_id: activeHorseId, status: 'occupied' }).eq('id', selectedBoxId);
+      
+      if (!error) {
+        setShowAssignModal(false);
+        fetchData();
+      } else {
+        alert(t('products.alert.error'));
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  const horseCategories = [
+    { id: 'jumpers', name: t('horse_list.categories.jumpers'), count: 18, icon: Trophy, color: 'text-blue-500', bg: 'bg-blue-50', hover: 'hover:bg-blue-50 hover:border-blue-200' },
+    { id: 'dressage', name: t('horse_list.categories.dressage'), count: 4, icon: Activity, color: 'text-purple-500', bg: 'bg-purple-50', hover: 'hover:bg-purple-50 hover:border-purple-200' },
+    { id: 'sales', name: t('horse_list.categories.sales'), count: 12, icon: Euro, color: 'text-emerald-500', bg: 'bg-emerald-50', hover: 'hover:bg-emerald-50 hover:border-emerald-200' },
+    { id: 'rearing', name: t('horse_list.categories.rearing'), count: 8, icon: Tent, color: 'text-rose-500', bg: 'bg-rose-50', hover: 'hover:bg-rose-50 hover:border-rose-200' },
+  ];
 
   // 1. Initial Dashboard View
   if (!selectedCategory) {
@@ -26,8 +100,8 @@ export function HorseListView() {
       <div className="max-w-7xl mx-auto space-y-8">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">Mijn Paarden</h1>
-            <p className="text-slate-500 mt-2">Selecteer een categorie om het staloverzicht te bekijken.</p>
+            <h1 className="text-3xl font-bold text-slate-900">{t('horse_list.title')}</h1>
+            <p className="text-slate-500 mt-2">{t('horse_list.subtitle')}</p>
           </div>
         </div>
 
@@ -45,7 +119,7 @@ export function HorseListView() {
                 </div>
                 <h3 className="text-lg font-bold text-slate-800 text-center">{cat.name}</h3>
                 <div className="mt-3 px-4 py-1.5 bg-slate-100 rounded-full">
-                  <span className="text-sm font-semibold text-slate-600">{cat.count} Paarden</span>
+                  <span className="text-sm font-semibold text-slate-600">{cat.count} {t('horse_list.horses_count')}</span>
                 </div>
               </button>
             );
@@ -58,6 +132,15 @@ export function HorseListView() {
   // 2. Detail View for a specific category
   const activeCatObj = horseCategories.find(c => c.id === selectedCategory);
   const ActiveIcon = activeCatObj?.icon || Trophy;
+
+  // Filter horses for this view (using mock filtering for now if table is small)
+  const displayHorses = horses.length > 0 ? horses : Array.from({ length: 6 }).map((_, i) => ({
+    id: `mock-${i}`,
+    name: selectedCategory === 'sales' ? 'Chacco Blue II' : `Equiviesa's Star #${i + 1}`,
+    discipline: 'Springpaard',
+    age: 8,
+    sex: 'Ruin'
+  }));
 
   return (
     <div className="max-w-7xl mx-auto space-y-8">
@@ -85,55 +168,106 @@ export function HorseListView() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
             <input
               type="text"
-              placeholder={`Zoek in ${activeCatObj?.name}...`}
+              placeholder={t('horse_list.search', { cat: activeCatObj?.name })}
               className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C2A878] transition-shadow"
             />
           </div>
           <button className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-2.5 bg-[#111111] hover:bg-slate-800 text-[#C2A878] rounded-xl font-bold text-sm transition-colors shadow-sm">
             <Plus className="w-4 h-4" />
-            Paard Toevoegen
+            {t('horse_list.add_horse')}
           </button>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-          {[1, 2, 3, 4, 5, 6].map((i) => (
-            <div key={i} className="group overflow-hidden rounded-2xl border border-slate-200 bg-white hover:border-[#C2A878] hover:shadow-lg transition-all cursor-pointer">
-              {/* Horse Image Header */}
-              <div className="relative h-48 bg-slate-100 overflow-hidden">
-                <img 
-                  src={`https://source.unsplash.com/800x600/?horse,jumping,equestrian&sig=${selectedCategory}${i}`} 
-                  alt="Horse"
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-slate-800 shadow-sm">
-                  {selectedCategory === 'sales' ? '€ 45.000' : 'Actief'}
+          {displayHorses.map((horse, i) => {
+            // Find current box for this horse
+            const currentBox = boxes.find(b => b.horse_id === horse.id);
+            const currentLocation = currentBox ? locations.find(l => l.id === currentBox.location_id) : null;
+            
+            return (
+              <div key={horse.id} className="group overflow-hidden rounded-2xl border border-slate-200 bg-white hover:border-[#C2A878] hover:shadow-lg transition-all flex flex-col">
+                {/* Horse Image Header */}
+                <div className="relative h-48 bg-slate-100 overflow-hidden cursor-pointer">
+                  <img 
+                    src={`https://source.unsplash.com/800x600/?horse,jumping,equestrian&sig=${selectedCategory}${i}`} 
+                    alt="Horse"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-xs font-bold text-slate-800 shadow-sm">
+                    {selectedCategory === 'sales' ? '€ 45.000' : t('horse_list.card.active')}
+                  </div>
                 </div>
-              </div>
-              
-              {/* Content */}
-              <div className="p-5">
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-xl font-bold text-slate-900 group-hover:text-[#C2A878] transition-colors">
-                    {selectedCategory === 'sales' ? 'Chacco Blue II' : `Equiviesa's Star #${i}`}
-                  </h3>
-                </div>
-                <p className="text-sm text-slate-500 mb-4 line-clamp-1">Kannan x Balou du Rouet • Ruin • 8 Jaar</p>
                 
-                <div className="flex items-center gap-4 text-xs font-medium text-slate-600">
-                  <div className="flex items-center gap-1.5">
-                    <MapPin className="w-4 h-4 text-slate-400" />
-                    <span>Hoofdstal, Box A{i}</span>
+                {/* Content */}
+                <div className="p-5 flex-1 flex flex-col">
+                  <div className="flex justify-between items-start mb-2">
+                    <h3 className="text-xl font-bold text-slate-900 group-hover:text-[#C2A878] transition-colors cursor-pointer">
+                      {horse.name}
+                    </h3>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <Heart className="w-4 h-4 text-rose-400" />
-                    <span>Gezond</span>
+                  <p className="text-sm text-slate-500 mb-4 line-clamp-1">Kannan x Balou du Rouet • {horse.sex} • {horse.age} Jaar</p>
+                  
+                  <div className="flex items-center gap-4 text-xs font-medium text-slate-600 mb-4 flex-1">
+                    <div className="flex items-center gap-1.5">
+                      <Heart className="w-4 h-4 text-rose-400" />
+                      <span>{t('horse_list.card.healthy')}</span>
+                    </div>
+                  </div>
+
+                  {/* Stable Assignment Area */}
+                  <div className="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-xs font-medium text-slate-600">
+                      <MapPin className="w-4 h-4 text-[#C2A878]" />
+                      <span>{currentBox ? `${currentLocation?.name}, Box ${currentBox.box_number}` : 'Niet toegewezen'}</span>
+                    </div>
+                    <button 
+                      onClick={() => {
+                        setActiveHorseId(horse.id);
+                        setSelectedBoxId(currentBox?.id || '');
+                        setShowAssignModal(true);
+                      }}
+                      className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold transition-colors"
+                    >
+                      {t('horse_list.card.assign_box')}
+                    </button>
                   </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
+
+      {/* Box Assignment Modal */}
+      {showAssignModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-200">
+            <h2 className="text-xl font-bold mb-4">{t('locations.forms.assign_box')}</h2>
+            <form onSubmit={handleAssignBox} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">{t('locations.forms.select_box')}</label>
+                <select required value={selectedBoxId} onChange={e => setSelectedBoxId(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md">
+                  <option value="">Selecteer een box...</option>
+                  {boxes.map(b => {
+                    const loc = locations.find(l => l.id === b.location_id);
+                    const isCurrent = b.horse_id === activeHorseId;
+                    return (
+                      <option key={b.id} value={b.id} disabled={b.horse_id !== null && !isCurrent}>
+                        {loc?.name} - Box {b.box_number} {b.horse_id ? (isCurrent ? '(Huidig)' : '(Bezet)') : '(Vrij)'}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+              <div className="flex justify-end gap-3 pt-4">
+                <button type="button" onClick={() => setShowAssignModal(false)} className="px-4 py-2 bg-slate-100 rounded-lg">{t('locations.forms.cancel')}</button>
+                <button type="submit" className="px-4 py-2 bg-[#C2A878] text-white rounded-lg">{t('locations.forms.save')}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }

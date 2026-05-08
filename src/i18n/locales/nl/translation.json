@@ -20,6 +20,408 @@
     "greeting_morning": "Goedemorgen",
     "greeting_afternoon": "Goedemiddag",
     "greeting_evening": "Goedenavond",
-    "subtitle": "Waar kan ik je vandaag mee helpen?"
+    "subtitle": "Waar kan ik je vandaag mee helpen?",
+    "quick_menu_title": "Snelmenu Modules",
+    "quick_menu": {
+      "stable": "Stalbeheer",
+      "care": "Verzorging",
+      "admin": "Administratie",
+      "breeding": "Fokkerij",
+      "analytics": "Analytics",
+      "open": "Open Module"
+    },
+    "kpi": {
+      "active_horses": "Actieve Paarden",
+      "active_horses_sub": "+3 deze maand",
+      "open_tasks": "Openstaande Taken",
+      "open_tasks_sub": "67% Voltooid",
+      "open_tasks_today": "Vandaag",
+      "total_revenue": "Totale Omzet (Mnd)",
+      "total_revenue_sub": "€2.340 nog te innen",
+      "media": "Media & Documenten",
+      "media_sub": "Nieuwe bestanden"
+    },
+    "weather": {
+      "title": "Klimaat & Weer",
+      "desc": "Licht bewolkt, 15% neerslag",
+      "stable": "Stal",
+      "humidity": "Vocht"
+    },
+    "alerts": {
+      "title": "Gezondheid Alerts",
+      "vaccine": "Vaccinatie Verlopen: Bella",
+      "vaccine_desc": "Influenza (2 dagen over tijd)",
+      "farrier": "Hoefsmid Gepland: Don Juan",
+      "farrier_desc": "Morgen om 10:00 (Nieuw beslag)",
+      "btn": "Bekijk Medisch Dossier"
+    },
+    "competitions": {
+      "title": "Komende Wedstrijden",
+      "comp1": "CSI3* Eindhoven",
+      "comp1_desc": "Luna & Maestro (1.40m)",
+      "comp2": "NK Dressuur Ermelo",
+      "comp2_desc": "Don Juan (Grand Prix)"
+    },
+    "invoices": {
+      "title": "Recente Betalingen",
+      "status_paid": "Betaald",
+      "status_debited": "Afgeschreven",
+      "status_processing": "In Verwerking",
+      "btn_all": "Alle facturen bekijken"
+    },
+    "kanban": {
+      "title": "Stal Workflow",
+      "live_data": "Live Data",
+      "add_task": "Taak Toevoegen",
+      "pinned": "Vastgezet:",
+      "pinned_msg": "Ochtendvoedingsschema begint om 07:00 - Alle grooms melden bij de hoofdstal",
+      "col_todo": "Te Doen",
+      "col_inprogress": "Bezig",
+      "col_done": "Klaar",
+      "modal_title": "Nieuwe Taak Toevoegen",
+      "modal_ph": "Taak titel...",
+      "modal_assignee": "Toegewezen aan",
+      "modal_save": "Opslaan",
+      "modal_cancel": "Annuleren"
+    },
+    "iot": {
+      "title": "Live IoT Tracker",
+      "connected": "Verbonden",
+      "min": "min",
+      "dev_girth": "Slimme Singel",
+      "dev_halter": "IoT Halster",
+      "act_treadmill": "Stapmolen",
+      "act_solarium": "Solarium",
+      "act_rest": "Rust"
+    }
+  },
+  "health": {
+    "title": "Gezondheid & Medisch",
+    "subtitle": "Beheer vaccinaties, dierenarts bezoeken, en hoefsmid planning.",
+    "search": "Zoek paard of dossier...",
+    "new": "Nieuw Dossier",
+    "stats": {
+      "healthy": "Gezonde Paarden",
+      "vaccinations": "Aankomende Entingen",
+      "farrier": "Hoefsmid Gepland",
+      "records": "Medische Dossiers"
+    },
+    "tabs": {
+      "overview": "Overzicht",
+      "vaccinations": "Vaccinaties (Entingen)",
+      "farrier": "Hoefsmid Planning",
+      "dental": "Gebitscontroles"
+    },
+    "alerts": {
+      "title": "Actuele Meldingen",
+      "due_7": "Binnen 7 dagen",
+      "due_tomorrow": "Morgen",
+      "due_week": "Volgende week",
+      "due_30": "Binnen 30 dagen",
+      "action": "Actie ondernemen"
+    },
+    "quick_log": {
+      "title": "Snel Logboek",
+      "vaccine": "Enting Registreren",
+      "vaccine_desc": "Update een medisch paspoort",
+      "vet": "Dierenarts Bezoek",
+      "vet_desc": "Klinisch of röntgen",
+      "farrier": "Hoefsmid Bezoek",
+      "farrier_desc": "Beslag of bekappen loggen"
+    },
+    "contacts": {
+      "title": "Contacten (Zorg)",
+      "add": "+ Zorgverlener toevoegen"
+    }
+  },
+  "feeding": {
+    "title": "Voedingsschema's & Voorraad",
+    "subtitle": "Beheer rantsoenen per paard, voersoorten en automatische webshop bestellingen.",
+    "rations": {
+      "title": "Actuele Rantsoenen (Per Paard)",
+      "new": "+ Nieuw schema",
+      "edit": "Bewerken",
+      "morning": "Ochtend",
+      "evening": "Avond",
+      "continuous": "Doorlopend"
+    },
+    "magic_link": {
+      "title": "Magic Link Importer",
+      "desc": "Plak een URL van een webshop (bijv. Agradi of Pavo) om direct het product en de ingrediënten in te laden.",
+      "placeholder": "https://www.agradi.nl/pavo-sportsfit...",
+      "btn": "Haal productgegevens op",
+      "loading": "Aan het inladen...",
+      "success": "Product succesvol gescrapet van webshop!"
+    },
+    "inventory": {
+      "title": "Voorraad Waarschuwing",
+      "low": "Nog maar 45 kg over (Bijna op)"
+    }
+  },
+  "competitions": {
+    "title": "Wedstrijdsport & Prestaties",
+    "subtitle": "Beheer concoursplanning, FEI-punten, en bekijk rit-video's.",
+    "new": "Nieuwe Inschrijving",
+    "stats": {
+      "prize": "Gewonnen Prijzengeld",
+      "fei": "FEI Punten (YTD)",
+      "upcoming": "Aankomende Concours",
+      "clear": "Clear Rounds"
+    },
+    "calendar": {
+      "title": "Wedstrijdkalender (CSI & Nationaal)",
+      "status_entered": "INGESCHREVEN",
+      "status_completed": "VOLTOOID",
+      "status_planned": "GEPLAND"
+    },
+    "video": {
+      "title": "ClipMyHorse Integratie",
+      "ride": "Luna - 1.45m Grand Prix",
+      "event": "CSI3* Valkenswaard",
+      "btn": "Bekijk alle ritten"
+    },
+    "ranking": {
+      "title": "Top Paarden (Ranking)",
+      "pts": "pts"
+    }
+  },
+  "locations": {
+    "title": "Stallen & Locaties",
+    "subtitle": "Beheer stallen, box-indelingen en weidegang overzichtelijk.",
+    "new": "Nieuwe Locatie",
+    "main_stable": "Hoofdstal",
+    "occupied": "BOXEN BEZET",
+    "box": "BOX",
+    "empty": "Leeg",
+    "management": {
+      "title": "Stalbeheer",
+      "assign": "Box Toewijzen",
+      "assign_desc": "Verplaats een paard",
+      "pasture": "Weidegang Schema",
+      "pasture_desc": "Beheer paddock tijden"
+    },
+    "forms": {
+      "new_location": "Nieuwe Locatie Toevoegen",
+      "name": "Locatienaam",
+      "type": "Type",
+      "capacity": "Totaal Boxen (Capaciteit)",
+      "assign_box": "Box Toewijzen",
+      "select_horse": "Selecteer Paard",
+      "select_box": "Selecteer Box",
+      "pasture_title": "Weidegang Schema",
+      "start_time": "Starttijd",
+      "end_time": "Eindtijd",
+      "save": "Opslaan",
+      "cancel": "Annuleren",
+      "loading": "Laden...",
+      "no_locations": "Geen locaties gevonden."
+    }
+  },
+  "horse_list": {
+    "title": "Mijn Paarden",
+    "subtitle": "Selecteer een categorie om het staloverzicht te bekijken.",
+    "add_horse": "Paard Toevoegen",
+    "search": "Zoek in {{cat}}...",
+    "horses_count": "Paarden",
+    "categories": {
+      "jumpers": "Springpaarden",
+      "dressage": "Dressuurpaarden",
+      "sales": "Handelspaarden",
+      "rearing": "Opfok & Pensioen"
+    },
+    "card": {
+      "active": "Actief",
+      "healthy": "Gezond",
+      "assign_box": "Box Toewijzen",
+      "box": "Hoofdstal, Box A{{i}}"
+    }
+  },
+  "agenda": {
+    "title": "Care Support Dashboard",
+    "subtitle": "Selecteer een zorgcategorie om de planning en historiek te beheren.",
+    "planned": "Gepland",
+    "back": "Terug naar Dashboard",
+    "overview": "Overzicht Zorg",
+    "tabs": {
+      "planning": "Planning",
+      "history": "Historiek"
+    },
+    "new_entry": "Nieuwe Invoer",
+    "today": "Vandaag",
+    "upcoming": "Aankomend",
+    "no_history": "Geen historiek gevonden",
+    "no_history_desc": "Er zijn nog geen voltooide acties in de categorie {{cat}}.",
+    "categories": {
+      "clinical": "Klinische Afspraken",
+      "parasite": "Parasietpreventie",
+      "immune": "Immunisatie",
+      "daily": "Dagelijks Welzijn",
+      "medical": "Medische Interventies",
+      "dental": "Gebitscontrole",
+      "farrier": "Hoefsmid & Beslag"
+    }
+  },
+  "breeding": {
+    "title_mares": "Mare Lines & Cycli",
+    "desc_mares": "Beheer en analyseer specifieke data voor merrielijnen & cycli.",
+    "title_embryos": "Embryo Tracking",
+    "desc_embryos": "Beheer en analyseer specifieke data voor embryo tracking.",
+    "title_foals": "Foal Rearing",
+    "desc_foals": "Beheer en analyseer specifieke data voor veulenopfok.",
+    "title_stallions": "Stallion Selection",
+    "desc_stallions": "Beheer en analyseer specifieke data voor hengstenkeuze.",
+    "items": "Items",
+    "search": "Zoek in {{sub}}...",
+    "add_item": "Item Toevoegen",
+    "active": "Actief",
+    "date": "Datum",
+    "today": "Vandaag",
+    "action": "Actie",
+    "action_req": "Vereist aandacht",
+    "status": "Status: Actief en up to date",
+    "blocks": {
+      "cycles": "Cyclus Registratie",
+      "scans": "Dierenarts Scans",
+      "treatments": "Hormoonbehandelingen",
+      "magic": "Dierenarts Magic Links",
+      "flushes": "Embryo Spoelingen",
+      "storage": "Vrieskist & Canisters",
+      "transfers": "Draagmerrie Transfers",
+      "registration": "Paspoort & DNA",
+      "health": "Gezondheidschema",
+      "training": "Training Logboek",
+      "collections": "Sperma Collecties",
+      "shipping": "Verzending & Logistiek",
+      "fees": "Dekgelden Beheer"
+    }
+  },
+  "invoices": {
+    "title": "Facturatie Systeem",
+    "subtitle": "Beheer facturen, betalingen en openstaande posten.",
+    "new_invoice": "Nieuwe Factuur",
+    "create_title": "Nieuwe Factuur Aanmaken",
+    "create_desc": "Selecteer een klant en voeg producten/diensten toe aan de factuur.",
+    "editor_title": "Factuur Editor (In Ontwikkeling)",
+    "editor_desc": "Hier komt het formulier om regels uit de Producten catalogus te selecteren.",
+    "cancel": "Annuleren",
+    "tabs": {
+      "all": "Alle",
+      "concept": "Concept",
+      "sent": "Verzonden",
+      "paid": "Betaald"
+    },
+    "search": "Zoek op factuurnr of klant...",
+    "table": {
+      "number": "Factuurnummer",
+      "client": "Klant",
+      "date": "Datum",
+      "amount": "Bedrag",
+      "status": "Status",
+      "actions": "Acties",
+      "status_paid": "Betaald",
+      "status_concept": "Concept",
+      "status_overdue": "Te laat"
+    }
+  },
+  "admin": {
+    "title": "Administratie & CRM",
+    "subtitle": "Selecteer een categorie om relaties, stallen of bedrijven te beheren.",
+    "categories": {
+      "title": "CRM Categorieën",
+      "clients": "Klanten & Eigenaren",
+      "vets": "Dierenartsen & Klinieken",
+      "suppliers": "Leveranciers",
+      "locations": "Stallen & Locaties",
+      "companies": "Bedrijfsrelaties",
+      "relations": "Relaties"
+    },
+    "back": "Terug naar Dashboard",
+    "search": "Zoek in {{cat}}...",
+    "add_new": "Nieuwe Toevoegen",
+    "modal": {
+      "title": "Nieuwe Relatie Toevoegen",
+      "type": "Soort Relatie *",
+      "type_client": "Klant",
+      "type_owner": "Eigenaar (Paard)",
+      "type_vet": "Dierenarts",
+      "type_farrier": "Hoefsmid",
+      "type_supplier": "Leverancier",
+      "first_name": "Voornaam",
+      "last_name": "Achternaam",
+      "company": "Bedrijfsnaam (Optioneel)",
+      "phone": "Telefoonnummer",
+      "email": "E-mailadres",
+      "cancel": "Annuleren",
+      "save": "Opslaan"
+    },
+    "card": {
+      "active": "B2B Klant • Actief"
+    }
+  },
+  "reports": {
+    "title": "Rapporten & Analytics",
+    "subtitle": "Financiële, medische en sportieve data-analyse op één plek.",
+    "export": "PDF Export",
+    "kpis": {
+      "revenue": "Totale Omzet (YTD)",
+      "margin": "Winstmarge",
+      "feed": "Voerkosten per Paard",
+      "sick": "Gem. Ziekteverzuim (Paarden)",
+      "fei": "FEI Punten Totaal",
+      "occupancy": "Bezettingsgraad Stallen"
+    },
+    "charts": {
+      "revenue_cost": "Omzet vs Kosten Ontwikkeling",
+      "revenue": "Omzet",
+      "cost": "Kosten",
+      "categories": "Uitgaven per Categorie",
+      "cat_training": "Trainingskosten",
+      "cat_feed": "Voer & Supplementen",
+      "cat_vet": "Dierenarts & Medisch",
+      "cat_housing": "Huisvesting & Stallen",
+      "cat_other": "Overig",
+      "breeding": "Fokkerij Rendement",
+      "breed_preg": "Drachtigheidspercentage",
+      "breed_cycle": "Gem. Cyclus tot Dracht",
+      "breed_live": "Veulens Levend Geboren",
+      "breed_roi": "ROI per Embryo (Est.)",
+      "top": "Meest Rendabele Paarden",
+      "col_horse": "Paard",
+      "col_revenue": "Omzet / Prijzengeld",
+      "col_cost": "Kosten",
+      "col_roi": "Netto Rendement"
+    }
+  },
+  "products": {
+    "title": "Producten Catalogus",
+    "subtitle": "Beheer voer, diensten, en supplementen voor facturatie.",
+    "new": "Nieuw Product",
+    "cancel": "Annuleren",
+    "form": {
+      "name": "Naam",
+      "name_ph": "Bijv. Basisbrok Sport",
+      "category": "Categorie",
+      "cat_feed": "Voer",
+      "cat_supplements": "Supplementen",
+      "cat_services": "Diensten",
+      "cat_other": "Overig",
+      "price": "Prijs (€)",
+      "price_ph": "0.00",
+      "stock": "Voorraad",
+      "stock_ph": "Optioneel",
+      "save": "Opslaan"
+    },
+    "table": {
+      "product": "Product / Dienst",
+      "category": "Categorie",
+      "price": "Prijs",
+      "stock": "Voorraad",
+      "actions": "Acties",
+      "loading": "Laden...",
+      "empty": "Geen producten gevonden."
+    },
+    "alert": {
+      "error": "Er is een fout opgetreden of de database tabel bestaat nog niet."
+    }
   }
 }

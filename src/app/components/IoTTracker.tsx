@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Activity, Wifi } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { useTranslation } from 'react-i18next';
 
 export function IoTTracker() {
+  const { t } = useTranslation();
   const data = [
     { time: '10:00', activity: 45 },
     { time: '10:15', activity: 72 },
@@ -15,9 +17,9 @@ export function IoTTracker() {
   ];
 
   const [activeDevices, setActiveDevices] = useState<any[]>([
-    { id: 'dev-1', horse: 'Equinox', device: 'Smart Girth', activity: 'Treadmill', duration: '23 min', status: 'active' },
-    { id: 'dev-2', horse: 'Eclipse', device: 'IoT Halter', activity: 'Solarium', duration: '15 min', status: 'active' },
-    { id: 'dev-3', horse: 'Thunder', device: 'Smart Girth', activity: 'Rest', duration: '45 min', status: 'idle' },
+    { id: 'dev-1', horse: 'Equinox', device: t('dashboard.iot.dev_girth'), activity: t('dashboard.iot.act_treadmill'), duration: `23 ${t('dashboard.iot.min')}`, status: 'active' },
+    { id: 'dev-2', horse: 'Eclipse', device: t('dashboard.iot.dev_halter'), activity: t('dashboard.iot.act_solarium'), duration: `15 ${t('dashboard.iot.min')}`, status: 'active' },
+    { id: 'dev-3', horse: 'Thunder', device: t('dashboard.iot.dev_girth'), activity: t('dashboard.iot.act_rest'), duration: `45 ${t('dashboard.iot.min')}`, status: 'idle' },
   ]);
 
   useEffect(() => {
@@ -26,13 +28,20 @@ export function IoTTracker() {
         const { data, error } = await supabase.from('iot_devices').select('*').limit(4);
         if (!error && data && data.length > 0) {
           setActiveDevices(data);
+        } else {
+          // Keep mock data if no SQL
+          setActiveDevices([
+            { id: 'dev-1', horse: 'Equinox', device: t('dashboard.iot.dev_girth'), activity: t('dashboard.iot.act_treadmill'), duration: `23 ${t('dashboard.iot.min')}`, status: 'active' },
+            { id: 'dev-2', horse: 'Eclipse', device: t('dashboard.iot.dev_halter'), activity: t('dashboard.iot.act_solarium'), duration: `15 ${t('dashboard.iot.min')}`, status: 'active' },
+            { id: 'dev-3', horse: 'Thunder', device: t('dashboard.iot.dev_girth'), activity: t('dashboard.iot.act_rest'), duration: `45 ${t('dashboard.iot.min')}`, status: 'idle' },
+          ]);
         }
       } catch (e) {
         console.error('Failed to load IoT devices, using fallback data');
       }
     }
     fetchIoT();
-  }, []);
+  }, [t]);
 
   const maxActivity = Math.max(...data.map(d => d.activity));
   const width = 400;
@@ -57,10 +66,10 @@ export function IoTTracker() {
         <div className="p-2 bg-slate-100 rounded-lg border border-slate-200">
           <Activity className="w-5 h-5 text-slate-700" />
         </div>
-        <h2 className="text-xl font-serif font-bold text-slate-900 tracking-wide">Live IoT Tracker</h2>
+        <h2 className="text-xl font-serif font-bold text-slate-900 tracking-wide">{t('dashboard.iot.title')}</h2>
         <div className="ml-auto flex items-center gap-2 bg-white border border-slate-200 px-2.5 py-1 rounded-full shadow-sm">
           <Wifi className="w-3 h-3 text-[#A88D5A] animate-pulse" />
-          <span className="text-xs text-slate-600 font-medium">{activeDevices.length} Connected</span>
+          <span className="text-xs text-slate-600 font-medium">{activeDevices.length} {t('dashboard.iot.connected')}</span>
         </div>
       </div>
 

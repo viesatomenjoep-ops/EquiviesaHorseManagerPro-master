@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { 
   BarChart3, 
   LineChart, 
@@ -16,16 +17,17 @@ import {
 } from 'lucide-react';
 
 export function ReportsView() {
+  const { t } = useTranslation();
   const [dateRange, setDateRange] = useState('YTD');
 
   // 10 Analytics Functions / Blocks
   const kpis = [
-    { id: 1, title: 'Totale Omzet (YTD)', value: '€ 142.500', trend: '+14%', icon: DollarSign, color: 'text-emerald-500' },
-    { id: 2, title: 'Winstmarge', value: '28.4%', trend: '+2.1%', icon: LineChart, color: 'text-blue-500' },
-    { id: 3, title: 'Voerkosten per Paard', value: '€ 285 / mnd', trend: '-5%', icon: Wheat, color: 'text-amber-500' },
-    { id: 4, title: 'Gem. Ziekteverzuim (Paarden)', value: '1.2 dagen', trend: 'Stabiel', icon: HeartPulse, color: 'text-rose-500' },
-    { id: 5, title: 'FEI Punten Totaal', value: '3,450', trend: '+450', icon: Trophy, color: 'text-yellow-500' },
-    { id: 6, title: 'Bezettingsgraad Stallen', value: '92%', trend: '+4%', icon: Users, color: 'text-indigo-500' },
+    { id: 1, title: t('reports.kpis.revenue'), value: '€ 142.500', trend: '+14%', icon: DollarSign, color: 'text-emerald-500' },
+    { id: 2, title: t('reports.kpis.margin'), value: '28.4%', trend: '+2.1%', icon: LineChart, color: 'text-blue-500' },
+    { id: 3, title: t('reports.kpis.feed'), value: '€ 285 / mnd', trend: '-5%', icon: Wheat, color: 'text-amber-500' },
+    { id: 4, title: t('reports.kpis.sick'), value: '1.2 dagen', trend: 'Stabiel', icon: HeartPulse, color: 'text-rose-500' },
+    { id: 5, title: t('reports.kpis.fei'), value: '3,450', trend: '+450', icon: Trophy, color: 'text-yellow-500' },
+    { id: 6, title: t('reports.kpis.occupancy'), value: '92%', trend: '+4%', icon: Users, color: 'text-indigo-500' },
   ];
 
   return (
@@ -35,13 +37,13 @@ export function ReportsView() {
         <div>
           <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
             <BarChart3 className="w-6 h-6 text-[#C2A878]" />
-            Rapporten & Analytics
+            {t('reports.title')}
           </h1>
           <p className="text-sm text-slate-500 mt-1">
-            Financiële, medische en sportieve data-analyse op één plek.
+            {t('reports.subtitle')}
           </p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 print:hidden">
           <select 
             value={dateRange}
             onChange={(e) => setDateRange(e.target.value)}
@@ -52,9 +54,9 @@ export function ReportsView() {
             <option value="YTD">Year to Date</option>
             <option value="ALL">All Time</option>
           </select>
-          <button className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-xl text-sm font-medium hover:bg-slate-800 transition-colors">
+          <button onClick={() => window.print()} className="flex items-center gap-2 px-4 py-2 bg-slate-900 text-white rounded-xl text-sm font-medium hover:bg-slate-800 transition-colors">
             <Download className="w-4 h-4" />
-            PDF Export
+            {t('reports.export')}
           </button>
         </div>
       </div>
@@ -82,7 +84,7 @@ export function ReportsView() {
         {/* Function 7: Revenue vs Expenses Chart (Simulated) */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
           <div className="flex justify-between items-center mb-6">
-            <h3 className="font-bold text-slate-900">Omzet vs Kosten Ontwikkeling</h3>
+            <h3 className="font-bold text-slate-900">{t('reports.charts.revenue_cost')}</h3>
             <button className="p-2 hover:bg-slate-50 rounded-lg text-slate-400">
               <Filter className="w-4 h-4" />
             </button>
@@ -104,25 +106,25 @@ export function ReportsView() {
           <div className="flex justify-center gap-6 mt-4 pt-4 border-t border-slate-100">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-[#C2A878]"></div>
-              <span className="text-xs text-slate-500 font-medium">Omzet</span>
+              <span className="text-xs text-slate-500 font-medium">{t('reports.charts.revenue')}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-rose-200"></div>
-              <span className="text-xs text-slate-500 font-medium">Kosten</span>
+              <span className="text-xs text-slate-500 font-medium">{t('reports.charts.cost')}</span>
             </div>
           </div>
         </div>
 
         {/* Function 8: Kostencategorisatie */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-          <h3 className="font-bold text-slate-900 mb-6">Uitgaven per Categorie</h3>
+          <h3 className="font-bold text-slate-900 mb-6">{t('reports.charts.categories')}</h3>
           <div className="space-y-4">
             {[
-              { label: 'Trainingskosten', value: 35, color: 'bg-indigo-500' },
-              { label: 'Voer & Supplementen', value: 25, color: 'bg-amber-500' },
-              { label: 'Dierenarts & Medisch', value: 20, color: 'bg-rose-500' },
-              { label: 'Huisvesting & Stallen', value: 15, color: 'bg-emerald-500' },
-              { label: 'Overig', value: 5, color: 'bg-slate-300' },
+              { label: t('reports.charts.cat_training'), value: 35, color: 'bg-indigo-500' },
+              { label: t('reports.charts.cat_feed'), value: 25, color: 'bg-amber-500' },
+              { label: t('reports.charts.cat_vet'), value: 20, color: 'bg-rose-500' },
+              { label: t('reports.charts.cat_housing'), value: 15, color: 'bg-emerald-500' },
+              { label: t('reports.charts.cat_other'), value: 5, color: 'bg-slate-300' },
             ].map((item, idx) => (
               <div key={idx}>
                 <div className="flex justify-between text-sm font-medium mb-1">
@@ -142,23 +144,23 @@ export function ReportsView() {
           <div className="absolute right-0 top-0 w-48 h-48 bg-[#C2A878]/10 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
           <h3 className="font-bold mb-6 flex items-center gap-2">
             <Activity className="w-5 h-5 text-[#C2A878]" />
-            Fokkerij Rendement
+            {t('reports.charts.breeding')}
           </h3>
           <div className="grid grid-cols-2 gap-4 relative z-10">
             <div className="p-4 bg-white/5 rounded-xl border border-white/10">
-              <p className="text-xs text-white/50 mb-1">Drachtigheidspercentage</p>
+              <p className="text-xs text-white/50 mb-1">{t('reports.charts.breed_preg')}</p>
               <p className="text-2xl font-bold text-[#C2A878]">84%</p>
             </div>
             <div className="p-4 bg-white/5 rounded-xl border border-white/10">
-              <p className="text-xs text-white/50 mb-1">Gem. Cyclus tot Dracht</p>
+              <p className="text-xs text-white/50 mb-1">{t('reports.charts.breed_cycle')}</p>
               <p className="text-2xl font-bold text-[#C2A878]">1.4</p>
             </div>
             <div className="p-4 bg-white/5 rounded-xl border border-white/10">
-              <p className="text-xs text-white/50 mb-1">Veulens Levend Geboren</p>
+              <p className="text-xs text-white/50 mb-1">{t('reports.charts.breed_live')}</p>
               <p className="text-2xl font-bold text-[#C2A878]">12</p>
             </div>
             <div className="p-4 bg-white/5 rounded-xl border border-white/10">
-              <p className="text-xs text-white/50 mb-1">ROI per Embryo (Est.)</p>
+              <p className="text-xs text-white/50 mb-1">{t('reports.charts.breed_roi')}</p>
               <p className="text-2xl font-bold text-emerald-400">+ 315%</p>
             </div>
           </div>
@@ -166,15 +168,15 @@ export function ReportsView() {
 
         {/* Function 10: Top Performing Horses Table */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 overflow-hidden">
-          <h3 className="font-bold text-slate-900 mb-6">Meest Rendabele Paarden</h3>
+          <h3 className="font-bold text-slate-900 mb-6">{t('reports.charts.top')}</h3>
           <div className="-mx-6 px-6 overflow-x-auto">
             <table className="w-full text-left text-sm">
               <thead>
                 <tr className="border-b border-slate-100 text-slate-500">
-                  <th className="pb-3 font-medium">Paard</th>
-                  <th className="pb-3 font-medium">Omzet / Prijzengeld</th>
-                  <th className="pb-3 font-medium">Kosten</th>
-                  <th className="pb-3 font-medium">Netto Rendement</th>
+                  <th className="pb-3 font-medium">{t('reports.charts.col_horse')}</th>
+                  <th className="pb-3 font-medium">{t('reports.charts.col_revenue')}</th>
+                  <th className="pb-3 font-medium">{t('reports.charts.col_cost')}</th>
+                  <th className="pb-3 font-medium">{t('reports.charts.col_roi')}</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50">

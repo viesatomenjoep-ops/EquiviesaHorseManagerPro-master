@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { 
   HeartPulse, 
   Stethoscope, 
@@ -13,13 +14,14 @@ import {
 } from 'lucide-react';
 
 export function HealthView() {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<'overview' | 'vaccinations' | 'farrier' | 'dental'>('overview');
 
   const stats = [
-    { label: 'Gezonde Paarden', value: '41', icon: HeartPulse, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
-    { label: 'Aankomende Entingen', value: '5', icon: Syringe, color: 'text-amber-500', bg: 'bg-amber-500/10' },
-    { label: 'Hoefsmid Gepland', value: '12', icon: Scissors, color: 'text-blue-500', bg: 'bg-blue-500/10' },
-    { label: 'Medische Dossiers', value: '148', icon: Activity, color: 'text-purple-500', bg: 'bg-purple-500/10' },
+    { label: t('health.stats.healthy'), value: '41', icon: HeartPulse, color: 'text-emerald-500', bg: 'bg-emerald-500/10' },
+    { label: t('health.stats.vaccinations'), value: '5', icon: Syringe, color: 'text-amber-500', bg: 'bg-amber-500/10' },
+    { label: t('health.stats.farrier'), value: '12', icon: Scissors, color: 'text-blue-500', bg: 'bg-blue-500/10' },
+    { label: t('health.stats.records'), value: '148', icon: Activity, color: 'text-purple-500', bg: 'bg-purple-500/10' },
   ];
 
   return (
@@ -29,10 +31,10 @@ export function HealthView() {
         <div>
           <h1 className="text-2xl font-bold text-slate-900 flex items-center gap-2">
             <Stethoscope className="w-6 h-6 text-[#C2A878]" />
-            Gezondheid & Medisch
+            {t('health.title')}
           </h1>
           <p className="text-sm text-slate-500 mt-1">
-            Beheer vaccinaties, dierenarts bezoeken, en hoefsmid planning.
+            {t('health.subtitle')}
           </p>
         </div>
         <div className="flex items-center gap-3 w-full sm:w-auto">
@@ -40,13 +42,13 @@ export function HealthView() {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
             <input
               type="text"
-              placeholder="Zoek paard of dossier..."
+              placeholder={t('health.search')}
               className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C2A878]"
             />
           </div>
           <button className="flex items-center gap-2 px-4 py-2 bg-[#C2A878] text-white rounded-xl text-sm font-medium hover:bg-[#B0986A] transition-colors whitespace-nowrap">
             <Plus className="w-4 h-4" />
-            <span className="hidden sm:inline">Nieuw Dossier</span>
+            <span className="hidden sm:inline">{t('health.new')}</span>
           </button>
         </div>
       </div>
@@ -74,10 +76,10 @@ export function HealthView() {
           {/* Tabs */}
           <div className="flex gap-2 p-1 bg-slate-100 rounded-xl overflow-x-auto">
             {[
-              { id: 'overview', label: 'Overzicht' },
-              { id: 'vaccinations', label: 'Vaccinaties (Entingen)' },
-              { id: 'farrier', label: 'Hoefsmid Planning' },
-              { id: 'dental', label: 'Gebitscontroles' }
+              { id: 'overview', label: t('health.tabs.overview') },
+              { id: 'vaccinations', label: t('health.tabs.vaccinations') },
+              { id: 'farrier', label: t('health.tabs.farrier') },
+              { id: 'dental', label: t('health.tabs.dental') }
             ].map(tab => (
               <button
                 key={tab.id}
@@ -96,14 +98,14 @@ export function HealthView() {
           {/* Action List (Placeholder Data) */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
             <div className="p-5 border-b border-slate-200 flex justify-between items-center bg-slate-50/50">
-              <h2 className="font-bold text-slate-900">Actuele Meldingen</h2>
+              <h2 className="font-bold text-slate-900">{t('health.alerts.title')}</h2>
             </div>
             <div className="divide-y divide-slate-100">
               {[
-                { type: 'vaccine', horse: 'Luna', detail: 'Influenza & Tetanus', due: 'Binnen 7 dagen', urgency: 'high' },
-                { type: 'farrier', horse: 'Don Juan', detail: 'Rondom beslaan', due: 'Morgen', urgency: 'high' },
-                { type: 'vet', horse: 'Zangersheide Z', detail: 'Röntgenologische Keuring', due: 'Volgende week', urgency: 'medium' },
-                { type: 'dental', horse: 'Bella', detail: 'Jaarlijkse controle', due: 'Binnen 30 dagen', urgency: 'low' }
+                { type: 'vaccine', horse: 'Luna', detail: 'Influenza & Tetanus', due: t('health.alerts.due_7'), urgency: 'high' },
+                { type: 'farrier', horse: 'Don Juan', detail: 'Rondom beslaan', due: t('health.alerts.due_tomorrow'), urgency: 'high' },
+                { type: 'vet', horse: 'Zangersheide Z', detail: 'Röntgenologische Keuring', due: t('health.alerts.due_week'), urgency: 'medium' },
+                { type: 'dental', horse: 'Bella', detail: 'Jaarlijkse controle', due: t('health.alerts.due_30'), urgency: 'low' }
               ].map((item, idx) => (
                 <div key={idx} className="p-4 hover:bg-slate-50 transition-colors flex items-center justify-between group">
                   <div className="flex items-center gap-4">
@@ -131,7 +133,7 @@ export function HealthView() {
                       {item.due}
                     </span>
                     <button className="text-sm text-[#C2A878] font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-                      Actie ondernemen &rarr;
+                      {t('health.alerts.action')} &rarr;
                     </button>
                   </div>
                 </div>
@@ -148,28 +150,28 @@ export function HealthView() {
             <div className="absolute -right-6 -top-6 w-32 h-32 bg-[#C2A878]/20 rounded-full blur-2xl"></div>
             <h3 className="font-bold text-lg mb-4 flex items-center gap-2">
               <Activity className="w-5 h-5 text-[#C2A878]" />
-              Snel Logboek
+              {t('health.quick_log.title')}
             </h3>
             <div className="space-y-3">
               <button className="w-full bg-white/10 hover:bg-white/20 transition-colors border border-white/10 rounded-xl p-3 text-left flex items-center gap-3">
                 <Syringe className="w-5 h-5 text-amber-400" />
                 <div>
-                  <div className="text-sm font-medium">Enting Registreren</div>
-                  <div className="text-xs text-white/50">Update een medisch paspoort</div>
+                  <div className="text-sm font-medium">{t('health.quick_log.vaccine')}</div>
+                  <div className="text-xs text-white/50">{t('health.quick_log.vaccine_desc')}</div>
                 </div>
               </button>
               <button className="w-full bg-white/10 hover:bg-white/20 transition-colors border border-white/10 rounded-xl p-3 text-left flex items-center gap-3">
                 <Stethoscope className="w-5 h-5 text-purple-400" />
                 <div>
-                  <div className="text-sm font-medium">Dierenarts Bezoek</div>
-                  <div className="text-xs text-white/50">Klinisch of röntgen</div>
+                  <div className="text-sm font-medium">{t('health.quick_log.vet')}</div>
+                  <div className="text-xs text-white/50">{t('health.quick_log.vet_desc')}</div>
                 </div>
               </button>
               <button className="w-full bg-white/10 hover:bg-white/20 transition-colors border border-white/10 rounded-xl p-3 text-left flex items-center gap-3">
                 <Scissors className="w-5 h-5 text-blue-400" />
                 <div>
-                  <div className="text-sm font-medium">Hoefsmid Bezoek</div>
-                  <div className="text-xs text-white/50">Beslag of bekappen loggen</div>
+                  <div className="text-sm font-medium">{t('health.quick_log.farrier')}</div>
+                  <div className="text-xs text-white/50">{t('health.quick_log.farrier_desc')}</div>
                 </div>
               </button>
             </div>
@@ -177,7 +179,7 @@ export function HealthView() {
 
           {/* Dierenartsen & Smids */}
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-            <h3 className="font-bold text-slate-900 mb-4">Contacten (Zorg)</h3>
+            <h3 className="font-bold text-slate-900 mb-4">{t('health.contacts.title')}</h3>
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center">
@@ -205,7 +207,7 @@ export function HealthView() {
               </div>
             </div>
             <button className="w-full mt-4 py-2 border border-dashed border-slate-300 rounded-xl text-sm text-slate-500 hover:bg-slate-50 hover:border-slate-400 transition-colors">
-              + Zorgverlener toevoegen
+              {t('health.contacts.add')}
             </button>
           </div>
 
