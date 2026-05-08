@@ -139,13 +139,42 @@ CREATE TABLE IF NOT EXISTS invoice_items (
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- 9. TABEL: PRODUCTS (Producten)
+-- 9. TABEL: PRODUCTS CATALOGUS (Handelspaarden, Diensten, Voer)
 CREATE TABLE IF NOT EXISTS products (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   name TEXT NOT NULL,
-  category TEXT NOT NULL, -- Voer, Supplementen, Diensten
+  category TEXT NOT NULL, -- Bijv. 'Handelspaard', 'Voer', 'Dienst'
   price DECIMAL(10, 2) NOT NULL,
   stock INTEGER DEFAULT 0,
+  
+  -- Specifiek voor Paardenverkoop (Handelsstal)
+  horse_id UUID REFERENCES horses(id) ON DELETE SET NULL, -- Koppel aan een specifiek paard
+  breed TEXT,             -- Ras (bijv. KWPN, Zangersheide)
+  origin_country TEXT,    -- Waar komt het paard vandaan?
+  destination_country TEXT, -- Waar gaat het paard naartoe? (Export)
+  
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 9B. TABEL: HORSE SALES LOGISTICS (Export, Vluchten, X-Rays)
+CREATE TABLE IF NOT EXISTS horse_sales_logistics (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  product_id UUID REFERENCES products(id) ON DELETE CASCADE,
+  
+  -- Gezondheid & Documenten voor verkoop
+  passport_number TEXT,
+  xray_status TEXT,       -- Bijv. 'Goedgekeurd (Klasse 1)', 'Kleine opmerking'
+  xray_document_url TEXT, -- Cloudinary link naar de röntgenfoto's
+  vet_check_date DATE,
+  vet_check_report TEXT,  -- Cloudinary link naar keuringsrapport
+  
+  -- Transport & Vluchtgegevens
+  transport_company TEXT,
+  flight_number TEXT,
+  departure_date TIMESTAMP WITH TIME ZONE,
+  arrival_date TIMESTAMP WITH TIME ZONE,
+  export_papers_ready BOOLEAN DEFAULT false,
+  
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
