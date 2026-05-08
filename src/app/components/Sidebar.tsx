@@ -1,16 +1,17 @@
+import { useState } from "react";
 import { Link, useLocation } from "react-router";
 import { 
   LayoutDashboard, Hexagon, CalendarDays, ListTodo,
   HeartPulse, Apple, Trophy,
   Users, Calculator, Package, MapPin, FolderOpen,
   Dna, Microscope, Baby,
-  PieChart, Settings, X 
+  PieChart, Settings, X, ChevronDown, ChevronRight
 } from "lucide-react";
 import { LanguageSelector } from "./LanguageSelector";
 
 const sidebarSections = [
   {
-    title: "STALBEHEER",
+    title: "STABLE MANAGEMENT",
     items: [
       { name: "Dashboard", path: "/", icon: LayoutDashboard },
       { name: "Mijn Paarden", path: "/horses", icon: Hexagon },
@@ -19,7 +20,7 @@ const sidebarSections = [
     ]
   },
   {
-    title: "VERZORGING & SPORT",
+    title: "CARE SUPPORT",
     items: [
       { name: "Gezondheid & Medisch", path: "/health", icon: HeartPulse },
       { name: "Voedingsschema's", path: "/feeding", icon: Apple },
@@ -27,7 +28,7 @@ const sidebarSections = [
     ]
   },
   {
-    title: "ADMINISTRATIE & CRM",
+    title: "ADMINISTRATION & CRM",
     items: [
       { name: "Relaties & Contacten", path: "/contacts", icon: Users },
       { name: "Facturatie", path: "/invoices", icon: Calculator },
@@ -37,7 +38,7 @@ const sidebarSections = [
     ]
   },
   {
-    title: "FOKKERIJ",
+    title: "BREEDING",
     items: [
       { name: "Merrie Lijnen", path: "/mares", icon: Dna },
       { name: "Embryo Tracking", path: "/embryos", icon: Microscope },
@@ -45,7 +46,7 @@ const sidebarSections = [
     ]
   },
   {
-    title: "SYSTEEM",
+    title: "SYSTEM",
     items: [
       { name: "Rapporten & Analytics", path: "/reports", icon: PieChart },
       { name: "Systeem Instellingen", path: "/settings", icon: Settings },
@@ -55,6 +56,18 @@ const sidebarSections = [
 
 export function Sidebar({ onClose }: { onClose?: () => void }) {
   const location = useLocation();
+  // By default, open the first 3 sections, keep Breeding and System closed as requested
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>({
+    "STABLE MANAGEMENT": true,
+    "CARE SUPPORT": true,
+    "ADMINISTRATION & CRM": true,
+    "BREEDING": false,
+    "SYSTEM": false
+  });
+
+  const toggleSection = (title: string) => {
+    setOpenSections(prev => ({ ...prev, [title]: !prev[title] }));
+  };
 
   return (
     <aside className="w-72 bg-[#111111] text-white min-h-screen flex flex-col shadow-2xl relative">
@@ -76,42 +89,57 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
       </div>
       
       <nav className="flex-1 overflow-y-auto py-4 scrollbar-hide">
-        <div className="space-y-8">
-          {sidebarSections.map((section, idx) => (
-            <div key={idx}>
-              <h2 className="px-6 mb-3 text-xs font-bold text-[#8C7345] tracking-wider uppercase">
-                {section.title}
-              </h2>
-              <ul className="space-y-1">
-                {section.items.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = location.pathname === item.path || (item.path !== "/" && location.pathname.startsWith(item.path));
-                  
-                  return (
-                    <li key={item.path}>
-                      <Link
-                        to={item.path}
-                        className={`flex items-center gap-4 px-6 py-2.5 text-sm font-medium transition-all duration-200 ${
-                          isActive 
-                            ? "bg-white/5 border-r-4 border-[#C2A878] text-[#C2A878]" 
-                            : "text-slate-400 hover:text-white hover:bg-white/5 border-r-4 border-transparent"
-                        }`}
-                      >
-                        <Icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-[#C2A878]' : 'text-slate-500'}`} />
-                        <span className="truncate">{item.name}</span>
-                      </Link>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          ))}
+        <div className="space-y-2">
+          {sidebarSections.map((section, idx) => {
+            const isOpen = openSections[section.title];
+            
+            return (
+              <div key={idx} className="mb-2">
+                <button 
+                  onClick={() => toggleSection(section.title)}
+                  className="w-full flex items-center justify-between px-6 py-2 group"
+                >
+                  <h2 className="text-xs font-bold text-[#8C7345] tracking-wider uppercase group-hover:text-[#C2A878] transition-colors">
+                    {section.title}
+                  </h2>
+                  {isOpen ? (
+                    <ChevronDown className="w-4 h-4 text-[#8C7345] group-hover:text-[#C2A878]" />
+                  ) : (
+                    <ChevronRight className="w-4 h-4 text-[#8C7345] group-hover:text-[#C2A878]" />
+                  )}
+                </button>
+                
+                <div className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-96 opacity-100 mt-1' : 'max-h-0 opacity-0'}`}>
+                  <ul className="space-y-1">
+                    {section.items.map((item) => {
+                      const Icon = item.icon;
+                      const isActive = location.pathname === item.path || (item.path !== "/" && location.pathname.startsWith(item.path));
+                      
+                      return (
+                        <li key={item.path}>
+                          <Link
+                            to={item.path}
+                            className={`flex items-center gap-4 px-6 py-2.5 text-sm font-medium transition-all duration-200 ${
+                              isActive 
+                                ? "bg-white/5 border-r-4 border-[#C2A878] text-[#C2A878]" 
+                                : "text-slate-400 hover:text-white hover:bg-white/5 border-r-4 border-transparent"
+                            }`}
+                          >
+                            <Icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-[#C2A878]' : 'text-slate-500'}`} />
+                            <span className="truncate">{item.name}</span>
+                          </Link>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </nav>
       
-      <div className="p-6 border-t border-white/10 flex justify-center bg-[#0a0a0a]">
-        <LanguageSelector />
-      </div>
+      {/* We removed LanguageSelector from here, as it's now in the top bar */}
     </aside>
   );
 }
