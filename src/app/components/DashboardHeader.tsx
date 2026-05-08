@@ -35,7 +35,7 @@ export function DashboardHeader() {
   }, []);
 
   return (
-    <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between p-6 bg-white rounded-2xl border border-slate-200 gap-6 shadow-sm mb-6 z-40">
+    <div className="relative flex flex-col md:flex-row items-start md:items-center justify-between p-6 bg-white rounded-2xl border border-slate-200 gap-6 shadow-sm mb-6 z-10">
       {/* Dismiss Button for Mobile */}
       <button 
         onClick={() => setIsVisible(false)}
