@@ -40,9 +40,12 @@ export default function App() {
         <Route path="documents" element={<Placeholder title="Documenten & Media (Cloudinary)" />} />
 
         {/* FOKKERIJ */}
-        <Route path="mares" element={<BreedingView />} />
-        <Route path="embryos" element={<BreedingView />} />
-        <Route path="foals" element={<BreedingView />} />
+        <Route path="breeding">
+          <Route path="mares" element={<BreedingView />} />
+          <Route path="embryos" element={<BreedingView />} />
+          <Route path="foals" element={<BreedingView />} />
+          <Route path="stallions" element={<BreedingView />} />
+        </Route>
 
         {/* SYSTEEM */}
         <Route path="reports" element={<Placeholder title="Rapporten & Analytics" />} />

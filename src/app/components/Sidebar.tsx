@@ -40,9 +40,10 @@ const sidebarSections = [
   {
     title: "BREEDING",
     items: [
-      { name: "Merrie Lijnen", path: "/mares", icon: Dna },
-      { name: "Embryo Tracking", path: "/embryos", icon: Microscope },
-      { name: "Veulen Opfok", path: "/foals", icon: Baby },
+      { name: "Mare Lines", path: "/breeding/mares", icon: Dna },
+      { name: "Embryo Tracking", path: "/breeding/embryos", icon: Microscope },
+      { name: "Foal Rearing", path: "/breeding/foals", icon: Baby },
+      { name: "Stallion Selection", path: "/breeding/stallions", icon: Trophy },
     ]
   },
   {
