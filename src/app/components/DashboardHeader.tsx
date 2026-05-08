@@ -1,5 +1,6 @@
 import { Search, Bell, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const languages = [
   { code: 'nl', name: 'Nederlands', flag: '🇳🇱' },
@@ -15,8 +16,10 @@ const languages = [
 ];
 
 export function DashboardHeader() {
+  const { t } = useTranslation();
   const currentHour = new Date().getHours();
-  const greeting = currentHour < 12 ? 'Goedemorgen' : currentHour < 18 ? 'Goedemiddag' : 'Goedenavond';
+  const greetingKey = currentHour < 12 ? 'greeting_morning' : currentHour < 18 ? 'greeting_afternoon' : 'greeting_evening';
+  const greeting = t(`dashboard.${greetingKey}`);
   
   const [rotation, setRotation] = useState(0);
   const [isVisible, setIsVisible] = useState(true);
@@ -56,8 +59,8 @@ export function DashboardHeader() {
           />
         </div>
         <div>
-          <h1 className="text-xl md:text-2xl font-bold text-slate-900">{greeting}, Thomas</h1>
-          <p className="text-xs md:text-sm text-slate-500 font-medium mt-1">Waar kan ik je vandaag mee helpen?</p>
+          <h1 className="text-xl md:text-2xl font-bold text-slate-900">{greeting}, Tom</h1>
+          <p className="text-xs md:text-sm text-slate-500 font-medium mt-1">{t('dashboard.subtitle')}</p>
         </div>
       </div>
 

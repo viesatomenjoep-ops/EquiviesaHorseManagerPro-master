@@ -17,7 +17,9 @@
     "settings": "Instellingen"
   },
   "dashboard": {
-    "greeting": "Goedemorgen",
-    "subtitle": "Hier is het overzicht van vandaag."
+    "greeting_morning": "Goedemorgen",
+    "greeting_afternoon": "Goedemiddag",
+    "greeting_evening": "Goedenavond",
+    "subtitle": "Waar kan ik je vandaag mee helpen?"
   }
 }

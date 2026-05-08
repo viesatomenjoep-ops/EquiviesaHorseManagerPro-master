@@ -17,7 +17,9 @@
     "settings": "Settings"
   },
   "dashboard": {
-    "greeting": "Good morning",
-    "subtitle": "Here is today's overview."
+    "greeting_morning": "Good morning",
+    "greeting_afternoon": "Good afternoon",
+    "greeting_evening": "Good evening",
+    "subtitle": "What can I help you with?"
   }
 }
