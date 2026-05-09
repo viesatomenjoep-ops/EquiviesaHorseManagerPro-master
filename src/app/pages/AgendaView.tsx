@@ -219,23 +219,23 @@ export function AgendaView() {
 
         {showNewEvent ? (
           <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 animate-in fade-in">
-             <h2 className="text-lg font-bold mb-4">Nieuwe afspraak inplannen voor {activeCatObj?.name}</h2>
+             <h2 className="text-lg font-bold mb-4 text-slate-900">{t('agenda.schedule_new', 'Nieuwe afspraak inplannen voor')} {activeCatObj?.name}</h2>
              <form onSubmit={handleCreateEvent} className="space-y-4 max-w-md">
                <div>
-                 <label className="block text-sm font-medium mb-1">Titel</label>
-                 <input type="text" required value={newTitle} onChange={e => setNewTitle(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md" placeholder="Bijv. Controle of Enting" />
+                 <label className="block text-sm font-bold text-slate-900 mb-1">{t('agenda.forms.title', 'Titel')}</label>
+                 <input type="text" required value={newTitle} onChange={e => setNewTitle(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md text-slate-900 bg-white" placeholder={t('agenda.forms.title_placeholder', 'Bijv. Controle of Enting')} />
                </div>
                <div>
-                 <label className="block text-sm font-medium mb-1">Datum</label>
-                 <input type="date" required value={newDate} onChange={e => setNewDate(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md" />
+                 <label className="block text-sm font-bold text-slate-900 mb-1">{t('agenda.forms.date', 'Datum')}</label>
+                 <input type="date" required value={newDate} onChange={e => setNewDate(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md text-slate-900 bg-white" />
                </div>
                <div>
-                 <label className="block text-sm font-medium mb-1">Uitvoerder (Dierenarts / Smid)</label>
-                 <input type="text" value={newProvider} onChange={e => setNewProvider(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md" placeholder="Naam uitvoerder" />
+                 <label className="block text-sm font-bold text-slate-900 mb-1">{t('agenda.forms.provider', 'Uitvoerder (Dierenarts / Smid)')}</label>
+                 <input type="text" value={newProvider} onChange={e => setNewProvider(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md text-slate-900 bg-white" placeholder={t('agenda.forms.provider_placeholder', 'Naam uitvoerder')} />
                </div>
                <div className="flex gap-3 pt-4">
-                 <button type="submit" className="px-4 py-2 bg-[#C2A878] text-white rounded-lg font-bold">Opslaan</button>
-                 <button type="button" onClick={() => setShowNewEvent(false)} className="px-4 py-2 bg-slate-100 rounded-lg">Annuleren</button>
+                 <button type="submit" className="px-4 py-2 bg-[#C2A878] hover:bg-[#B09665] text-white rounded-lg font-bold transition-colors">{t('agenda.forms.save', 'Opslaan')}</button>
+                 <button type="button" onClick={() => setShowNewEvent(false)} className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-900 rounded-lg font-bold transition-colors">{t('agenda.forms.cancel', 'Annuleren')}</button>
                </div>
              </form>
           </div>
