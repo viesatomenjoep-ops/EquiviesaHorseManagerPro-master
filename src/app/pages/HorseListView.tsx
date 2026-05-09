@@ -144,17 +144,28 @@ export function HorseListView() {
     try {
       if (editingHorse.id && !editingHorse.id.startsWith('mock')) {
         // Update
-        await supabase.from('horses').update(editingHorse).eq('id', editingHorse.id);
+        const { error } = await supabase.from('horses').update(editingHorse).eq('id', editingHorse.id);
+        if (error) {
+          console.error("Database Update Error:", error);
+          alert("Fout bij het opslaan van het paard in de database: " + error.message);
+          return;
+        }
       } else {
         // Insert
         const { id, ...newHorseData } = editingHorse as any;
-        await supabase.from('horses').insert([newHorseData]);
+        const { error } = await supabase.from('horses').insert([newHorseData]);
+        if (error) {
+          console.error("Database Insert Error:", error);
+          alert("Fout bij het toevoegen van het paard in de database: " + error.message);
+          return;
+        }
       }
       setShowHorseModal(false);
       setEditingHorse(null);
       fetchData();
     } catch (err) {
       console.error(err);
+      alert("Er is een onverwachte fout opgetreden bij het opslaan.");
     }
   }
 
@@ -169,7 +180,7 @@ export function HorseListView() {
       formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'equiviesa_upload');
       formData.append('cloud_name', import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'daj1lyfgk');
 
-      const response = await fetch(`https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'daj1lyfgk'}/image/upload`, {
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'daj1lyfgk'}/auto/upload`, {
         method: 'POST',
         body: formData,
       });
@@ -219,7 +230,7 @@ export function HorseListView() {
                 </div>
                 <h3 className="text-lg font-bold text-slate-800 text-center">{cat.name}</h3>
                 <div className="mt-3 px-4 py-1.5 bg-slate-100 rounded-full">
-                  <span className="text-sm font-semibold text-slate-600">{cat.count} Paarden</span>
+                  <span className="text-sm font-semibold text-slate-600">{cat.count} {t('horse_list.horses_count')}</span>
                 </div>
               </button>
             );
@@ -253,14 +264,14 @@ export function HorseListView() {
           className="mr-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-colors flex items-center gap-2"
         >
           <span className="text-xl">←</span>
-          Terug naar Dashboard
+          {t('admin.back')}
         </button>
         <div className={`p-4 rounded-2xl ${activeCatObj?.bg}`}>
           <ActiveIcon className={`w-8 h-8 ${activeCatObj?.color}`} />
         </div>
         <div>
           <h1 className="text-3xl font-bold text-slate-900">{activeCatObj?.name}</h1>
-          <p className="text-slate-500 mt-1">Beheer alle {activeCatObj?.name.toLowerCase()} in de database.</p>
+          <p className="text-slate-500 mt-1">{t('horse_list.subtitle')}</p>
         </div>
       </div>
 

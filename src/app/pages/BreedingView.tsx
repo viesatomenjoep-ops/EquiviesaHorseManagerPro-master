@@ -261,7 +261,14 @@ export function BreedingView() {
                {newItemMedia && (
                  <div className="mb-2 text-sm text-emerald-600 font-bold break-all">✓ Bestand geüpload: {newItemMedia}</div>
                )}
-               <input type="file" onChange={handleMediaUpload} disabled={isUploading} className="text-sm w-full text-slate-900" />
+               <div className="flex items-center gap-3">
+                 <div className="relative w-full">
+                   <input type="file" onChange={handleMediaUpload} disabled={isUploading} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" title="Bestand Toevoegen" />
+                   <button type="button" className="px-4 py-2 bg-slate-100 border border-slate-300 rounded-lg text-slate-900 text-sm font-bold shadow-sm pointer-events-none w-full text-left">
+                      Bestand / Plaatjes Toevoegen
+                   </button>
+                 </div>
+               </div>
                {isUploading && <p className="text-xs text-[#C2A878] mt-1 font-bold animate-pulse">Aan het uploaden naar Cloudinary...</p>}
              </div>
 
