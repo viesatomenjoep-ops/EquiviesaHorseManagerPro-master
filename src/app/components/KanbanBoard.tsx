@@ -5,10 +5,18 @@ import { GripVertical, Clock, User, Sparkles, Plus } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useTranslation } from 'react-i18next';
 
+interface Staff {
+  id: string;
+  first_name: string;
+  last_name: string;
+}
+
 interface Task {
   id: string;
   title: string;
-  assignee: string;
+  assignee?: string;
+  assigned_to?: string;
+  staff?: { first_name: string; last_name: string };
   time?: string;
   priority?: 'high' | 'medium' | 'low';
   status: string;
@@ -52,7 +60,7 @@ function TaskCard({ task }: { task: Task }) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-xs text-slate-500">
           <User className="w-3 h-3" />
-          <span>{task.assignee}</span>
+          <span>{task.assignee || (task.staff ? `${task.staff.first_name} ${task.staff.last_name}` : 'Onbekend')}</span>
         </div>
         {task.time && (
           <div className="flex items-center gap-1 text-xs text-slate-500">
@@ -116,20 +124,33 @@ export function KanbanBoard() {
     { id: 'done', title: t('dashboard.kanban.col_done'), tasks: [] },
   ]);
 
-  const [showAddModal, setShowAddModal] = useState(false);
-  const [newTaskTitle, setNewTaskTitle] = useState('');
-  const [newTaskAssignee, setNewTaskAssignee] = useState('Emma');
+  const [staff, setStaff] = useState<Staff[]>([]);
+  const [selectedStaffId, setSelectedStaffId] = useState('');
 
   useEffect(() => {
-    fetchTasks();
+    fetchData();
   }, [t]);
 
-  async function fetchTasks() {
+  async function fetchData() {
     try {
-      const { data, error } = await supabase.from('tasks').select('*');
-      if (!error && data) {
+      const [tasksRes, staffRes] = await Promise.all([
+        supabase.from('tasks').select('*, staff:assigned_to(first_name, last_name)'),
+        supabase.from('staff').select('*')
+      ]);
+
+      if (staffRes.data) {
+        setStaff(staffRes.data);
+        if (staffRes.data.length > 0) setSelectedStaffId(staffRes.data[0].id);
+      }
+
+      if (tasksRes.data) {
+        const parsedData = tasksRes.data.map(t => ({
+          ...t,
+          assignee: t.staff ? `${t.staff.first_name} ${t.staff.last_name}` : 'Onbekend'
+        }));
+        
         // Fallback for empty data
-        const workingData = data.length > 0 ? data : [
+        const workingData = parsedData.length > 0 ? parsedData : [
           { id: '1', title: 'Feed morning schedule for Stallion Block A', assignee: 'Emma', time: '08:00', priority: 'high', status: 'todo' },
           { id: '4', title: 'Clean stables Block C', assignee: 'Mike', time: '10:30', priority: 'medium', status: 'inprogress' },
           { id: '6', title: 'Morning inspection completed', assignee: 'Emma', priority: 'medium', status: 'done' },
@@ -146,7 +167,7 @@ export function KanbanBoard() {
         ]);
       }
     } catch (e) {
-      console.error('Error fetching tasks');
+      console.error('Error fetching tasks', e);
     }
   }
 
@@ -200,14 +221,14 @@ export function KanbanBoard() {
     try {
       const { error } = await supabase.from('tasks').insert({
         title: newTaskTitle,
-        assignee: newTaskAssignee,
+        assigned_to: selectedStaffId || null,
         status: 'todo',
         priority: 'medium'
       });
       if (!error) {
         setShowAddModal(false);
         setNewTaskTitle('');
-        fetchTasks();
+        fetchData();
       }
     } catch (err) {
       console.error(err);
@@ -232,7 +253,12 @@ export function KanbanBoard() {
             <h3 className="font-bold mb-3">{t('dashboard.kanban.modal_title')}</h3>
             <form onSubmit={handleAddTask} className="space-y-3">
               <input type="text" placeholder={t('dashboard.kanban.modal_ph')} required value={newTaskTitle} onChange={e => setNewTaskTitle(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md text-sm" />
-              <input type="text" placeholder={t('dashboard.kanban.modal_assignee')} value={newTaskAssignee} onChange={e => setNewTaskAssignee(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md text-sm" />
+              <select value={selectedStaffId} onChange={e => setSelectedStaffId(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md text-sm">
+                <option value="">Selecteer Personeel...</option>
+                {staff.map(s => (
+                  <option key={s.id} value={s.id}>{s.first_name} {s.last_name} ({s.role})</option>
+                ))}
+              </select>
               <div className="flex gap-2">
                 <button type="submit" className="flex-1 bg-[#C2A878] text-white py-2 rounded-md font-bold text-sm">{t('dashboard.kanban.modal_save')}</button>
                 <button type="button" onClick={() => setShowAddModal(false)} className="flex-1 bg-slate-100 text-slate-700 py-2 rounded-md font-bold text-sm">{t('dashboard.kanban.modal_cancel')}</button>

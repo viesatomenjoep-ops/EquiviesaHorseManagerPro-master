@@ -4,6 +4,7 @@ import { KPICard } from '../components/KPICard';
 import { KanbanBoard } from '../components/KanbanBoard';
 import { AIFeed } from '../components/AIFeed';
 import { IoTTracker } from '../components/IoTTracker';
+import { StaffWidget } from '../components/StaffWidget';
 import { 
   PawPrint, CheckCircle, DollarSign, Image, Home, Activity, Briefcase, 
   Dna, Settings, CloudRain, Thermometer, Wind, AlertCircle, HeartPulse, 
@@ -233,8 +234,13 @@ export function Dashboard() {
         </div>
       </div>
 
-      {/* ROW 5: INVOICES & IOT TRACKER */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      {/* ROW 5: STAFF, INVOICES & IOT TRACKER */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        {/* Personeel Management */}
+        <div className="lg:col-span-1">
+          <StaffWidget />
+        </div>
         
         {/* Recente Facturen */}
         <div className="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm magnetic-card">

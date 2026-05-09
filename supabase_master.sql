@@ -793,3 +793,42 @@ INSERT INTO public.system_settings (setting_key, setting_value, description) VAL
 ('general_preferences', '{"language": "nl", "currency": "EUR", "timezone": "Europe/Amsterdam"}', 'General system preferences'),
 ('integration_credentials', '{"cloudinary_cloud_name": "daj1lyfgk", "cloudinary_upload_preset": "equiviesa_upload"}', 'Third-party integration credentials')
 ON CONFLICT (setting_key) DO NOTHING;
+
+-- STAFF / PERSONNEL TABLE
+CREATE TABLE IF NOT EXISTS public.staff (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    first_name VARCHAR(100) NOT NULL,
+    last_name VARCHAR(100) NOT NULL,
+    role VARCHAR(50) DEFAULT 'Groom',
+    email VARCHAR(255) UNIQUE,
+    phone VARCHAR(50),
+    active BOOLEAN DEFAULT true,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
+);
+
+ALTER TABLE public.staff ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Allow authenticated full access to staff" ON public.staff FOR ALL USING (auth.role() = 'authenticated');
+
+-- TASKS / PLANNER TABLE
+CREATE TABLE IF NOT EXISTS public.tasks (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    status VARCHAR(50) DEFAULT 'todo',
+    assigned_to UUID REFERENCES public.staff(id) ON DELETE SET NULL,
+    horse_id UUID REFERENCES public.horses(id) ON DELETE CASCADE,
+    due_date TIMESTAMP WITH TIME ZONE,
+    is_synced_to_gmail BOOLEAN DEFAULT false,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
+);
+
+ALTER TABLE public.tasks ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Allow authenticated full access to tasks" ON public.tasks FOR ALL USING (auth.role() = 'authenticated');
+
+-- Insert initial staff
+INSERT INTO public.staff (first_name, last_name, role, email) VALUES
+('Emma', 'Johnson', 'Head Groom', 'emma.headgroom@example.com'),
+('Liam', 'Smith', 'Rider', 'liam.rider@example.com'),
+('Noah', 'Williams', 'Stable Hand', 'noah.stablehand@example.com')
+ON CONFLICT (email) DO NOTHING;
