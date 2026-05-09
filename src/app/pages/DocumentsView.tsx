@@ -51,17 +51,29 @@ export function DocumentsView() {
     let completedFiles = 0;
 
       const uploadPromises = Array.from(files).map(async (file) => {
-      const formData = new FormData();
+      let formData = new FormData();
       formData.append('file', file);
       formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'yibk3vns');
       formData.append('cloud_name', import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dx21n2mbo');
 
       try {
-        const res = await fetch(`https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dx21n2mbo'}/auto/upload`, {
+        let res = await fetch(`https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dx21n2mbo'}/auto/upload`, {
           method: 'POST',
           body: formData,
         });
-        const data = await res.json();
+        let data = await res.json();
+        
+        if (data.error && data.error.message.includes('preset')) {
+          formData = new FormData();
+          formData.append('file', file);
+          formData.append('upload_preset', 'yibk3vns');
+          formData.append('cloud_name', 'dx21n2mbo');
+          res = await fetch('https://api.cloudinary.com/v1_1/dx21n2mbo/auto/upload', {
+            method: 'POST',
+            body: formData,
+          });
+          data = await res.json();
+        }
         
         if (data.secure_url) {
           const type = data.resource_type === 'image' ? 'image' : 'document';
