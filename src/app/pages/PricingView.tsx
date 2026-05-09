@@ -43,7 +43,7 @@ export function PricingView() {
         </h1>
         <p className="text-base md:text-lg text-slate-600">
           <Trans i18nKey="pricing.subtitle">
-            Beheer letterlijk alles vanaf één plek. Kies een compleet pakket of stel je eigen gepersonaliseerde abonnement samen. Start vandaag met een <span className="font-bold text-[#C2A878]">gratis 30-dagen free trial</span>.
+            Beheer letterlijk alles vanaf één plek. Kies een compleet pakket of stel je eigen gepersonaliseerde abonnement samen. Start vandaag met een <span className="font-bold text-[#C2A878]">gratis 22-dagen free trial</span>.
           </Trans>
         </p>
       </div>
@@ -168,34 +168,34 @@ export function PricingView() {
             {/* Left side: Form */}
             <div className="flex-1 p-8 md:p-10 overflow-y-auto">
               <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-extrabold text-slate-900">Start je 30-Dagen Trial</h2>
+                <h2 className="text-2xl font-extrabold text-slate-900">{t('pricing.checkout.title')}</h2>
                 <button onClick={() => setShowCheckout(false)} className="md:hidden p-2 bg-slate-100 rounded-full text-slate-500">
                   <X className="w-5 h-5" />
                 </button>
               </div>
               
-              <form className="space-y-5" onSubmit={e => { e.preventDefault(); setIsSubmitting(true); setTimeout(() => { setIsSubmitting(false); setShowCheckout(false); alert('Welkom bij Equiviesa Pro! Je account is succesvol aangemaakt.'); }, 1500); }}>
+              <form className="space-y-5" onSubmit={e => { e.preventDefault(); setIsSubmitting(true); setTimeout(() => { setIsSubmitting(false); setShowCheckout(false); alert(t('pricing.checkout.success')); }, 1500); }}>
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-1">Bedrijfsnaam / Stalnaam</label>
+                  <label className="block text-sm font-bold text-slate-700 mb-1">{t('pricing.checkout.company')}</label>
                   <div className="relative">
                     <Building className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                    <input required type="text" className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#C2A878] outline-none transition-all" placeholder="Stal de Muze" />
+                    <input required type="text" className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#C2A878] outline-none transition-all" placeholder={t('pricing.checkout.company_ph')} />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-bold text-slate-700 mb-1">Voornaam</label>
-                    <input required type="text" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#C2A878] outline-none transition-all" placeholder="Jan" />
+                    <label className="block text-sm font-bold text-slate-700 mb-1">{t('pricing.checkout.firstname')}</label>
+                    <input required type="text" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#C2A878] outline-none transition-all" placeholder={t('pricing.checkout.firstname_ph')} />
                   </div>
                   <div>
-                    <label className="block text-sm font-bold text-slate-700 mb-1">Achternaam</label>
-                    <input required type="text" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#C2A878] outline-none transition-all" placeholder="Jansen" />
+                    <label className="block text-sm font-bold text-slate-700 mb-1">{t('pricing.checkout.lastname')}</label>
+                    <input required type="text" className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#C2A878] outline-none transition-all" placeholder={t('pricing.checkout.lastname_ph')} />
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-1">E-mailadres</label>
+                  <label className="block text-sm font-bold text-slate-700 mb-1">{t('pricing.checkout.email')}</label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                     <input required type="email" className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#C2A878] outline-none transition-all" placeholder="jan@stal.nl" />
@@ -203,7 +203,7 @@ export function PricingView() {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-1">Wachtwoord</label>
+                  <label className="block text-sm font-bold text-slate-700 mb-1">{t('pricing.checkout.password')}</label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                     <input required type="password" className="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-[#C2A878] outline-none transition-all" placeholder="••••••••" />
@@ -211,12 +211,12 @@ export function PricingView() {
                 </div>
 
                 <div className="pt-4">
-                  <label className="block text-sm font-bold text-slate-700 mb-3">Betaalmethode (Wordt pas na 30 dagen belast)</label>
+                  <label className="block text-sm font-bold text-slate-700 mb-3">{t('pricing.checkout.payment_method')}</label>
                   <div className="grid grid-cols-2 gap-3">
                     <label className="border-2 border-[#C2A878] bg-[#C2A878]/5 rounded-xl p-3 flex items-center gap-3 cursor-pointer">
                       <input type="radio" name="payment" defaultChecked className="text-[#C2A878] focus:ring-[#C2A878]" />
                       <CreditCard className="w-5 h-5 text-[#C2A878]" />
-                      <span className="font-bold text-slate-900 text-sm">Creditcard</span>
+                      <span className="font-bold text-slate-900 text-sm">{t('pricing.checkout.creditcard')}</span>
                     </label>
                     <label className="border border-slate-200 bg-slate-50 rounded-xl p-3 flex items-center gap-3 cursor-pointer hover:border-[#C2A878]/50">
                       <input type="radio" name="payment" className="text-[#C2A878] focus:ring-[#C2A878]" />
@@ -227,9 +227,9 @@ export function PricingView() {
                 </div>
 
                 <button disabled={isSubmitting} type="submit" className="w-full py-4 bg-[#111111] hover:bg-slate-800 text-white rounded-xl font-bold text-lg mt-6 transition-all shadow-lg flex items-center justify-center gap-2">
-                  {isSubmitting ? <Sparkles className="w-5 h-5 animate-spin" /> : 'Bevestig & Start Proefperiode'}
+                  {isSubmitting ? <Sparkles className="w-5 h-5 animate-spin" /> : t('pricing.checkout.submit')}
                 </button>
-                <p className="text-xs text-center text-slate-500 mt-4">Je zit nergens aan vast. Annuleer op elk moment tijdens je proefperiode.</p>
+                <p className="text-xs text-center text-slate-500 mt-4">{t('pricing.checkout.guarantee')}</p>
               </form>
             </div>
 
@@ -239,12 +239,12 @@ export function PricingView() {
                 <X className="w-5 h-5" />
               </button>
               
-              <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-6">Jouw Abonnement</h3>
+              <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-6">{t('pricing.checkout.summary_title')}</h3>
               
               {checkoutData?.type === 'preset' ? (
                 <div className="space-y-4 flex-grow">
                   <div className="flex justify-between items-center pb-4 border-b border-slate-200">
-                    <span className="font-bold text-slate-900 text-lg">{t(`pricing.plans.${checkoutData.plan.id}.name`)} Pakket</span>
+                    <span className="font-bold text-slate-900 text-lg">{t(`pricing.plans.${checkoutData.plan.id}.name`)} {t('pricing.checkout.plan_suffix')}</span>
                     <span className="font-bold text-slate-900">€{checkoutData.plan.price}</span>
                   </div>
                   <div className="text-sm text-slate-600 space-y-2">
@@ -256,7 +256,7 @@ export function PricingView() {
               ) : (
                 <div className="space-y-4 flex-grow">
                   <div className="flex justify-between items-center pb-4 border-b border-slate-200">
-                    <span className="font-bold text-slate-900 text-lg">Custom Plan</span>
+                    <span className="font-bold text-slate-900 text-lg">{t('pricing.checkout.custom_plan')}</span>
                     <span className="font-bold text-slate-900">€{checkoutData?.total}</span>
                   </div>
                   <div className="text-sm text-slate-600 space-y-3">
@@ -275,11 +275,11 @@ export function PricingView() {
 
               <div className="pt-6 border-t border-slate-200 mt-6">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-slate-500">Vandaag te betalen</span>
+                  <span className="text-slate-500">{t('pricing.checkout.pay_today')}</span>
                   <span className="font-extrabold text-2xl text-emerald-600">€0,00</span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-slate-500">Daarna per maand</span>
+                  <span className="text-slate-500">{t('pricing.checkout.pay_after')}</span>
                   <span className="font-bold text-slate-900">€{checkoutData?.type === 'preset' ? checkoutData.plan.price : checkoutData?.total}</span>
                 </div>
               </div>

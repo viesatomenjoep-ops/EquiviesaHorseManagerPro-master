@@ -569,6 +569,29 @@
         "ai": "AI Automations & Bots",
         "breeding": "Breeding Manager"
       }
+    },
+    "checkout": {
+      "title": "Start your 22-Day Trial",
+      "company": "Company / Stable Name",
+      "company_ph": "Stal de Muze",
+      "firstname": "First Name",
+      "firstname_ph": "John",
+      "lastname": "Last Name",
+      "lastname_ph": "Doe",
+      "email": "Email Address",
+      "password": "Password",
+      "payment_method": "Payment Method (Will be charged after 22 days)",
+      "creditcard": "Credit Card",
+      "ideal": "iDEAL",
+      "submit": "Confirm & Start Trial",
+      "submitting": "Please wait...",
+      "guarantee": "No commitments. Cancel anytime during your trial period.",
+      "summary_title": "Your Subscription",
+      "plan_suffix": "Package",
+      "custom_plan": "Custom Plan",
+      "pay_today": "To pay today",
+      "pay_after": "Then per month",
+      "success": "Welcome to Equiviesa Pro! Your account has been successfully created."
     }
   }
 }

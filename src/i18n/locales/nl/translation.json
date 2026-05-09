@@ -569,6 +569,29 @@
         "ai": "AI Automations & Bots",
         "breeding": "Fokkerij Manager"
       }
+    },
+    "checkout": {
+      "title": "Start je 22-Dagen Trial",
+      "company": "Bedrijfsnaam / Stalnaam",
+      "company_ph": "Stal de Muze",
+      "firstname": "Voornaam",
+      "firstname_ph": "Jan",
+      "lastname": "Achternaam",
+      "lastname_ph": "Jansen",
+      "email": "E-mailadres",
+      "password": "Wachtwoord",
+      "payment_method": "Betaalmethode (Wordt pas na 22 dagen belast)",
+      "creditcard": "Creditcard",
+      "ideal": "iDEAL",
+      "submit": "Bevestig & Start Proefperiode",
+      "submitting": "Even geduld...",
+      "guarantee": "Je zit nergens aan vast. Annuleer op elk moment tijdens je proefperiode.",
+      "summary_title": "Jouw Abonnement",
+      "plan_suffix": "Pakket",
+      "custom_plan": "Custom Plan",
+      "pay_today": "Vandaag te betalen",
+      "pay_after": "Daarna per maand",
+      "success": "Welkom bij Equiviesa Pro! Je account is succesvol aangemaakt."
     }
   }
 }

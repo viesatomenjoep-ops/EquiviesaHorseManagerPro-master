@@ -15,6 +15,7 @@ import { LocationsView } from "./pages/LocationsView";
 import { ReportsView } from "./pages/ReportsView";
 import { DocumentsView } from "./pages/DocumentsView";
 import { PricingView } from "./pages/PricingView";
+import { LandingPageView } from "./pages/LandingPageView";
 
 // Placeholders for all the other routes
 function Placeholder({ titleKey }: { titleKey: string }) {
@@ -30,9 +31,11 @@ function Placeholder({ titleKey }: { titleKey: string }) {
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Layout />}>
+      <Route path="/" element={<LandingPageView />} />
+      <Route path="/app" element={<Layout />}>
         {/* STALBEHEER */}
         <Route index element={<Dashboard />} />
+        <Route path="dashboard" element={<Dashboard />} />
         <Route path="horses" element={<HorseListView />} />
         <Route path="agenda" element={<AgendaView />} />
         <Route path="tasks" element={<Placeholder titleKey="app.placeholders.tasks" />} />

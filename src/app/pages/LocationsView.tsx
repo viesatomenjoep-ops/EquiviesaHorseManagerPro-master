@@ -148,6 +148,36 @@ export function LocationsView() {
     }
   }
 
+
+  async function handleAddBox(locationId: string, locBoxes: any[]) {
+    let prefix = 'D';
+    let maxNum = 0;
+    if (locBoxes.length > 0) {
+      locBoxes.forEach(b => {
+        const m = b.box_number.match(/^([a-zA-Z]*)(\d+)$/);
+        if (m) {
+          prefix = m[1];
+          const num = parseInt(m[2], 10);
+          if (num > maxNum) maxNum = num;
+        }
+      });
+    }
+    const nextNumber = `${prefix}${maxNum + 1}`;
+    
+    try {
+      const { error } = await supabase.from('boxes').insert([{
+        location_id: locationId,
+        box_number: nextNumber,
+        status: 'available'
+      }]);
+      if (!error) {
+        fetchData();
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   async function handleSaveBox(e: React.FormEvent) {
     e.preventDefault();
     if (!editingBox?.id) return;
@@ -272,7 +302,7 @@ export function LocationsView() {
             <div className="p-8 text-center text-slate-500 bg-white rounded-2xl border border-slate-200">{t('locations.forms.no_locations')}</div>
           ) : (
             locations.map(loc => {
-              const locBoxes = boxes.filter(b => b.location_id === loc.id).sort((a, b) => a.box_number.localeCompare(b.box_number));
+              const locBoxes = boxes.filter(b => b.location_id === loc.id).sort((a, b) => a.box_number.localeCompare(b.box_number, undefined, { numeric: true }));
               const occupied = locBoxes.filter(b => b.horse_id !== null).length;
               
               return (
@@ -353,8 +383,18 @@ export function LocationsView() {
                           </div>
                         </div>
                       ))}
+                      <div 
+                        onClick={() => handleAddBox(loc.id, locBoxes)}
+                        className="group relative p-4 rounded-xl border border-dashed border-slate-300 bg-transparent flex flex-col items-center justify-center text-center gap-2 transition-transform hover:scale-105 hover:bg-slate-50 cursor-pointer h-[120px]"
+                      >
+                        <div className="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center group-hover:bg-[#C2A878]/10 transition-colors">
+                          <Plus className="w-5 h-5 text-slate-400 group-hover:text-[#C2A878]" />
+                        </div>
+                        <p className="text-xs font-bold text-slate-400 group-hover:text-slate-600">Nieuwe Box</p>
+                      </div>
                     </div>
                   </div>
+
                 </div>
               );
             })
@@ -447,18 +487,18 @@ export function LocationsView() {
       {showAssignModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-200">
-            <h2 className="text-xl font-bold mb-4">{t('locations.forms.assign_box')}</h2>
+            <h2 className="text-xl font-bold mb-4 text-slate-900">{t('locations.forms.assign_box')}</h2>
             <form onSubmit={handleAssignBox} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1">{t('locations.forms.select_horse')}</label>
-                <select required value={assignHorseId} onChange={e => setAssignHorseId(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md">
+                <label className="block text-sm font-bold text-slate-900 mb-1">{t('locations.forms.select_horse')}</label>
+                <select required value={assignHorseId} onChange={e => setAssignHorseId(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md text-slate-900 bg-white">
                   <option value="">{t('locations.forms.select_horse')}...</option>
                   {horses.map(h => <option key={h.id} value={h.id}>{h.name}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">{t('locations.forms.select_box')}</label>
-                <select required value={assignBoxId} onChange={e => setAssignBoxId(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md">
+                <label className="block text-sm font-bold text-slate-900 mb-1">{t('locations.forms.select_box')}</label>
+                <select required value={assignBoxId} onChange={e => setAssignBoxId(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md text-slate-900 bg-white">
                   <option value="">{t('locations.forms.select_box')}...</option>
                   {boxes.map(b => {
                     const loc = locations.find(l => l.id === b.location_id);
@@ -467,8 +507,8 @@ export function LocationsView() {
                 </select>
               </div>
               <div className="flex justify-end gap-3 pt-4">
-                <button type="button" onClick={() => setShowAssignModal(false)} className="px-4 py-2 bg-slate-100 rounded-lg">{t('locations.forms.cancel')}</button>
-                <button type="submit" className="px-4 py-2 bg-[#C2A878] text-white rounded-lg">{t('locations.forms.save')}</button>
+                <button type="button" onClick={() => setShowAssignModal(false)} className="px-4 py-2 bg-slate-100 rounded-lg font-bold text-slate-900 hover:bg-slate-200">{t('locations.forms.cancel')}</button>
+                <button type="submit" className="px-4 py-2 bg-[#C2A878] text-white rounded-lg font-bold hover:bg-[#b09665]">{t('locations.forms.save')}</button>
               </div>
             </form>
           </div>
@@ -478,35 +518,35 @@ export function LocationsView() {
       {showPastureModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-200">
-            <h2 className="text-xl font-bold mb-4">{t('locations.forms.pasture_title')}</h2>
+            <h2 className="text-xl font-bold mb-4 text-slate-900">{t('locations.forms.pasture_title')}</h2>
             <form onSubmit={handlePastureSchedule} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1">{t('locations.forms.select_horse')}</label>
-                <select required value={pastureHorseId} onChange={e => setPastureHorseId(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md">
+                <label className="block text-sm font-bold text-slate-900 mb-1">{t('locations.forms.select_horse')}</label>
+                <select required value={pastureHorseId} onChange={e => setPastureHorseId(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md text-slate-900 bg-white">
                   <option value="">{t('locations.forms.select_horse')}...</option>
                   {horses.map(h => <option key={h.id} value={h.id}>{h.name}</option>)}
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Locatie (Paddock/Weide)</label>
-                <select required value={pastureLocationId} onChange={e => setPastureLocationId(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md">
+                <label className="block text-sm font-bold text-slate-900 mb-1">Locatie (Paddock/Weide)</label>
+                <select required value={pastureLocationId} onChange={e => setPastureLocationId(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md text-slate-900 bg-white">
                   <option value="">Selecteer locatie...</option>
                   {locations.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
                 </select>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-1">{t('locations.forms.start_time')}</label>
-                  <input required type="time" value={pastureStartTime} onChange={e => setPastureStartTime(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md" />
+                  <label className="block text-sm font-bold text-slate-900 mb-1">{t('locations.forms.start_time')}</label>
+                  <input required type="time" value={pastureStartTime} onChange={e => setPastureStartTime(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md text-slate-900 bg-white" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">{t('locations.forms.end_time')}</label>
-                  <input required type="time" value={pastureEndTime} onChange={e => setPastureEndTime(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md" />
+                  <label className="block text-sm font-bold text-slate-900 mb-1">{t('locations.forms.end_time')}</label>
+                  <input required type="time" value={pastureEndTime} onChange={e => setPastureEndTime(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md text-slate-900 bg-white" />
                 </div>
               </div>
               <div className="flex justify-end gap-3 pt-4">
-                <button type="button" onClick={() => setShowPastureModal(false)} className="px-4 py-2 bg-slate-100 rounded-lg">{t('locations.forms.cancel')}</button>
-                <button type="submit" className="px-4 py-2 bg-[#C2A878] text-white rounded-lg">{t('locations.forms.save')}</button>
+                <button type="button" onClick={() => setShowPastureModal(false)} className="px-4 py-2 bg-slate-100 rounded-lg font-bold text-slate-900 hover:bg-slate-200">{t('locations.forms.cancel')}</button>
+                <button type="submit" className="px-4 py-2 bg-[#C2A878] text-white rounded-lg font-bold hover:bg-[#b09665]">{t('locations.forms.save')}</button>
               </div>
             </form>
           </div>
