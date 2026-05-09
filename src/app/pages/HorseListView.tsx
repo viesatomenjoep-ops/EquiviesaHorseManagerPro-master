@@ -19,6 +19,9 @@ interface Horse {
   discipline: string;
   age: number;
   sex: string;
+  image_url?: string;
+  sire?: string;
+  dam?: string;
 }
 
 interface Location {
@@ -47,6 +50,7 @@ export function HorseListView() {
 
   const [showHorseModal, setShowHorseModal] = useState(false);
   const [editingHorse, setEditingHorse] = useState<Partial<Horse> | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -110,6 +114,34 @@ export function HorseListView() {
       console.error(err);
     }
   }
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'equiviesa_upload');
+      formData.append('cloud_name', import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'daj1lyfgk');
+
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'daj1lyfgk'}/image/upload`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+      if (data.secure_url) {
+        setEditingHorse(prev => prev ? { ...prev, image_url: data.secure_url } : null);
+      }
+    } catch (error) {
+      console.error('Upload failed', error);
+      alert('Upload mislukt. Controleer je Cloudinary instellingen.');
+    } finally {
+      setIsUploading(false);
+    }
+  };
 
   const horseCategories = [
     { id: 'jumpers', name: t('horse_list.categories.jumpers'), count: 18, icon: Trophy, color: 'text-blue-500', bg: 'bg-blue-50', hover: 'hover:bg-blue-50 hover:border-blue-200' },
@@ -222,7 +254,7 @@ export function HorseListView() {
                 {/* Horse Image Header */}
                 <div className="relative h-48 bg-slate-100 overflow-hidden cursor-pointer">
                   <img 
-                    src={`https://source.unsplash.com/800x600/?horse,jumping,equestrian&sig=${selectedCategory}${i}`} 
+                    src={horse.image_url || `https://source.unsplash.com/800x600/?horse,jumping,equestrian&sig=${selectedCategory}${i}`} 
                     alt="Horse"
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
@@ -312,30 +344,63 @@ export function HorseListView() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-200">
             <h2 className="text-xl font-bold mb-4">{editingHorse?.id && !editingHorse.id.startsWith('mock') ? 'Bewerk Paard' : t('horse_list.add_horse')}</h2>
-            <form onSubmit={handleSaveHorse} className="space-y-4">
+            <form onSubmit={handleSaveHorse} className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
+              
+              <div className="flex flex-col gap-2 mb-4">
+                <label className="block text-sm font-medium">Profielfoto (Cloudinary)</label>
+                {editingHorse?.image_url && (
+                  <img src={editingHorse.image_url} alt="Preview" className="w-24 h-24 object-cover rounded-xl border border-slate-200" />
+                )}
+                <div className="flex items-center gap-3">
+                  <input type="file" accept="image/*" onChange={handleImageUpload} className="text-sm w-full" disabled={isUploading} />
+                  {isUploading && <span className="text-xs text-[#C2A878] font-semibold animate-pulse">Uploading...</span>}
+                </div>
+              </div>
+
               <div>
                 <label className="block text-sm font-medium mb-1">Naam</label>
                 <input required type="text" value={editingHorse?.name || ''} onChange={e => setEditingHorse({...editingHorse, name: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md" />
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Geslacht / Type</label>
-                <select required value={editingHorse?.sex || ''} onChange={e => setEditingHorse({...editingHorse, sex: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md">
-                  <option value="">Selecteer...</option>
-                  <option value="Mare">Mare (Merrie)</option>
-                  <option value="Gelding">Gelding (Ruin)</option>
-                  <option value="Stallion">Stallion (Hengst)</option>
-                  <option value="Pony">Pony</option>
-                </select>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Geslacht / Type</label>
+                  <select required value={editingHorse?.sex || ''} onChange={e => setEditingHorse({...editingHorse, sex: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md">
+                    <option value="">Selecteer...</option>
+                    <option value="Mare">Mare (Merrie)</option>
+                    <option value="Gelding">Gelding (Ruin)</option>
+                    <option value="Stallion">Stallion (Hengst)</option>
+                    <option value="Pony">Pony</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Discipline</label>
+                  <select value={editingHorse?.discipline || ''} onChange={e => setEditingHorse({...editingHorse, discipline: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md">
+                    <option value="">Selecteer...</option>
+                    <option value="Jumpers">Jumpers</option>
+                    <option value="Hunters">Hunters</option>
+                    <option value="Equitation">Equitation</option>
+                    <option value="Dressage">Dressage</option>
+                    <option value="Sales">Sales</option>
+                    <option value="Allround">Allround</option>
+                  </select>
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Leeftijd</label>
-                <input type="number" value={editingHorse?.age || ''} onChange={e => setEditingHorse({...editingHorse, age: parseInt(e.target.value)})} className="w-full p-2 border border-slate-300 rounded-md" />
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Leeftijd</label>
+                  <input type="number" value={editingHorse?.age || ''} onChange={e => setEditingHorse({...editingHorse, age: parseInt(e.target.value)})} className="w-full p-2 border border-slate-300 rounded-md" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Vader (Sire)</label>
+                  <input type="text" value={editingHorse?.sire || ''} onChange={e => setEditingHorse({...editingHorse, sire: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Moeder (Dam)</label>
+                  <input type="text" value={editingHorse?.dam || ''} onChange={e => setEditingHorse({...editingHorse, dam: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md" />
+                </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Discipline</label>
-                <input type="text" value={editingHorse?.discipline || ''} onChange={e => setEditingHorse({...editingHorse, discipline: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md" />
-              </div>
-              <div className="flex justify-end gap-3 pt-4">
+              
+              <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
                 <button type="button" onClick={() => setShowHorseModal(false)} className="px-4 py-2 bg-slate-100 rounded-lg">{t('locations.forms.cancel')}</button>
                 <button type="submit" className="px-4 py-2 bg-[#C2A878] text-white rounded-lg">{t('locations.forms.save')}</button>
               </div>
