@@ -139,7 +139,7 @@ export function BreedingView() {
       });
       let data = await res.json();
       
-      if (data.error && data.error.message.includes('preset')) {
+      if (data.error) {
         formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', 'yibk3vns');
