@@ -162,9 +162,9 @@ export function PricingView() {
     
       {/* CHECKOUT MODAL */}
       {showCheckout && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 sm:p-6 animate-in fade-in duration-200">
-            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl overflow-hidden flex flex-col md:flex-row max-h-[95vh] md:max-h-[90vh] mx-auto">
-            <div className="flex-1 p-8 md:p-10 overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-200">
+            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl flex flex-col md:flex-row mx-auto my-auto relative shrink-0">
+            <div className="flex-1 p-6 md:p-10">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-extrabold text-slate-900">{t('pricing.checkout.title')}</h2>
                 <button onClick={() => setShowCheckout(false)} className="md:hidden p-2 bg-slate-100 rounded-full text-slate-500">
@@ -232,7 +232,7 @@ export function PricingView() {
             </div>
 
             {/* Right side: Summary */}
-            <div className="w-full md:w-96 bg-slate-50 p-8 md:p-10 border-t md:border-t-0 md:border-l border-slate-200 flex flex-col relative overflow-y-auto">
+            <div className="w-full md:w-96 bg-slate-50 p-6 md:p-10 border-t md:border-t-0 md:border-l border-slate-200 flex flex-col relative rounded-b-3xl md:rounded-bl-none md:rounded-r-3xl">
               <button onClick={() => setShowCheckout(false)} className="hidden md:flex absolute top-6 right-6 p-2 bg-slate-200/50 rounded-full text-slate-500 hover:bg-slate-200 transition-colors">
                 <X className="w-5 h-5" />
               </button>
