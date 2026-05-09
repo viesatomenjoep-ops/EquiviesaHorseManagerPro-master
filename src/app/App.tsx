@@ -14,6 +14,7 @@ import { CompetitionsView } from "./pages/CompetitionsView";
 import { LocationsView } from "./pages/LocationsView";
 import { ReportsView } from "./pages/ReportsView";
 import { DocumentsView } from "./pages/DocumentsView";
+import { PricingView } from "./pages/PricingView";
 
 // Placeholders for all the other routes
 function Placeholder({ titleKey }: { titleKey: string }) {
@@ -58,6 +59,7 @@ export default function App() {
 
         {/* SYSTEEM */}
         <Route path="reports" element={<ReportsView />} />
+        <Route path="pricing" element={<PricingView />} />
         <Route path="settings" element={<Placeholder titleKey="app.placeholders.settings" />} />
       </Route>
     </Routes>

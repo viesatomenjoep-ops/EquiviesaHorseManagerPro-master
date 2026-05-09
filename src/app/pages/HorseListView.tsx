@@ -187,6 +187,27 @@ export function HorseListView() {
     }
   }
 
+  const handleDocumentUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: 'wffs_result_url' | 'fei_result_url') => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setIsUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || '');
+      formData.append('cloud_name', import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || '');
+      const response = await fetch(`https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/auto/upload`, { method: 'POST', body: formData });
+      const data = await response.json();
+      if (data.error) throw new Error(data.error.message);
+      setEditingHorse(prev => prev ? { ...prev, [field]: data.secure_url } : null);
+    } catch (err: any) {
+      console.error(err);
+      alert("Upload mislukt: " + err.message);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;

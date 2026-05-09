@@ -5,7 +5,7 @@ import {
   HeartPulse, Apple, Trophy,
   Users, Calculator, Package, MapPin, FolderOpen,
   Dna, Microscope, Baby,
-  PieChart, Settings, X, ChevronDown, ChevronRight, Globe
+  PieChart, Settings, X, ChevronDown, ChevronRight, Globe, CreditCard
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { LanguageSelector } from "./LanguageSelector";
@@ -57,6 +57,7 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
       items: [
         { name: t('nav.reports'), path: "/reports", icon: PieChart },
         { name: t('nav.settings'), path: "/settings", icon: Settings },
+        { name: "Abonnement (Upgrade)", path: "/pricing", icon: CreditCard },
       ]
     }
   ];
