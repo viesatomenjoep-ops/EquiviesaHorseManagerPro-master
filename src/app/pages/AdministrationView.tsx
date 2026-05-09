@@ -115,7 +115,12 @@ export function AdministrationView() {
           general_email: editingContact.general_email,
           city: editingContact.city
         }).eq('id', editingContact.id);
-        if (!error) fetchContacts();
+        if (error) {
+          alert(`Error updating: ${error.message}`);
+          console.error(error);
+        } else {
+          fetchContacts();
+        }
       } else {
         // Add new
         const { error } = await supabase.from('crm_companies').insert([{
@@ -125,12 +130,18 @@ export function AdministrationView() {
           general_email: editingContact.general_email,
           city: editingContact.city
         }]);
-        if (!error) fetchContacts();
+        if (error) {
+          alert(`Error inserting: ${error.message}`);
+          console.error(error);
+        } else {
+          fetchContacts();
+        }
       }
       setIsModalOpen(false);
       setEditingContact(null);
     } catch (err) {
       console.error(err);
+      alert('Er ging iets mis.');
     }
   };
 
