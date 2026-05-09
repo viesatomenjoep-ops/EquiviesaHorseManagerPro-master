@@ -233,8 +233,8 @@
     }
   },
   "horse_list": {
-    "title": "My Horses",
-    "subtitle": "Select a category to view the stable overview.",
+    "title": "Inventory",
+    "subtitle": "Select a category to view the inventory.",
     "add_horse": "Add Horse",
     "search": "Search in {{cat}}...",
     "horses_count": "Horses",

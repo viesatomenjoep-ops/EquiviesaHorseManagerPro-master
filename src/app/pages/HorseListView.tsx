@@ -14,27 +14,37 @@ import {
 } from 'lucide-react';
 
 const JumperIcon = ({ className }: { className?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <path d="M12 2L3 11l2 2 3-3 4 4 3-3 2 2 4-4-3-3z"/>
-    <path d="M5 22h14"/>
-    <path d="M9 18v4"/>
-    <path d="M15 18v4"/>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <g transform="translate(4, -2) scale(0.8)">
+      <path d="M19.46 11.5c-1.12-.46-2.61-.92-3.87-1.1-1.3-.18-2.67-.3-4.14-.3-.54 0-1.13.06-1.7.13-.5.06-1.1.18-1.54.4-1.5.76-2.5 2.15-3.05 3.63-.55 1.5-.77 3.2-.77 4.8 0 .43.25.84.65.98.42.14.9-.06 1.15-.42.27-.38.56-.8.86-1.23.44-.64.92-1.32 1.5-1.9.54-.54 1.15-1.03 1.83-1.4.7-.37 1.48-.65 2.3-.8.85-.15 1.76-.17 2.68-.07.9.1 1.78.33 2.62.66.4.15.86-.02 1.05-.4.2-.38.05-.85-.35-1.04-.63-.3-1.3-.54-2-.7-.7-.17-1.42-.26-2.14-.3-.72-.04-1.46-.02-2.2.04-1.6.14-3.23.53-4.7 1.34-1.44.8-2.73 1.93-3.7 3.28-.96 1.33-1.63 2.87-2 4.5-.1.38-.05.78.16 1.1.2.33.56.55.95.6.38.04.77-.1 1.04-.37.28-.27.46-.64.5-1.03.1-1.16.4-2.3.88-3.37.5-1.08 1.18-2.07 2.05-2.9.85-.82 1.87-1.5 3-2.03 1.13-.53 2.36-.92 3.65-1.14 1.28-.23 2.62-.3 3.96-.2.66.05 1.3.16 1.95.3.36.08.74-.13.88-.47.14-.35-.04-.76-.4-.9z" />
+    </g>
+    <rect x="0" y="16" width="24" height="2" rx="1" />
+    <rect x="0" y="20" width="24" height="2" rx="1" />
+    <path fill="none" d="M4 16v6 M20 16v6" stroke="currentColor" strokeWidth="2" />
   </svg>
 );
 
 const DressageIcon = ({ className }: { className?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <circle cx="12" cy="12" r="10"/>
-    <path d="M12 2a10 10 0 0 1 10 10h-20"/>
-    <path d="M12 6v12"/>
-    <path d="M8 12h8"/>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <path d="M19.46 11.5c-1.12-.46-2.61-.92-3.87-1.1-1.3-.18-2.67-.3-4.14-.3-.54 0-1.13.06-1.7.13-.5.06-1.1.18-1.54.4-1.5.76-2.5 2.15-3.05 3.63-.55 1.5-.77 3.2-.77 4.8 0 .43.25.84.65.98.42.14.9-.06 1.15-.42.27-.38.56-.8.86-1.23.44-.64.92-1.32 1.5-1.9.54-.54 1.15-1.03 1.83-1.4.7-.37 1.48-.65 2.3-.8.85-.15 1.76-.17 2.68-.07.9.1 1.78.33 2.62.66.4.15.86-.02 1.05-.4.2-.38.05-.85-.35-1.04-.63-.3-1.3-.54-2-.7-.7-.17-1.42-.26-2.14-.3-.72-.04-1.46-.02-2.2.04-1.6.14-3.23.53-4.7 1.34-1.44.8-2.73 1.93-3.7 3.28-.96 1.33-1.63 2.87-2 4.5-.1.38-.05.78.16 1.1.2.33.56.55.95.6.38.04.77-.1 1.04-.37.28-.27.46-.64.5-1.03.1-1.16.4-2.3.88-3.37.5-1.08 1.18-2.07 2.05-2.9.85-.82 1.87-1.5 3-2.03 1.13-.53 2.36-.92 3.65-1.14 1.28-.23 2.62-.3 3.96-.2.66.05 1.3.16 1.95.3.36.08.74-.13.88-.47.14-.35-.04-.76-.4-.9z" />
   </svg>
 );
 
 const HunterIcon = ({ className }: { className?: string }) => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-    <circle cx="12" cy="11" r="3"/>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <g transform="translate(3, 4) scale(0.7)">
+       <path d="M19.46 11.5c-1.12-.46-2.61-.92-3.87-1.1-1.3-.18-2.67-.3-4.14-.3-.54 0-1.13.06-1.7.13-.5.06-1.1.18-1.54.4-1.5.76-2.5 2.15-3.05 3.63-.55 1.5-.77 3.2-.77 4.8 0 .43.25.84.65.98.42.14.9-.06 1.15-.42.27-.38.56-.8.86-1.23.44-.64.92-1.32 1.5-1.9.54-.54 1.15-1.03 1.83-1.4.7-.37 1.48-.65 2.3-.8.85-.15 1.76-.17 2.68-.07.9.1 1.78.33 2.62.66.4.15.86-.02 1.05-.4.2-.38.05-.85-.35-1.04-.63-.3-1.3-.54-2-.7-.7-.17-1.42-.26-2.14-.3-.72-.04-1.46-.02-2.2.04-1.6.14-3.23.53-4.7 1.34-1.44.8-2.73 1.93-3.7 3.28-.96 1.33-1.63 2.87-2 4.5-.1.38-.05.78.16 1.1.2.33.56.55.95.6.38.04.77-.1 1.04-.37.28-.27.46-.64.5-1.03.1-1.16.4-2.3.88-3.37.5-1.08 1.18-2.07 2.05-2.9.85-.82 1.87-1.5 3-2.03 1.13-.53 2.36-.92 3.65-1.14 1.28-.23 2.62-.3 3.96-.2.66.05 1.3.16 1.95.3.36.08.74-.13.88-.47.14-.35-.04-.76-.4-.9z" />
+    </g>
+    <path fill="none" stroke="currentColor" strokeWidth="2" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+  </svg>
+);
+
+const RearingIcon = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className={className}>
+    <g transform="translate(6, -2) scale(0.6)">
+       <path d="M19.46 11.5c-1.12-.46-2.61-.92-3.87-1.1-1.3-.18-2.67-.3-4.14-.3-.54 0-1.13.06-1.7.13-.5.06-1.1.18-1.54.4-1.5.76-2.5 2.15-3.05 3.63-.55 1.5-.77 3.2-.77 4.8 0 .43.25.84.65.98.42.14.9-.06 1.15-.42.27-.38.56-.8.86-1.23.44-.64.92-1.32 1.5-1.9.54-.54 1.15-1.03 1.83-1.4.7-.37 1.48-.65 2.3-.8.85-.15 1.76-.17 2.68-.07.9.1 1.78.33 2.62.66.4.15.86-.02 1.05-.4.2-.38.05-.85-.35-1.04-.63-.3-1.3-.54-2-.7-.7-.17-1.42-.26-2.14-.3-.72-.04-1.46-.02-2.2.04-1.6.14-3.23.53-4.7 1.34-1.44.8-2.73 1.93-3.7 3.28-.96 1.33-1.63 2.87-2 4.5-.1.38-.05.78.16 1.1.2.33.56.55.95.6.38.04.77-.1 1.04-.37.28-.27.46-.64.5-1.03.1-1.16.4-2.3.88-3.37.5-1.08 1.18-2.07 2.05-2.9.85-.82 1.87-1.5 3-2.03 1.13-.53 2.36-.92 3.65-1.14 1.28-.23 2.62-.3 3.96-.2.66.05 1.3.16 1.95.3.36.08.74-.13.88-.47.14-.35-.04-.76-.4-.9z" />
+    </g>
+    <path fill="none" stroke="currentColor" strokeWidth="2" d="M3 20h18 M6 20v-4c0-1 1-2 2-2h0c1 0 2 1 2 2v4 M14 20v-5c0-1 1-2 2-2h0c1 0 2 1 2 2v5"/>
   </svg>
 );
 
@@ -177,10 +187,11 @@ export function HorseListView() {
   };
 
   const horseCategories = [
-    { id: 'jumpers', name: 'Jumpers & Hunters', count: horses.filter(h => h.discipline?.toLowerCase().includes('jump') || h.discipline?.toLowerCase().includes('hunt')).length, icon: JumperIcon, color: 'text-blue-500', bg: 'bg-blue-50', hover: 'hover:bg-blue-50 hover:border-blue-200' },
+    { id: 'jumpers', name: 'Jumpers', count: horses.filter(h => h.discipline?.toLowerCase().includes('jump')).length, icon: JumperIcon, color: 'text-blue-500', bg: 'bg-blue-50', hover: 'hover:bg-blue-50 hover:border-blue-200' },
+    { id: 'hunters', name: 'Hunters', count: horses.filter(h => h.discipline?.toLowerCase().includes('hunt')).length, icon: HunterIcon, color: 'text-orange-500', bg: 'bg-orange-50', hover: 'hover:bg-orange-50 hover:border-orange-200' },
     { id: 'dressage', name: 'Dressage', count: horses.filter(h => h.discipline?.toLowerCase().includes('dress')).length, icon: DressageIcon, color: 'text-purple-500', bg: 'bg-purple-50', hover: 'hover:bg-purple-50 hover:border-purple-200' },
     { id: 'sales', name: 'Sales & Training', count: horses.filter(h => h.discipline?.toLowerCase().includes('sales') || h.discipline?.toLowerCase().includes('train')).length, icon: SalesIcon, color: 'text-emerald-500', bg: 'bg-emerald-50', hover: 'hover:bg-emerald-50 hover:border-emerald-200' },
-    { id: 'rearing', name: 'Rearing & Retirement', count: horses.filter(h => h.discipline?.toLowerCase().includes('rear') || h.discipline?.toLowerCase().includes('retire')).length, icon: HunterIcon, color: 'text-rose-500', bg: 'bg-rose-50', hover: 'hover:bg-rose-50 hover:border-rose-200' },
+    { id: 'rearing', name: 'Rearing & Retirement', count: horses.filter(h => h.discipline?.toLowerCase().includes('rear') || h.discipline?.toLowerCase().includes('retire')).length, icon: RearingIcon, color: 'text-rose-500', bg: 'bg-rose-50', hover: 'hover:bg-rose-50 hover:border-rose-200' },
   ];
 
   // 1. Initial Dashboard View
@@ -194,7 +205,7 @@ export function HorseListView() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
           {horseCategories.map(cat => {
             const Icon = cat.icon;
             return (
@@ -225,7 +236,8 @@ export function HorseListView() {
   const displayHorses = horses.filter(h => {
     if (!h.discipline) return false;
     const d = h.discipline.toLowerCase();
-    if (selectedCategory === 'jumpers') return d.includes('jump') || d.includes('hunt');
+    if (selectedCategory === 'jumpers') return d.includes('jump');
+    if (selectedCategory === 'hunters') return d.includes('hunt');
     if (selectedCategory === 'dressage') return d.includes('dress');
     if (selectedCategory === 'sales') return d.includes('sales') || d.includes('train');
     if (selectedCategory === 'rearing') return d.includes('rear') || d.includes('retire');
@@ -238,9 +250,10 @@ export function HorseListView() {
       <div className="flex items-center gap-4 border-b border-slate-200 pb-6">
         <button 
           onClick={() => setSelectedCategory(null)}
-          className="mr-2 p-2 hover:bg-slate-100 rounded-xl transition-colors"
+          className="mr-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-colors flex items-center gap-2"
         >
           <span className="text-xl">←</span>
+          Terug naar Dashboard
         </button>
         <div className={`p-4 rounded-2xl ${activeCatObj?.bg}`}>
           <ActiveIcon className={`w-8 h-8 ${activeCatObj?.color}`} />
@@ -286,7 +299,10 @@ export function HorseListView() {
             return (
               <div key={horse.id} className="group overflow-hidden rounded-2xl border border-slate-200 bg-white hover:border-[#C2A878] hover:shadow-lg transition-all flex flex-col">
                 {/* Horse Image Header */}
-                <div className="relative h-48 bg-slate-100 overflow-hidden cursor-pointer">
+                <div 
+                  className="relative h-48 bg-slate-100 overflow-hidden cursor-pointer"
+                  onClick={() => { setEditingHorse(horse); setShowHorseModal(true); }}
+                >
                   <img 
                     src={horse.image_url || `https://source.unsplash.com/800x600/?horse,jumping,equestrian&sig=${selectedCategory}${i}`} 
                     alt="Horse"
@@ -300,7 +316,10 @@ export function HorseListView() {
                 {/* Content */}
                 <div className="p-5 flex-1 flex flex-col">
                   <div className="flex justify-between items-start mb-2">
-                    <h3 className="text-xl font-bold text-slate-900 group-hover:text-[#C2A878] transition-colors cursor-pointer">
+                    <h3 
+                      onClick={() => { setEditingHorse(horse); setShowHorseModal(true); }}
+                      className="text-xl font-bold text-slate-900 group-hover:text-[#C2A878] transition-colors cursor-pointer"
+                    >
                       {horse.name}
                     </h3>
                     <button 

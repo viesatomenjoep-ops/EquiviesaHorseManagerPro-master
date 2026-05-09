@@ -233,8 +233,8 @@
     }
   },
   "horse_list": {
-    "title": "Mijn Paarden",
-    "subtitle": "Selecteer een categorie om het staloverzicht te bekijken.",
+    "title": "Voorraad",
+    "subtitle": "Selecteer een categorie om de voorraad te bekijken.",
     "add_horse": "Paard Toevoegen",
     "search": "Zoek in {{cat}}...",
     "horses_count": "Paarden",
