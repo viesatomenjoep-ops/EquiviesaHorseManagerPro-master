@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Menu, X, ChevronRight, Play, Shield, Zap, Globe, Smartphone } from 'lucide-react';
-import { Tent } from 'lucide-react';
+import { LanguageSelector } from '../components/LanguageSelector';
 
 export function LandingPageView() {
   const navigate = useNavigate();
@@ -40,10 +40,10 @@ export function LandingPageView() {
             {/* Logo */}
             <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo(0, 0)}>
               <div className="w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center shadow-lg overflow-hidden">
-                <Tent className="w-6 h-6 text-white" />
+                <img src="/viesa-logo.png" alt="Viesa Logo" className="w-8 h-8 object-contain drop-shadow-md" />
               </div>
-              <span className={`font-serif font-bold text-xl tracking-tight transition-colors \${isScrolled ? 'text-slate-900' : 'text-slate-800'}`}>
-                Equiviesa<span className="text-[#C2A878]">Pro</span>
+              <span className={`font-serif font-bold text-xl tracking-tight transition-colors text-black`}>
+                Equiviesa<span className="text-black">Pro</span>
               </span>
             </div>
 
@@ -54,7 +54,7 @@ export function LandingPageView() {
                   <li key={link.name}>
                     <button 
                       onClick={link.action ? link.action : () => {}} 
-                      className="text-sm font-semibold text-slate-600 hover:text-[#C2A878] transition-colors"
+                      className="text-sm font-bold text-black hover:text-[#C2A878] transition-colors"
                     >
                       {link.name}
                     </button>
@@ -63,10 +63,11 @@ export function LandingPageView() {
               </ul>
               
               <div className="flex items-center gap-4 pl-6 border-l border-slate-200">
-                <button onClick={() => navigate('/app')} className="text-sm font-bold text-slate-900 hover:text-[#C2A878] transition-colors">
+                <LanguageSelector />
+                <button onClick={() => navigate('/app')} className="text-sm font-bold text-black hover:text-[#C2A878] transition-colors">
                   Inloggen
                 </button>
-                <button className="text-sm font-bold text-slate-600 hover:text-slate-900 transition-colors">
+                <button onClick={() => window.location.href = "https://wa.me/31651641886"} className="text-sm font-bold text-black hover:text-[#C2A878] transition-colors">
                   Adviesgesprek
                 </button>
                 <button onClick={() => navigate('/app/pricing')} className="bg-[#C2A878] text-white px-5 py-2.5 rounded-full text-sm font-bold shadow-md shadow-[#C2A878]/20 hover:bg-[#b09665] hover:shadow-lg hover:-translate-y-0.5 transition-all">
@@ -77,12 +78,13 @@ export function LandingPageView() {
 
             {/* Mobile Menu Toggle */}
             <div className="md:hidden flex items-center gap-4">
+              <LanguageSelector />
               <button onClick={() => navigate('/app/pricing')} className="bg-[#C2A878] text-white px-4 py-2 rounded-full text-xs font-bold shadow-sm">
                 Probeer Gratis
               </button>
               <button 
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-2 -mr-2 text-slate-600 hover:bg-slate-100 rounded-full transition-colors"
+                className="p-2 -mr-2 text-black hover:bg-slate-100 rounded-full transition-colors"
               >
                 {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
@@ -107,10 +109,10 @@ export function LandingPageView() {
                 ))}
               </ul>
               <div className="flex flex-col gap-3 pt-2">
-                <button onClick={() => navigate('/app')} className="w-full py-3 bg-slate-100 text-slate-900 rounded-xl font-bold text-center hover:bg-slate-200 transition-colors">
+                <button onClick={() => navigate('/app')} className="w-full py-3 bg-black text-white rounded-xl font-bold text-center hover:bg-slate-900 transition-colors">
                   Inloggen Portaal
                 </button>
-                <button className="w-full py-3 border-2 border-slate-900 text-slate-900 rounded-xl font-bold text-center hover:bg-slate-50 transition-colors">
+                <button onClick={() => window.location.href = "https://wa.me/31651641886"} className="w-full py-3 border-2 border-black text-black rounded-xl font-bold text-center hover:bg-slate-50 transition-colors">
                   Vraag Demo Aan
                 </button>
               </div>
@@ -125,11 +127,11 @@ export function LandingPageView() {
           <SparkleIcon className="w-3.5 h-3.5" /> De Nieuwe Standaard in Paardenmanagement
         </div>
         
-        <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 tracking-tight max-w-4xl leading-[1.1] mb-6">
-          Beheer je complete stal <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C2A878] to-[#D4B886]">zonder de chaos.</span>
+        <h1 className="text-5xl md:text-7xl font-extrabold text-black tracking-tight max-w-4xl leading-[1.1] mb-6">
+          Beheer je complete stal <span className="text-black">zonder de chaos.</span>
         </h1>
         
-        <p className="text-lg md:text-xl text-slate-500 max-w-2xl mb-10 leading-relaxed">
+        <p className="text-lg md:text-xl text-black font-medium max-w-2xl mb-10 leading-relaxed">
           Van gezondheidsdossiers tot geautomatiseerde facturatie. Equiviesa Pro combineert al je tools in één krachtig, elegant platform.
         </p>
         
@@ -145,24 +147,24 @@ export function LandingPageView() {
         {/* Feature Teaser */}
         <div className="mt-24 grid grid-cols-1 md:grid-cols-4 gap-8 max-w-5xl w-full text-left">
           <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-            <Shield className="w-8 h-8 text-indigo-500 mb-4" />
-            <h3 className="font-bold text-slate-900 mb-2">EHR & Medisch</h3>
-            <p className="text-sm text-slate-500">Volledige medische geschiedenis, vaccinaties en keuringen op één plek.</p>
+            <Shield className="w-8 h-8 text-black mb-4" />
+            <h3 className="font-bold text-black mb-2">EHR & Medisch</h3>
+            <p className="text-sm text-black font-medium">Volledige medische geschiedenis, vaccinaties en keuringen op één plek.</p>
           </div>
           <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-            <Zap className="w-8 h-8 text-amber-500 mb-4" />
-            <h3 className="font-bold text-slate-900 mb-2">Slimme Planning</h3>
-            <p className="text-sm text-slate-500">Automatische roosters voor personeel, hoefsmid en voer-schema's.</p>
+            <Zap className="w-8 h-8 text-black mb-4" />
+            <h3 className="font-bold text-black mb-2">Slimme Planning</h3>
+            <p className="text-sm text-black font-medium">Automatische roosters voor personeel, hoefsmid en voer-schema's.</p>
           </div>
           <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-            <Globe className="w-8 h-8 text-emerald-500 mb-4" />
-            <h3 className="font-bold text-slate-900 mb-2">Facturatie & CRM</h3>
-            <p className="text-sm text-slate-500">Genereer en verstuur facturen automatisch naar eigenaren en klanten.</p>
+            <Globe className="w-8 h-8 text-black mb-4" />
+            <h3 className="font-bold text-black mb-2">Facturatie & CRM</h3>
+            <p className="text-sm text-black font-medium">Genereer en verstuur facturen automatisch naar eigenaren en klanten.</p>
           </div>
           <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
-            <Smartphone className="w-8 h-8 text-rose-500 mb-4" />
-            <h3 className="font-bold text-slate-900 mb-2">Overal Toegankelijk</h3>
-            <p className="text-sm text-slate-500">Altijd en overal toegang via je mobiel, tablet of computer.</p>
+            <Smartphone className="w-8 h-8 text-black mb-4" />
+            <h3 className="font-bold text-black mb-2">Overal Toegankelijk</h3>
+            <p className="text-sm text-black font-medium">Altijd en overal toegang via je mobiel, tablet of computer.</p>
           </div>
         </div>
       </main>
