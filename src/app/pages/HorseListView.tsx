@@ -366,11 +366,11 @@ export function HorseListView() {
       {showAssignModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-200">
-            <h2 className="text-xl font-bold mb-4">{t('locations.forms.assign_box')}</h2>
+            <h2 className="text-xl font-bold mb-4 text-slate-900">{t('locations.forms.assign_box')}</h2>
             <form onSubmit={handleAssignBox} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1">{t('locations.forms.select_box')}</label>
-                <select required value={selectedBoxId} onChange={e => setSelectedBoxId(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md">
+                <label className="block text-sm font-bold text-slate-900 mb-1">{t('locations.forms.select_box')}</label>
+                <select required value={selectedBoxId} onChange={e => setSelectedBoxId(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md text-slate-900">
                   <option value="">{t('horse_list.card.select_box')}</option>
                   {boxes.map(b => {
                     const loc = locations.find(l => l.id === b.location_id);
@@ -383,9 +383,9 @@ export function HorseListView() {
                   })}
                 </select>
               </div>
-              <div className="flex justify-end gap-3 pt-4">
-                <button type="button" onClick={() => setShowAssignModal(false)} className="px-4 py-2 bg-slate-100 rounded-lg">{t('locations.forms.cancel')}</button>
-                <button type="submit" className="px-4 py-2 bg-[#C2A878] text-white rounded-lg">{t('locations.forms.save')}</button>
+              <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                <button type="button" onClick={() => setShowAssignModal(false)} className="px-4 py-2 bg-slate-200 text-slate-900 font-bold rounded-lg">{t('locations.forms.cancel')}</button>
+                <button type="submit" className="px-4 py-2 bg-[#C2A878] text-slate-900 font-bold rounded-lg">{t('locations.forms.save')}</button>
               </div>
             </form>
           </div>
