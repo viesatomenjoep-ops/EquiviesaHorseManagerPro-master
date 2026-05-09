@@ -527,7 +527,7 @@ export function LocationsView() {
                 <label className="block text-sm font-bold text-slate-900 mb-1">{t('locations.forms.select_box')}</label>
                 <select required value={assignBoxId} onChange={e => setAssignBoxId(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md text-slate-900 bg-white">
                   <option value="">{t('locations.forms.select_box')}...</option>
-                  {boxes.map(b => {
+                  {[...boxes].sort((a, b) => a.box_number.localeCompare(b.box_number, undefined, { numeric: true })).map(b => {
                     const loc = locations.find(l => l.id === b.location_id);
                     return <option key={b.id} value={b.id}>{loc?.name} - Box {b.box_number} {b.horse_id ? '(Bezet)' : '(Vrij)'}</option>;
                   })}
