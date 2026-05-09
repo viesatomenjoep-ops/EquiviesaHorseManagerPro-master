@@ -94,10 +94,18 @@ export function HorseListView() {
   const [showHorseModal, setShowHorseModal] = useState(false);
   const [editingHorse, setEditingHorse] = useState<Partial<Horse> | null>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [horseMedia, setHorseMedia] = useState<any[]>([]);
+  const [pendingMedia, setPendingMedia] = useState<string[]>([]);
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  async function fetchHorseMedia(horseId: string) {
+    if (!horseId || horseId.startsWith('mock')) return;
+    const { data } = await supabase.from('media_assets').select('*').eq('horse_id', horseId);
+    if (data) setHorseMedia(data);
+  }
 
   async function fetchData() {
     try {
@@ -142,26 +150,32 @@ export function HorseListView() {
     if (!editingHorse) return;
 
     try {
-      if (editingHorse.id && !editingHorse.id.startsWith('mock')) {
-        // Update
-        const { error } = await supabase.from('horses').update(editingHorse).eq('id', editingHorse.id);
-        if (error) {
-          console.error("Database Update Error:", error);
-          alert("Fout bij het opslaan van het paard in de database: " + error.message);
-          return;
-        }
+      let currentHorseId = editingHorse.id;
+      
+      if (currentHorseId && !currentHorseId.startsWith('mock')) {
+        const { error } = await supabase.from('horses').update(editingHorse).eq('id', currentHorseId);
+        if (error) { alert("Fout bij opslaan: " + error.message); return; }
       } else {
-        // Insert
         const { id, ...newHorseData } = editingHorse as any;
-        const { error } = await supabase.from('horses').insert([newHorseData]);
-        if (error) {
-          console.error("Database Insert Error:", error);
-          alert("Fout bij het toevoegen van het paard in de database: " + error.message);
-          return;
-        }
+        const { data, error } = await supabase.from('horses').insert([newHorseData]).select();
+        if (error) { alert("Fout bij toevoegen: " + error.message); return; }
+        if (data && data[0]) currentHorseId = data[0].id;
       }
+
+      // Save pending media
+      if (pendingMedia.length > 0 && currentHorseId) {
+        const mediaInserts = pendingMedia.map(url => ({
+          horse_id: currentHorseId,
+          url: url,
+          document_category: 'Foto/Video'
+        }));
+        await supabase.from('media_assets').insert(mediaInserts);
+      }
+
       setShowHorseModal(false);
       setEditingHorse(null);
+      setPendingMedia([]);
+      setHorseMedia([]);
       fetchData();
     } catch (err) {
       console.error(err);
@@ -170,28 +184,44 @@ export function HorseListView() {
   }
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
 
     setIsUploading(true);
     try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'equiviesa_upload');
-      formData.append('cloud_name', import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'daj1lyfgk');
+      const uploadPromises = Array.from(files).map(async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        // Fallback to demo unsigned preset if VITE env vars fail
+        formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'yibk3vns');
+        formData.append('cloud_name', import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dx21n2mbo');
 
-      const response = await fetch(`https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'daj1lyfgk'}/auto/upload`, {
-        method: 'POST',
-        body: formData,
+        const response = await fetch(`https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dx21n2mbo'}/auto/upload`, {
+          method: 'POST',
+          body: formData,
+        });
+
+        const data = await response.json();
+        if (data.error) throw new Error(data.error.message);
+        return data.secure_url;
       });
 
-      const data = await response.json();
-      if (data.secure_url) {
-        setEditingHorse(prev => prev ? { ...prev, image_url: data.secure_url } : null);
+      const urls = await Promise.all(uploadPromises);
+      const validUrls = urls.filter(url => url);
+      
+      if (validUrls.length > 0) {
+        // First image becomes primary image_url if not set
+        setEditingHorse(prev => {
+           if (!prev) return prev;
+           if (!prev.image_url) return { ...prev, image_url: validUrls[0] };
+           return prev;
+        });
+        // Add all to pending media to insert later
+        setPendingMedia(prev => [...prev, ...validUrls]);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Upload failed', error);
-      alert('Upload mislukt. Controleer je Cloudinary instellingen.');
+      alert('Upload mislukt: ' + error.message);
     } finally {
       setIsUploading(false);
     }
@@ -288,12 +318,7 @@ export function HorseListView() {
           </div>
           <button 
             onClick={() => {
-              setEditingHorse({ 
-                discipline: selectedCategory === 'sales' ? 'Sales' : 
-                            (selectedCategory === 'dressage' ? 'Dressage' : 'Jumpers'),
-                sex: 'Mare'
-              }); 
-              setShowHorseModal(true); 
+              setEditingHorse({ discipline: selectedCategory === 'sales' ? 'Sales' : (selectedCategory === 'dressage' ? 'Dressage' : 'Jumpers'), sex: 'Mare' }); setPendingMedia([]); setHorseMedia([]); setShowHorseModal(true); 
             }}
             className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-2.5 bg-[#111111] hover:bg-slate-800 text-[#C2A878] rounded-xl font-bold text-sm transition-colors shadow-sm">
             <Plus className="w-4 h-4" />
@@ -312,7 +337,7 @@ export function HorseListView() {
                 {/* Horse Image Header */}
                 <div 
                   className="relative h-48 bg-slate-100 overflow-hidden cursor-pointer"
-                  onClick={() => { setEditingHorse(horse); setShowHorseModal(true); }}
+                  onClick={() => { setEditingHorse(horse); setPendingMedia([]); setHorseMedia([]); fetchHorseMedia(horse.id); setShowHorseModal(true); }}
                 >
                   <img 
                     src={horse.image_url || `https://source.unsplash.com/800x600/?horse,jumping,equestrian&sig=${selectedCategory}${i}`} 
@@ -328,13 +353,13 @@ export function HorseListView() {
                 <div className="p-5 flex-1 flex flex-col">
                   <div className="flex justify-between items-start mb-2">
                     <h3 
-                      onClick={() => { setEditingHorse(horse); setShowHorseModal(true); }}
+                      onClick={() => { setEditingHorse(horse); setPendingMedia([]); setHorseMedia([]); fetchHorseMedia(horse.id); setShowHorseModal(true); }}
                       className="text-xl font-bold text-slate-900 group-hover:text-[#C2A878] transition-colors cursor-pointer"
                     >
                       {horse.name}
                     </h3>
                     <button 
-                      onClick={() => { setEditingHorse(horse); setShowHorseModal(true); }}
+                      onClick={() => { setEditingHorse(horse); setPendingMedia([]); setHorseMedia([]); fetchHorseMedia(horse.id); setShowHorseModal(true); }}
                       className="text-xs font-bold text-slate-400 hover:text-[#C2A878] bg-slate-50 px-2 py-1 rounded-md"
                     >
                       {t('horse_list.card.edit')}
@@ -412,18 +437,40 @@ export function HorseListView() {
               
               <div className="flex flex-col gap-2 mb-4">
                 <label className="block text-sm font-bold text-slate-900">{t('horse_list.form.photo_video')}</label>
-                {editingHorse?.image_url && (
-                  <div className="relative w-24 h-24 rounded-xl border border-slate-200 overflow-hidden bg-slate-100">
-                    {editingHorse.image_url.includes('.mp4') || editingHorse.image_url.includes('video') ? (
-                       <video src={editingHorse.image_url} className="w-full h-full object-cover" controls />
-                    ) : (
-                       <img src={editingHorse.image_url} alt="Preview" className="w-full h-full object-cover" />
+                {(editingHorse?.image_url || horseMedia.length > 0 || pendingMedia.length > 0) && (
+                  <div className="flex gap-2 flex-wrap mb-2">
+                    {editingHorse?.image_url && (
+                      <div className="relative w-20 h-20 rounded-xl border-2 border-[#C2A878] overflow-hidden bg-slate-100" title="Hoofdfoto">
+                        {editingHorse.image_url.includes('.mp4') || editingHorse.image_url.includes('video') ? (
+                          <video src={editingHorse.image_url} className="w-full h-full object-cover" />
+                        ) : (
+                          <img src={editingHorse.image_url} alt="Preview" className="w-full h-full object-cover" />
+                        )}
+                      </div>
                     )}
+                    {horseMedia.map(m => (
+                      <div key={m.id} className="relative w-20 h-20 rounded-xl border border-slate-200 overflow-hidden bg-slate-100">
+                        {m.url.includes('.mp4') || m.url.includes('video') ? (
+                          <video src={m.url} className="w-full h-full object-cover" />
+                        ) : (
+                          <img src={m.url} alt="Media" className="w-full h-full object-cover" />
+                        )}
+                      </div>
+                    ))}
+                    {pendingMedia.map((url, i) => (
+                      <div key={i} className="relative w-20 h-20 rounded-xl border border-slate-200 overflow-hidden bg-slate-100 opacity-70">
+                        {url.includes('.mp4') || url.includes('video') ? (
+                          <video src={url} className="w-full h-full object-cover" />
+                        ) : (
+                          <img src={url} alt="Nieuw" className="w-full h-full object-cover" />
+                        )}
+                      </div>
+                    ))}
                   </div>
                 )}
                 <div className="flex items-center gap-3">
                   <div className="relative">
-                    <input type="file" accept="image/*,video/*" onChange={handleImageUpload} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" disabled={isUploading} title={t('horse_list.form.photo_video')} />
+                    <input type="file" multiple accept="image/*,video/*" onChange={handleImageUpload} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" disabled={isUploading} title={t('horse_list.form.photo_video')} />
                     <button type="button" className="px-4 py-2 bg-slate-100 border border-slate-300 rounded-lg text-slate-900 text-sm font-bold shadow-sm pointer-events-none">
                        {t('horse_list.form.photo_video')} Toevoegen
                     </button>

@@ -50,14 +50,14 @@ export function DocumentsView() {
     const totalFiles = files.length;
     let completedFiles = 0;
 
-    const uploadPromises = Array.from(files).map(async (file) => {
+      const uploadPromises = Array.from(files).map(async (file) => {
       const formData = new FormData();
       formData.append('file', file);
-      formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || '');
-      formData.append('cloud_name', import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || '');
+      formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'yibk3vns');
+      formData.append('cloud_name', import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dx21n2mbo');
 
       try {
-        const res = await fetch(`https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/auto/upload`, {
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dx21n2mbo'}/auto/upload`, {
           method: 'POST',
           body: formData,
         });
