@@ -162,8 +162,9 @@ export function PricingView() {
     
       {/* CHECKOUT MODAL */}
       {showCheckout && (
-        <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/60 p-4 sm:p-6 overflow-y-auto animate-in fade-in duration-200">
-            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl flex flex-col md:flex-row mx-auto my-auto relative shrink-0">
+        <div className="fixed inset-0 z-50 bg-black/60 overflow-y-auto animate-in fade-in duration-200">
+          <div className="flex min-h-full items-center justify-center p-4 sm:p-6">
+            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl flex flex-col md:flex-row relative overflow-hidden">
             <div className="flex-1 p-6 md:p-10">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-extrabold text-slate-900">{t('pricing.checkout.title')}</h2>
