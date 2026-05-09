@@ -238,30 +238,30 @@ export function BreedingView() {
 
         {showAddForm && (
           <form onSubmit={handleAddItem} className="mb-6 p-6 border border-slate-200 rounded-2xl bg-slate-50 space-y-4">
-             <h3 className="font-bold text-lg">{t('breeding.add_new')} - {subBlocks.find(b => b.id === activeSubModule)?.name}</h3>
+             <h3 className="font-bold text-lg text-slate-900">{t('breeding.add_new')} - {subBlocks.find(b => b.id === activeSubModule)?.name}</h3>
              
              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                <div>
-                 <label className="block text-sm font-medium mb-1">Titel</label>
-                 <input type="text" value={newItemTitle} onChange={e => setNewItemTitle(e.target.value)} required className="w-full p-2 border border-slate-300 rounded-md" />
+                 <label className="block text-sm font-bold text-slate-900 mb-1">Titel</label>
+                 <input type="text" value={newItemTitle} onChange={e => setNewItemTitle(e.target.value)} required className="w-full p-2 border border-slate-300 rounded-md text-slate-900" />
                </div>
                <div>
-                 <label className="block text-sm font-medium mb-1">Datum</label>
-                 <input type="date" value={newItemDate} onChange={e => setNewItemDate(e.target.value)} required className="w-full p-2 border border-slate-300 rounded-md" />
+                 <label className="block text-sm font-bold text-slate-900 mb-1">Datum</label>
+                 <input type="date" value={newItemDate} onChange={e => setNewItemDate(e.target.value)} required className="w-full p-2 border border-slate-300 rounded-md text-slate-900" />
                </div>
              </div>
 
              <div>
-               <label className="block text-sm font-medium mb-1">Notities</label>
-               <textarea value={newItemNotes} onChange={e => setNewItemNotes(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md h-24" />
+               <label className="block text-sm font-bold text-slate-900 mb-1">Notities</label>
+               <textarea value={newItemNotes} onChange={e => setNewItemNotes(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md h-24 text-slate-900" />
              </div>
 
              <div>
-               <label className="block text-sm font-medium mb-1">Media (PDF / Afbeelding)</label>
+               <label className="block text-sm font-bold text-slate-900 mb-1">Media (PDF / Afbeelding)</label>
                {newItemMedia && (
                  <div className="mb-2 text-sm text-emerald-600 font-bold break-all">✓ Bestand geüpload: {newItemMedia}</div>
                )}
-               <input type="file" onChange={handleMediaUpload} disabled={isUploading} className="text-sm w-full" />
+               <input type="file" onChange={handleMediaUpload} disabled={isUploading} className="text-sm w-full text-slate-900" />
                {isUploading && <p className="text-xs text-[#C2A878] mt-1 font-bold animate-pulse">Aan het uploaden naar Cloudinary...</p>}
              </div>
 
