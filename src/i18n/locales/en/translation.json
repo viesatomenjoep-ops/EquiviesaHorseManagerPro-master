@@ -245,10 +245,21 @@
       "rearing": "Rearing & Retirement"
     },
     "card": {
-      "active": "Active",
-      "healthy": "Healthy",
+      "active": "Active In Training",
+      "healthy": "Healthy & Fit",
+      "unassigned": "Unassigned",
       "assign_box": "Assign Box",
+      "select_box": "Select a box...",
       "box": "Main Stable, Box A{{i}}"
+    },
+    "mock": {
+      "jumper": "Jumper",
+      "gelding": "Gelding"
+    },
+    "box": {
+      "current": "(Current)",
+      "occupied": "(Occupied)",
+      "free": "(Free)"
     }
   },
   "agenda": {
@@ -461,32 +472,6 @@
       "documents": "Documents & Media (Cloudinary)",
       "settings": "System Settings",
       "description": "This module is currently under development and will be available soon."
-    }
-  },
-  "horse_list": {
-    "search": "Search {{cat}}...",
-    "add_horse": "Add Horse",
-    "categories": {
-      "jumpers": "Jumpers",
-      "dressage": "Dressage",
-      "sales": "Sales & Trading",
-      "rearing": "Rearing & Retirement"
-    },
-    "mock": {
-      "jumper": "Jumper",
-      "gelding": "Gelding"
-    },
-    "card": {
-      "active": "Active In Training",
-      "healthy": "Healthy & Fit",
-      "unassigned": "Unassigned",
-      "assign_box": "Assign Box",
-      "select_box": "Select a box..."
-    },
-    "box": {
-      "current": "(Current)",
-      "occupied": "(Occupied)",
-      "free": "(Free)"
     }
   }
 }

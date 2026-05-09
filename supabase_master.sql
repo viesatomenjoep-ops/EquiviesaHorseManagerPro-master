@@ -776,3 +776,20 @@ INSERT INTO horses (name, discipline, sex, age) VALUES
 ('Walker', 'Jumpers', 'Gelding', 9),
 ('Godiva', 'Hunters', 'Mare', 5);
 
+-- SYSTEM SETTINGS TABLE
+CREATE TABLE IF NOT EXISTS public.system_settings (
+    id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+    setting_key VARCHAR(255) NOT NULL UNIQUE,
+    setting_value JSONB NOT NULL,
+    description TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now())
+);
+
+ALTER TABLE public.system_settings ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Allow authenticated full access to system_settings" ON public.system_settings FOR ALL USING (auth.role() = 'authenticated');
+
+INSERT INTO public.system_settings (setting_key, setting_value, description) VALUES
+('general_preferences', '{"language": "nl", "currency": "EUR", "timezone": "Europe/Amsterdam"}', 'General system preferences'),
+('integration_credentials', '{"cloudinary_cloud_name": "daj1lyfgk", "cloudinary_upload_preset": "equiviesa_upload"}', 'Third-party integration credentials')
+ON CONFLICT (setting_key) DO NOTHING;

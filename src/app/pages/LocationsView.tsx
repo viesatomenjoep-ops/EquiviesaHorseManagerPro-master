@@ -271,6 +271,9 @@ export function LocationsView() {
                                 setEditingHorse(h);
                                 setShowHorseModal(true);
                               }
+                            } else {
+                              setAssignBoxId(box.id);
+                              setShowAssignModal(true);
                             }
                           }}
                           className={`p-4 rounded-xl border ${box.horse_id ? 'bg-white border-slate-200 shadow-sm' : 'bg-slate-50 border-dashed border-slate-300'} flex flex-col items-center justify-center text-center gap-2 transition-transform hover:scale-105 cursor-pointer`}

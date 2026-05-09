@@ -245,10 +245,21 @@
       "rearing": "Opfok & Pensioen"
     },
     "card": {
-      "active": "Actief",
-      "healthy": "Gezond",
+      "active": "Actief In Training",
+      "healthy": "Gezond & Fit",
+      "unassigned": "Niet toegewezen",
       "assign_box": "Box Toewijzen",
+      "select_box": "Selecteer een box...",
       "box": "Hoofdstal, Box A{{i}}"
+    },
+    "mock": {
+      "jumper": "Springpaard",
+      "gelding": "Ruin"
+    },
+    "box": {
+      "current": "(Huidig)",
+      "occupied": "(Bezet)",
+      "free": "(Vrij)"
     }
   },
   "agenda": {
@@ -461,32 +472,6 @@
       "documents": "Documenten & Media (Cloudinary)",
       "settings": "Systeem Instellingen",
       "description": "Deze module wordt momenteel ontwikkeld en is binnenkort beschikbaar."
-    }
-  },
-  "horse_list": {
-    "search": "Zoek {{cat}}...",
-    "add_horse": "Paard Toevoegen",
-    "categories": {
-      "jumpers": "Springpaarden",
-      "dressage": "Dressuur",
-      "sales": "Handel & Verkoop",
-      "rearing": "Opfok & Pensioen"
-    },
-    "mock": {
-      "jumper": "Springpaard",
-      "gelding": "Ruin"
-    },
-    "card": {
-      "active": "Actief In Training",
-      "healthy": "Gezond & Fit",
-      "unassigned": "Niet toegewezen",
-      "assign_box": "Box Toewijzen",
-      "select_box": "Selecteer een box..."
-    },
-    "box": {
-      "current": "(Huidig)",
-      "occupied": "(Bezet)",
-      "free": "(Vrij)"
     }
   }
 }
