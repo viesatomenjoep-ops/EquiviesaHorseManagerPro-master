@@ -260,6 +260,29 @@
       "current": "(Huidig)",
       "occupied": "(Bezet)",
       "free": "(Vrij)"
+    },
+    "form": {
+      "edit_horse": "Bewerk Paard",
+      "photo_video": "Profielfoto / Video",
+      "name": "Naam",
+      "sex_type": "Geslacht / Type",
+      "mare": "Merrie",
+      "gelding": "Ruin",
+      "stallion": "Hengst",
+      "pony": "Pony",
+      "discipline": "Discipline",
+      "jumpers": "Springen",
+      "hunters": "Hunters",
+      "equitation": "Equitation",
+      "dressage": "Dressuur",
+      "sales": "Verkoop",
+      "allround": "Allround",
+      "age": "Leeftijd",
+      "sire": "Vader (Sire)",
+      "dam": "Moeder (Dam)",
+      "select": "Selecteer...",
+      "cancel": "Annuleren",
+      "save": "Opslaan"
     }
   },
   "agenda": {

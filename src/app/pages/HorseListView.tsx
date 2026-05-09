@@ -396,11 +396,11 @@ export function HorseListView() {
       {showHorseModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-200">
-            <h2 className="text-xl font-bold mb-4 text-slate-900">{editingHorse?.id && !editingHorse.id.startsWith('mock') ? 'Bewerk Paard' : t('horse_list.add_horse')}</h2>
+            <h2 className="text-xl font-bold mb-4 text-slate-900">{editingHorse?.id && !editingHorse.id.startsWith('mock') ? t('horse_list.form.edit_horse') : t('horse_list.add_horse')}</h2>
             <form onSubmit={handleSaveHorse} className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
               
               <div className="flex flex-col gap-2 mb-4">
-                <label className="block text-sm font-bold text-slate-900">Profielfoto / Video (Cloudinary)</label>
+                <label className="block text-sm font-bold text-slate-900">{t('horse_list.form.photo_video')}</label>
                 {editingHorse?.image_url && (
                   <div className="relative w-24 h-24 rounded-xl border border-slate-200 overflow-hidden bg-slate-100">
                     {editingHorse.image_url.includes('.mp4') || editingHorse.image_url.includes('video') ? (
@@ -411,57 +411,62 @@ export function HorseListView() {
                   </div>
                 )}
                 <div className="flex items-center gap-3">
-                  <input type="file" accept="image/*,video/*" onChange={handleImageUpload} className="text-sm w-full text-slate-900" disabled={isUploading} />
+                  <div className="relative">
+                    <input type="file" accept="image/*,video/*" onChange={handleImageUpload} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" disabled={isUploading} title={t('horse_list.form.photo_video')} />
+                    <button type="button" className="px-4 py-2 bg-slate-100 border border-slate-300 rounded-lg text-slate-900 text-sm font-bold shadow-sm pointer-events-none">
+                       {t('horse_list.form.photo_video')} Toevoegen
+                    </button>
+                  </div>
                   {isUploading && <span className="text-xs text-[#C2A878] font-semibold animate-pulse">Uploading...</span>}
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-900 mb-1">Naam</label>
+                <label className="block text-sm font-bold text-slate-900 mb-1">{t('horse_list.form.name')}</label>
                 <input required type="text" value={editingHorse?.name || ''} onChange={e => setEditingHorse({...editingHorse, name: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md text-slate-900" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-bold text-slate-900 mb-1">Geslacht / Type</label>
+                  <label className="block text-sm font-bold text-slate-900 mb-1">{t('horse_list.form.sex_type')}</label>
                   <select required value={editingHorse?.sex || ''} onChange={e => setEditingHorse({...editingHorse, sex: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md text-slate-900">
-                    <option value="">Selecteer...</option>
-                    <option value="Mare">Mare (Merrie)</option>
-                    <option value="Gelding">Gelding (Ruin)</option>
-                    <option value="Stallion">Stallion (Hengst)</option>
-                    <option value="Pony">Pony</option>
+                    <option value="">{t('horse_list.form.select')}</option>
+                    <option value="Mare">{t('horse_list.form.mare')}</option>
+                    <option value="Gelding">{t('horse_list.form.gelding')}</option>
+                    <option value="Stallion">{t('horse_list.form.stallion')}</option>
+                    <option value="Pony">{t('horse_list.form.pony')}</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-slate-900 mb-1">Discipline</label>
+                  <label className="block text-sm font-bold text-slate-900 mb-1">{t('horse_list.form.discipline')}</label>
                   <select value={editingHorse?.discipline || ''} onChange={e => setEditingHorse({...editingHorse, discipline: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md text-slate-900">
-                    <option value="">Selecteer...</option>
-                    <option value="Jumpers">Jumpers</option>
-                    <option value="Hunters">Hunters</option>
-                    <option value="Equitation">Equitation</option>
-                    <option value="Dressage">Dressage</option>
-                    <option value="Sales">Sales</option>
-                    <option value="Allround">Allround</option>
+                    <option value="">{t('horse_list.form.select')}</option>
+                    <option value="Jumpers">{t('horse_list.form.jumpers')}</option>
+                    <option value="Hunters">{t('horse_list.form.hunters')}</option>
+                    <option value="Equitation">{t('horse_list.form.equitation')}</option>
+                    <option value="Dressage">{t('horse_list.form.dressage')}</option>
+                    <option value="Sales">{t('horse_list.form.sales')}</option>
+                    <option value="Allround">{t('horse_list.form.allround')}</option>
                   </select>
                 </div>
               </div>
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="block text-sm font-bold text-slate-900 mb-1">Leeftijd</label>
+                  <label className="block text-sm font-bold text-slate-900 mb-1">{t('horse_list.form.age')}</label>
                   <input type="number" value={editingHorse?.age || ''} onChange={e => setEditingHorse({...editingHorse, age: parseInt(e.target.value)})} className="w-full p-2 border border-slate-300 rounded-md text-slate-900" />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-slate-900 mb-1">Vader (Sire)</label>
+                  <label className="block text-sm font-bold text-slate-900 mb-1">{t('horse_list.form.sire')}</label>
                   <input type="text" value={editingHorse?.sire || ''} onChange={e => setEditingHorse({...editingHorse, sire: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md text-slate-900" />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-slate-900 mb-1">Moeder (Dam)</label>
+                  <label className="block text-sm font-bold text-slate-900 mb-1">{t('horse_list.form.dam')}</label>
                   <input type="text" value={editingHorse?.dam || ''} onChange={e => setEditingHorse({...editingHorse, dam: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md text-slate-900" />
                 </div>
               </div>
               
               <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
-                <button type="button" onClick={() => setShowHorseModal(false)} className="px-4 py-2 bg-slate-200 text-slate-900 font-bold rounded-lg">{t('locations.forms.cancel')}</button>
-                <button type="submit" className="px-4 py-2 bg-[#C2A878] text-slate-900 font-bold rounded-lg">{t('locations.forms.save')}</button>
+                <button type="button" onClick={() => setShowHorseModal(false)} className="px-4 py-2 bg-slate-200 text-slate-900 font-bold rounded-lg">{t('horse_list.form.cancel')}</button>
+                <button type="submit" className="px-4 py-2 bg-[#C2A878] text-slate-900 font-bold rounded-lg">{t('horse_list.form.save')}</button>
               </div>
             </form>
           </div>
