@@ -62,8 +62,8 @@ export function DocumentsView() {
           body: formData,
         });
         const data = await res.json();
-        if (data.error) throw new Error(data.error.message););
-        }
+        if (data.error) throw new Error(data.error.message);
+
       } catch (err) {
         console.error('Error uploading media file:', err);
       } finally {
