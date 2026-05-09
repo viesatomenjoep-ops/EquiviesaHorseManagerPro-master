@@ -163,7 +163,7 @@ export function PricingView() {
       {/* CHECKOUT MODAL */}
       {showCheckout && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 animate-in fade-in duration-200">
-          <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl overflow-hidden flex flex-col md:flex-row max-h-[90vh]">
+            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col md:flex-row max-h-[90vh] mx-auto">
             
             {/* Left side: Form */}
             <div className="flex-1 p-8 md:p-10 overflow-y-auto">

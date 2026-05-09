@@ -5,6 +5,7 @@ import { LanguageSelector } from '../components/LanguageSelector';
 
 export function LandingPageView() {
   const navigate = useNavigate();
+  const [showDemo, setShowDemo] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -17,11 +18,11 @@ export function LandingPageView() {
   }, []);
 
   const navLinks = [
-    { name: 'Oplossingen', href: '#features' },
-    { name: 'Tarieven', href: '#pricing', action: () => navigate('/app/pricing') },
-    { name: 'Ervaringen', href: '#stories' },
-    { name: 'Kennisbank', href: '#faq' },
-    { name: 'Contact', href: '#contact' },
+    { name: t('landing.nav.solutions'), href: '#features' },
+    { name: t('landing.nav.pricing'), href: '#pricing', action: () => navigate('/app/pricing') },
+    { name: t('landing.nav.stories'), href: '#stories' },
+    { name: t('landing.nav.faq'), href: '#faq' },
+    { name: t('landing.nav.contact'), href: '#contact' },
   ];
 
   return (
@@ -45,6 +46,11 @@ export function LandingPageView() {
               <span className={`font-serif font-bold text-xl tracking-tight transition-colors text-black`}>
                 Equiviesa<span className="text-black">Pro</span>
               </span>
+              <button onClick={() => navigate('/')}
+                className="w-2 h-2 rounded-full bg-black hover:bg-slate-800 transition-colors"
+                aria-label="Return to homepage"
+                title="Return to homepage"
+              />
             </div>
 
             {/* Desktop Navigation */}
@@ -124,23 +130,23 @@ export function LandingPageView() {
       {/* HERO SECTION PLACEHOLDER */}
       <main className="pt-32 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col items-center text-center">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#C2A878]/10 text-[#C2A878] text-xs font-bold uppercase tracking-widest mb-8 border border-[#C2A878]/20">
-          <SparkleIcon className="w-3.5 h-3.5" /> De Nieuwe Standaard in Paardenmanagement
+          <SparkleIcon className="w-3.5 h-3.5" /> {t('landing.tagline')}
         </div>
         
         <h1 className="text-5xl md:text-7xl font-extrabold text-black tracking-tight max-w-4xl leading-[1.1] mb-6">
-          Beheer je complete stal <span className="text-black">zonder de chaos.</span>
+          {t('landing.title')} <span className="text-black">{t('landing.subtitle')}</span>
         </h1>
         
         <p className="text-lg md:text-xl text-black font-medium max-w-2xl mb-10 leading-relaxed">
-          Van gezondheidsdossiers tot geautomatiseerde facturatie. Equiviesa Pro combineert al je tools in één krachtig, elegant platform.
+          {t('landing.description')}
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
           <button onClick={() => navigate('/app/pricing')} className="px-8 py-4 bg-slate-900 text-white rounded-2xl font-bold text-lg hover:bg-slate-800 hover:shadow-xl hover:-translate-y-1 transition-all flex items-center justify-center gap-2">
-            Start 22 Dagen Gratis <ChevronRight className="w-5 h-5" />
+            {t('landing.cta.start_free')} <ChevronRight className="w-5 h-5" />
           </button>
           <button className="px-8 py-4 bg-white border-2 border-slate-200 text-slate-900 rounded-2xl font-bold text-lg hover:border-slate-300 hover:bg-slate-50 transition-all flex items-center justify-center gap-2">
-            <Play className="w-5 h-5 text-[#C2A878] fill-[#C2A878]" /> Bekijk Demo
+            <Play className="w-5 h-5 text-[#C2A878] fill-[#C2A878]" /> {t('landing.cta.watch_demo')}
           </button>
         </div>
 
@@ -148,23 +154,23 @@ export function LandingPageView() {
         <div className="mt-24 grid grid-cols-1 md:grid-cols-4 gap-8 max-w-5xl w-full text-left">
           <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
             <Shield className="w-8 h-8 text-black mb-4" />
-            <h3 className="font-bold text-black mb-2">EHR & Medisch</h3>
-            <p className="text-sm text-black font-medium">Volledige medische geschiedenis, vaccinaties en keuringen op één plek.</p>
+            <h3 className="font-bold text-black mb-2">{t('landing.features.ehr.title')}</h3>
+            <p className="text-sm text-black font-medium">{t('landing.features.ehr.desc')}</p>
           </div>
           <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
             <Zap className="w-8 h-8 text-black mb-4" />
-            <h3 className="font-bold text-black mb-2">Slimme Planning</h3>
-            <p className="text-sm text-black font-medium">Automatische roosters voor personeel, hoefsmid en voer-schema's.</p>
+            <h3 className="font-bold text-black mb-2">{t('landing.features.planning.title')}</h3>
+            <p className="text-sm text-black font-medium">{t('landing.features.planning.desc')}</p>
           </div>
           <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
             <Globe className="w-8 h-8 text-black mb-4" />
-            <h3 className="font-bold text-black mb-2">Facturatie & CRM</h3>
-            <p className="text-sm text-black font-medium">Genereer en verstuur facturen automatisch naar eigenaren en klanten.</p>
+            <h3 className="font-bold text-black mb-2">{t('landing.features.billing.title')}</h3>
+            <p className="text-sm text-black font-medium">{t('landing.features.billing.desc')}</p>
           </div>
           <div className="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
             <Smartphone className="w-8 h-8 text-black mb-4" />
-            <h3 className="font-bold text-black mb-2">Overal Toegankelijk</h3>
-            <p className="text-sm text-black font-medium">Altijd en overal toegang via je mobiel, tablet of computer.</p>
+            <h3 className="font-bold text-black mb-2">{t('landing.features.access.title')}</h3>
+            <p className="text-sm text-black font-medium">{t('landing.features.access.desc')}</p>
           </div>
         </div>
       </main>

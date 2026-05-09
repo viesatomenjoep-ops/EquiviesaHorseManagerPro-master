@@ -19,45 +19,45 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
     {
       title: t('nav.categories.stable_management'),
       items: [
-        { name: t('nav.dashboard'), path: "/", icon: LayoutDashboard },
-        { name: t('nav.horses'), path: "/horses", icon: Hexagon },
-        { name: t('nav.agenda'), path: "/agenda", icon: CalendarDays },
-        { name: t('nav.tasks'), path: "/tasks", icon: ListTodo },
+        { name: t('nav.dashboard'), path: "/app", icon: LayoutDashboard },
+        { name: t('nav.horses'), path: "/app/horses", icon: Hexagon },
+        { name: t('nav.agenda'), path: "/app/agenda", icon: CalendarDays },
+        { name: t('nav.tasks'), path: "/app/tasks", icon: ListTodo },
       ]
     },
     {
       title: t('nav.categories.care_support'),
       items: [
-        { name: t('nav.health'), path: "/health", icon: HeartPulse },
-        { name: t('nav.feeding'), path: "/feeding", icon: Apple },
-        { name: t('nav.competitions'), path: "/competitions", icon: Trophy },
+        { name: t('nav.health'), path: "/app/health", icon: HeartPulse },
+        { name: t('nav.feeding'), path: "/app/feeding", icon: Apple },
+        { name: t('nav.competitions'), path: "/app/competitions", icon: Trophy },
       ]
     },
     {
       title: t('nav.categories.administration'),
       items: [
-        { name: t('nav.contacts'), path: "/contacts", icon: Users },
-        { name: t('nav.invoices'), path: "/invoices", icon: Calculator },
-        { name: t('nav.products'), path: "/products", icon: Package },
-        { name: t('nav.locations'), path: "/locations", icon: MapPin },
-        { name: t('nav.documents'), path: "/documents", icon: FolderOpen },
+        { name: t('nav.contacts'), path: "/app/contacts", icon: Users },
+        { name: t('nav.invoices'), path: "/app/invoices", icon: Calculator },
+        { name: t('nav.products'), path: "/app/products", icon: Package },
+        { name: t('nav.locations'), path: "/app/locations", icon: MapPin },
+        { name: t('nav.documents'), path: "/app/documents", icon: FolderOpen },
       ]
     },
     {
       title: t('nav.categories.breeding'),
       items: [
-        { name: t('nav.breeding_items.mares'), path: "/breeding/mares", icon: Dna },
-        { name: t('nav.breeding_items.embryos'), path: "/breeding/embryos", icon: Microscope },
-        { name: t('nav.breeding_items.foals'), path: "/breeding/foals", icon: Baby },
-        { name: t('nav.breeding_items.stallions'), path: "/breeding/stallions", icon: Trophy },
+        { name: t('nav.breeding_items.mares'), path: "/app/breeding/mares", icon: Dna },
+        { name: t('nav.breeding_items.embryos'), path: "/app/breeding/embryos", icon: Microscope },
+        { name: t('nav.breeding_items.foals'), path: "/app/breeding/foals", icon: Baby },
+        { name: t('nav.breeding_items.stallions'), path: "/app/breeding/stallions", icon: Trophy },
       ]
     },
     {
       title: t('nav.categories.system'),
       items: [
-        { name: t('nav.reports'), path: "/reports", icon: PieChart },
-        { name: t('nav.settings'), path: "/settings", icon: Settings },
-        { name: "Abonnement (Upgrade)", path: "/pricing", icon: CreditCard },
+        { name: t('nav.reports'), path: "/app/reports", icon: PieChart },
+        { name: t('nav.settings'), path: "/app/settings", icon: Settings },
+        { name: "Abonnement (Upgrade)", path: "/app/pricing", icon: CreditCard },
       ]
     }
   ];
@@ -97,7 +97,7 @@ export function Sidebar({ onClose }: { onClose?: () => void }) {
       <nav className="flex-1 overflow-y-auto py-4 scrollbar-hide">
         <div className="space-y-2">
           {sidebarSections.map((section, idx) => {
-            const isOpen = openSections[section.title];
+            const isOpen = openSections[section.title] ?? true;
             
             return (
               <div key={idx} className="mb-2">
