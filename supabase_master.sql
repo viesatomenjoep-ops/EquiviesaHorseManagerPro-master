@@ -377,6 +377,7 @@ CREATE TABLE IF NOT EXISTS locations (
   
   address TEXT,
   capacity INTEGER,
+  image_url TEXT,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
@@ -400,6 +401,19 @@ CREATE TABLE IF NOT EXISTS pasture_schedules (
   end_time TIME NOT NULL,
   days_of_week TEXT[], -- Bijv. ['Monday', 'Tuesday']
   notes TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- 25. TABEL: BREEDING RECORDS (Algemene tabel voor Mares, Embryos, Foals, Stallions)
+CREATE TABLE IF NOT EXISTS breeding_records (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  category TEXT NOT NULL, -- 'mares', 'embryos', 'foals', 'stallions'
+  sub_category TEXT NOT NULL, -- 'cycles', 'scans', 'treatments', etc.
+  title TEXT,
+  date DATE,
+  notes TEXT,
+  media_url TEXT, -- PDF/Image upload URL
+  status TEXT DEFAULT 'active',
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 

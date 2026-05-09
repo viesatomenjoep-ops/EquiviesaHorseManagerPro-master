@@ -55,7 +55,9 @@ export function LocationsView() {
   const [showPastureModal, setShowPastureModal] = useState(false);
   const [showHorseModal, setShowHorseModal] = useState(false);
   const [editingHorse, setEditingHorse] = useState<Partial<Horse> | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
+  const [editingLocation, setEditingLocation] = useState<Location | null>(null);
+  const [showBoxEditModal, setShowBoxEditModal] = useState(false);
+  const [editingBox, setEditingBox] = useState<Partial<Box> | null>(null);
 
   // Forms state
   const [locName, setLocName] = useState('');
@@ -94,34 +96,71 @@ export function LocationsView() {
     }
   }
 
-  async function handleAddLocation(e: React.FormEvent) {
+  async function handleSaveLocation(e: React.FormEvent) {
     e.preventDefault();
     try {
-      const { data, error } = await supabase.from('locations').insert([{
-        name: locName,
-        type: locType,
-        capacity: parseInt(locCapacity),
-        image_url: locImageUrl || null
-      }]).select();
-
-      if (!error && data) {
-        setLocations([...locations, data[0]]);
+      if (editingLocation) {
+        // Update
+        const { error } = await supabase.from('locations').update({
+          name: locName,
+          type: locType,
+          capacity: parseInt(locCapacity),
+          image_url: locImageUrl || null
+        }).eq('id', editingLocation.id);
         
-        // Auto-create boxes for the new location
-        const newBoxes = Array.from({ length: parseInt(locCapacity) }).map((_, i) => ({
-          location_id: data[0].id,
-          box_number: `A${i + 1}`,
-          status: 'available'
-        }));
-        
-        const boxRes = await supabase.from('boxes').insert(newBoxes).select();
-        if (boxRes.data) {
-          setBoxes([...boxes, ...boxRes.data]);
+        if (!error) {
+          fetchData();
+          setShowLocationModal(false);
+          setEditingLocation(null);
+        } else {
+          alert(t('products.alert.error'));
         }
-        
-        setShowLocationModal(false);
-        setLocName('');
-        setLocImageUrl('');
+      } else {
+        // Insert
+        const { data, error } = await supabase.from('locations').insert([{
+          name: locName,
+          type: locType,
+          capacity: parseInt(locCapacity),
+          image_url: locImageUrl || null
+        }]).select();
+
+        if (!error && data) {
+          fetchData();
+          
+          // Auto-create boxes for the new location
+          const newBoxes = Array.from({ length: parseInt(locCapacity) }).map((_, i) => ({
+            location_id: data[0].id,
+            box_number: `A${i + 1}`,
+            status: 'available'
+          }));
+          
+          await supabase.from('boxes').insert(newBoxes);
+          
+          setShowLocationModal(false);
+          setLocName('');
+          setLocImageUrl('');
+        } else {
+          alert(t('products.alert.error'));
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function handleSaveBox(e: React.FormEvent) {
+    e.preventDefault();
+    if (!editingBox?.id) return;
+    try {
+      const { error } = await supabase.from('boxes').update({
+        box_number: editingBox.box_number,
+        location_id: editingBox.location_id
+      }).eq('id', editingBox.id);
+
+      if (!error) {
+        setShowBoxEditModal(false);
+        setEditingBox(null);
+        fetchData();
       } else {
         alert(t('products.alert.error'));
       }
@@ -248,7 +287,22 @@ export function LocationsView() {
                         </div>
                       )}
                       <div>
-                        <h2 className="font-bold text-slate-900 text-lg">{loc.name}</h2>
+                        <div className="flex items-center gap-2">
+                          <h2 className="font-bold text-slate-900 text-lg">{loc.name}</h2>
+                          <button 
+                            onClick={() => {
+                              setEditingLocation(loc);
+                              setLocName(loc.name);
+                              setLocType(loc.type);
+                              setLocCapacity(loc.capacity.toString());
+                              setLocImageUrl(loc.image_url || '');
+                              setShowLocationModal(true);
+                            }}
+                            className="text-slate-400 hover:text-[#C2A878]"
+                          >
+                            <Settings className="w-4 h-4" />
+                          </button>
+                        </div>
                         <p className="text-xs font-medium text-slate-500">
                           {loc.type === 'Hoofdstal' ? t('locations.main_stable') : loc.type}
                         </p>
@@ -276,8 +330,20 @@ export function LocationsView() {
                               setShowAssignModal(true);
                             }
                           }}
-                          className={`p-4 rounded-xl border ${box.horse_id ? 'bg-white border-slate-200 shadow-sm' : 'bg-slate-50 border-dashed border-slate-300'} flex flex-col items-center justify-center text-center gap-2 transition-transform hover:scale-105 cursor-pointer`}
+                          className={`group relative p-4 rounded-xl border ${box.horse_id ? 'bg-white border-slate-200 shadow-sm' : 'bg-slate-50 border-dashed border-slate-300'} flex flex-col items-center justify-center text-center gap-2 transition-transform hover:scale-105 cursor-pointer`}
                         >
+                          <div className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setEditingBox(box);
+                                setShowBoxEditModal(true);
+                              }}
+                              className="p-1 text-slate-400 hover:text-[#C2A878]"
+                            >
+                              <Settings className="w-3 h-3" />
+                            </button>
+                          </div>
                           <BoxIcon className={`w-6 h-6 ${box.horse_id ? 'text-[#C2A878]' : 'text-slate-300'}`} />
                           <div>
                             <p className="text-xs font-bold text-slate-400">{t('locations.box')} {box.box_number}</p>
@@ -328,11 +394,35 @@ export function LocationsView() {
       </div>
 
       {/* MODALS */}
+      {showBoxEditModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-200">
+            <h2 className="text-xl font-bold mb-4">Box Aanpassen</h2>
+            <form onSubmit={handleSaveBox} className="space-y-4">
+               <div>
+                  <label className="block text-sm font-medium mb-1">Box Nummer/Naam</label>
+                  <input type="text" value={editingBox?.box_number || ''} onChange={e => setEditingBox({...editingBox, box_number: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md" required />
+               </div>
+               <div>
+                  <label className="block text-sm font-medium mb-1">Locatie</label>
+                  <select value={editingBox?.location_id || ''} onChange={e => setEditingBox({...editingBox, location_id: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md" required>
+                     {locations.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
+                  </select>
+               </div>
+               <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                  <button type="button" onClick={() => setShowBoxEditModal(false)} className="px-4 py-2 bg-slate-100 rounded-lg">{t('locations.forms.cancel')}</button>
+                  <button type="submit" className="px-4 py-2 bg-[#C2A878] text-white rounded-lg">{t('locations.forms.save')}</button>
+               </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {showLocationModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-200">
-            <h2 className="text-xl font-bold mb-4">{t('locations.forms.new_location')}</h2>
-            <form onSubmit={handleAddLocation} className="space-y-4">
+            <h2 className="text-xl font-bold mb-4">{editingLocation ? 'Locatie Aanpassen' : t('locations.forms.new_location')}</h2>
+            <form onSubmit={handleSaveLocation} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium mb-1">{t('locations.forms.name')}</label>
                 <input required type="text" value={locName} onChange={e => setLocName(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md" />

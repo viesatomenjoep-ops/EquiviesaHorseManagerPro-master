@@ -13,6 +13,7 @@ import { FeedingView } from "./pages/FeedingView";
 import { CompetitionsView } from "./pages/CompetitionsView";
 import { LocationsView } from "./pages/LocationsView";
 import { ReportsView } from "./pages/ReportsView";
+import { DocumentsView } from "./pages/DocumentsView";
 
 // Placeholders for all the other routes
 function Placeholder({ titleKey }: { titleKey: string }) {
@@ -45,7 +46,7 @@ export default function App() {
         <Route path="invoices" element={<InvoicesView />} />
         <Route path="products" element={<ProductsView />} />
         <Route path="locations" element={<LocationsView />} />
-        <Route path="documents" element={<Placeholder titleKey="app.placeholders.documents" />} />
+        <Route path="documents" element={<DocumentsView />} />
 
         {/* FOKKERIJ */}
         <Route path="breeding">

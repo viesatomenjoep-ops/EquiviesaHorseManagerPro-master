@@ -26,6 +26,13 @@ export function BreedingView() {
   const [items, setItems] = useState<any[]>([]);
   const [showAddForm, setShowAddForm] = useState(false);
 
+  // New Form states
+  const [newItemTitle, setNewItemTitle] = useState('');
+  const [newItemDate, setNewItemDate] = useState(new Date().toISOString().split('T')[0]);
+  const [newItemNotes, setNewItemNotes] = useState('');
+  const [newItemMedia, setNewItemMedia] = useState('');
+  const [isUploading, setIsUploading] = useState(false);
+
   // Determine which of the 4 main modules we are in based on the URL
   const path = location.pathname;
   let moduleName = "";
@@ -95,35 +102,81 @@ export function BreedingView() {
   }, [activeSubModule, path]);
 
   async function fetchItems() {
-    // Only attempt to fetch if it's 'cycles' for mares as a proof of SQL concept
-    if (path.includes('mares') && activeSubModule === 'cycles') {
+    let category = '';
+    if (path.includes('mares')) category = 'mares';
+    if (path.includes('embryos')) category = 'embryos';
+    if (path.includes('foals')) category = 'foals';
+    if (path.includes('stallions')) category = 'stallions';
+
+    if (category) {
       try {
-        const { data } = await supabase.from('breeding_mare_cycles').select('*');
+        const { data } = await supabase.from('breeding_records')
+          .select('*')
+          .eq('category', category)
+          .eq('sub_category', activeSubModule)
+          .order('created_at', { ascending: false });
         setItems(data || []);
       } catch (err) {
         console.error(err);
       }
-    } else {
-      setItems([]);
     }
   }
 
-  async function handleAddItem() {
-    if (path.includes('mares') && activeSubModule === 'cycles') {
-      try {
-        const { error } = await supabase.from('breeding_mare_cycles').insert({
-          start_date: new Date().toISOString().split('T')[0],
-          status: 'in_heat'
-        });
-        if (!error) {
-          setShowAddForm(false);
-          fetchItems();
-        }
-      } catch (err) {
-        console.error(err);
+  const handleMediaUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || '');
+    formData.append('cloud_name', import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || '');
+
+    try {
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/auto/upload`, {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await res.json();
+      if (data.secure_url) {
+        setNewItemMedia(data.secure_url);
       }
-    } else {
-      alert(t('breeding.demo_notice'));
+    } catch (err) {
+      console.error('Error uploading media:', err);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  async function handleAddItem(e: React.FormEvent) {
+    e.preventDefault();
+    let category = '';
+    if (path.includes('mares')) category = 'mares';
+    if (path.includes('embryos')) category = 'embryos';
+    if (path.includes('foals')) category = 'foals';
+    if (path.includes('stallions')) category = 'stallions';
+
+    try {
+      const { error } = await supabase.from('breeding_records').insert({
+        category,
+        sub_category: activeSubModule,
+        title: newItemTitle || 'Nieuw Item',
+        date: newItemDate,
+        notes: newItemNotes,
+        media_url: newItemMedia,
+        status: 'active'
+      });
+      if (!error) {
+        setShowAddForm(false);
+        setNewItemTitle('');
+        setNewItemNotes('');
+        setNewItemMedia('');
+        fetchItems();
+      } else {
+        alert(t('products.alert.error'));
+      }
+    } catch (err) {
+      console.error(err);
     }
   }
 
@@ -184,11 +237,39 @@ export function BreedingView() {
         </div>
 
         {showAddForm && (
-          <div className="mb-6 p-6 border border-slate-200 rounded-2xl">
-             <h3 className="font-bold mb-4">{t('breeding.add_new')}</h3>
-             <button onClick={handleAddItem} className="px-4 py-2 bg-[#C2A878] text-white rounded-lg">{t('breeding.save')}</button>
-             <button onClick={() => setShowAddForm(false)} className="px-4 py-2 bg-slate-100 ml-2 rounded-lg">{t('breeding.cancel')}</button>
-          </div>
+          <form onSubmit={handleAddItem} className="mb-6 p-6 border border-slate-200 rounded-2xl bg-slate-50 space-y-4">
+             <h3 className="font-bold text-lg">{t('breeding.add_new')} - {subBlocks.find(b => b.id === activeSubModule)?.name}</h3>
+             
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+               <div>
+                 <label className="block text-sm font-medium mb-1">Titel</label>
+                 <input type="text" value={newItemTitle} onChange={e => setNewItemTitle(e.target.value)} required className="w-full p-2 border border-slate-300 rounded-md" />
+               </div>
+               <div>
+                 <label className="block text-sm font-medium mb-1">Datum</label>
+                 <input type="date" value={newItemDate} onChange={e => setNewItemDate(e.target.value)} required className="w-full p-2 border border-slate-300 rounded-md" />
+               </div>
+             </div>
+
+             <div>
+               <label className="block text-sm font-medium mb-1">Notities</label>
+               <textarea value={newItemNotes} onChange={e => setNewItemNotes(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md h-24" />
+             </div>
+
+             <div>
+               <label className="block text-sm font-medium mb-1">Media (PDF / Afbeelding)</label>
+               {newItemMedia && (
+                 <div className="mb-2 text-sm text-emerald-600 font-bold break-all">✓ Bestand geüpload: {newItemMedia}</div>
+               )}
+               <input type="file" onChange={handleMediaUpload} disabled={isUploading} className="text-sm w-full" />
+               {isUploading && <p className="text-xs text-[#C2A878] mt-1 font-bold animate-pulse">Aan het uploaden naar Cloudinary...</p>}
+             </div>
+
+             <div className="flex justify-end gap-3 pt-4 border-t border-slate-200">
+               <button type="button" onClick={() => setShowAddForm(false)} className="px-4 py-2 bg-white border border-slate-300 rounded-lg text-slate-700">{t('breeding.cancel')}</button>
+               <button type="submit" disabled={isUploading} className="px-4 py-2 bg-[#C2A878] text-white rounded-lg disabled:opacity-50">{t('breeding.save')}</button>
+             </div>
+          </form>
         )}
 
         {/* Database list rendering */}
@@ -199,14 +280,23 @@ export function BreedingView() {
                 <div className="flex justify-between items-start mb-4">
                   <div>
                     <h4 className="text-lg font-bold text-slate-900">
-                      {t('breeding.cycle_start')}: {item.start_date || 'N/A'}
+                      {item.title || t('breeding.cycle_start')}
                     </h4>
-                    <p className="text-slate-500 text-sm mt-1">{t('breeding.status')}</p>
+                    <p className="text-slate-500 text-sm mt-1">{item.date || 'N/A'}</p>
+                    {item.notes && <p className="text-slate-600 text-sm mt-2">{item.notes}</p>}
                   </div>
                   <span className={`px-3 py-1 text-xs font-bold rounded-full uppercase tracking-wider ${bgClass} ${colorClass}`}>
                     {item.status || t('breeding.active')}
                   </span>
                 </div>
+                {item.media_url && (
+                  <div className="mt-4 pt-4 border-t border-slate-100">
+                    <a href={item.media_url} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-[#C2A878] hover:text-[#B0986A] flex items-center gap-1">
+                      <LinkIcon className="w-3 h-3" />
+                      Bekijk Media/Document
+                    </a>
+                  </div>
+                )}
               </div>
             ))}
           </div>
