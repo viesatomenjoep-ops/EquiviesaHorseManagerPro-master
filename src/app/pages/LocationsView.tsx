@@ -397,21 +397,21 @@ export function LocationsView() {
       {showBoxEditModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-200">
-            <h2 className="text-xl font-bold mb-4">Box Aanpassen</h2>
+            <h2 className="text-xl font-bold mb-4 text-slate-900">Box Aanpassen</h2>
             <form onSubmit={handleSaveBox} className="space-y-4">
                <div>
-                  <label className="block text-sm font-medium mb-1">Box Nummer/Naam</label>
-                  <input type="text" value={editingBox?.box_number || ''} onChange={e => setEditingBox({...editingBox, box_number: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md" required />
+                  <label className="block text-sm font-bold text-slate-900 mb-1">Box Nummer/Naam</label>
+                  <input type="text" value={editingBox?.box_number || ''} onChange={e => setEditingBox({...editingBox, box_number: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md text-slate-900 bg-white" required />
                </div>
                <div>
-                  <label className="block text-sm font-medium mb-1">Locatie</label>
-                  <select value={editingBox?.location_id || ''} onChange={e => setEditingBox({...editingBox, location_id: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md" required>
+                  <label className="block text-sm font-bold text-slate-900 mb-1">Locatie</label>
+                  <select value={editingBox?.location_id || ''} onChange={e => setEditingBox({...editingBox, location_id: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md text-slate-900 bg-white" required>
                      {locations.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
                   </select>
                </div>
                <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
-                  <button type="button" onClick={() => setShowBoxEditModal(false)} className="px-4 py-2 bg-slate-100 rounded-lg">{t('locations.forms.cancel')}</button>
-                  <button type="submit" className="px-4 py-2 bg-[#C2A878] text-white rounded-lg">{t('locations.forms.save')}</button>
+                  <button type="button" onClick={() => setShowBoxEditModal(false)} className="px-4 py-2 bg-slate-100 text-slate-900 font-bold hover:bg-slate-200 rounded-lg">{t('locations.forms.cancel')}</button>
+                  <button type="submit" className="px-4 py-2 bg-[#C2A878] hover:bg-[#b09665] font-bold text-white rounded-lg">{t('locations.forms.save')}</button>
                </div>
             </form>
           </div>
@@ -421,23 +421,23 @@ export function LocationsView() {
       {showLocationModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
           <div className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-200">
-            <h2 className="text-xl font-bold mb-4">{editingLocation ? 'Locatie Aanpassen' : t('locations.forms.new_location')}</h2>
+            <h2 className="text-xl font-bold mb-4 text-slate-900">{editingLocation ? 'Locatie Aanpassen' : t('locations.forms.new_location')}</h2>
             <form onSubmit={handleSaveLocation} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1">{t('locations.forms.name')}</label>
-                <input required type="text" value={locName} onChange={e => setLocName(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md" />
+                <label className="block text-sm font-bold text-slate-900 mb-1">{t('locations.forms.name')}</label>
+                <input required type="text" value={locName} onChange={e => setLocName(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md text-slate-900 bg-white" />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">{t('locations.forms.type')}</label>
-                <input required type="text" value={locType} onChange={e => setLocType(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md" />
+                <label className="block text-sm font-bold text-slate-900 mb-1">{t('locations.forms.type')}</label>
+                <input required type="text" value={locType} onChange={e => setLocType(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md text-slate-900 bg-white" />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">{t('locations.forms.capacity')}</label>
-                <input required type="number" min="1" max="100" value={locCapacity} onChange={e => setLocCapacity(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md" />
+                <label className="block text-sm font-bold text-slate-900 mb-1">{t('locations.forms.capacity')}</label>
+                <input required type="number" min="1" max="100" value={locCapacity} onChange={e => setLocCapacity(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md text-slate-900 bg-white" />
               </div>
               <div className="flex justify-end gap-3 pt-4">
-                <button type="button" onClick={() => setShowLocationModal(false)} className="px-4 py-2 bg-slate-100 rounded-lg">{t('locations.forms.cancel')}</button>
-                <button type="submit" className="px-4 py-2 bg-[#C2A878] text-white rounded-lg">{t('locations.forms.save')}</button>
+                <button type="button" onClick={() => setShowLocationModal(false)} className="px-4 py-2 bg-slate-100 text-slate-900 rounded-lg font-bold hover:bg-slate-200">{t('locations.forms.cancel')}</button>
+                <button type="submit" className="px-4 py-2 bg-[#C2A878] text-white rounded-lg font-bold hover:bg-[#b09665]">{t('locations.forms.save')}</button>
               </div>
             </form>
           </div>

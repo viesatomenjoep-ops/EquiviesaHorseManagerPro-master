@@ -128,6 +128,8 @@ export function KanbanBoard() {
   const [selectedStaffId, setSelectedStaffId] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
   const [newTaskTitle, setNewTaskTitle] = useState('');
+  const [pinnedText, setPinnedText] = useState("Morning feed schedule starts at 07:00 - All grooms report to main stable");
+  
 
   useEffect(() => {
     fetchData();
@@ -269,11 +271,17 @@ export function KanbanBoard() {
           </div>
         )}
 
-        <div className="bg-amber-50 border border-amber-200/60 rounded-lg p-3 mb-6">
-          <p className="text-sm text-amber-800 flex items-center gap-2">
-            <span className="font-semibold">📌 {t('dashboard.kanban.pinned')}</span>
-            {t('dashboard.kanban.pinned_msg')}
-          </p>
+        <div className="bg-amber-50 border border-amber-200/60 rounded-lg p-3 mb-6 hover:border-amber-300 transition-colors">
+          <div className="text-sm text-amber-800 flex items-center gap-2">
+            <span className="font-semibold flex-shrink-0">📌 {t('dashboard.kanban.pinned')}</span>
+            <input 
+              type="text" 
+              value={pinnedText} 
+              onChange={e => setPinnedText(e.target.value)} 
+              className="bg-transparent border-b border-transparent hover:border-amber-300 focus:border-amber-500 outline-none w-full text-amber-900 transition-colors" 
+              placeholder="Typ een vastgepind bericht..."
+            />
+          </div>
         </div>
 
         <div className="flex flex-col md:flex-row gap-4 overflow-x-auto pb-4">
