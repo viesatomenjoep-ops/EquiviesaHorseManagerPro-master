@@ -64,6 +64,19 @@ export function DocumentsView() {
         const data = await res.json();
         if (data.error) throw new Error(data.error.message);
 
+        const assetType = data.resource_type === 'image' ? 'image' : 'document';
+        const fileExt = data.format ? `.${data.format}` : '';
+        const title = data.original_filename + fileExt;
+
+        const { error: dbError } = await supabase.from('media_assets').insert({
+          url: data.secure_url,
+          type: assetType,
+          category: 'upload',
+          title: title
+        });
+
+        if (dbError) throw dbError;
+
       } catch (err) {
         console.error('Error uploading media file:', err);
       } finally {
@@ -163,8 +176,8 @@ export function DocumentsView() {
                 )}
                 
                 <div className="p-3">
-                  <p className="text-xs font-bold text-slate-700 truncate mb-1">
-                    {asset.category.toUpperCase()}
+                  <p className="text-xs font-bold text-slate-700 truncate mb-1" title={asset.title || asset.category}>
+                    {asset.title || asset.category.toUpperCase()}
                   </p>
                   <div className="flex justify-between items-center">
                     <a href={asset.url} target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-800 p-1 bg-indigo-50 rounded-lg" title="Bekijken/Downloaden">

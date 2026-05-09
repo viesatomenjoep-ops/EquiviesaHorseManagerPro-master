@@ -47,6 +47,7 @@ export function LocationsView() {
   const [locations, setLocations] = useState<Location[]>([]);
   const [boxes, setBoxes] = useState<Box[]>([]);
   const [horses, setHorses] = useState<Horse[]>([]);
+  const [schedules, setSchedules] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   // Modals state
@@ -69,6 +70,7 @@ export function LocationsView() {
   const [assignBoxId, setAssignBoxId] = useState('');
   
   const [pastureHorseId, setPastureHorseId] = useState('');
+  const [scheduleActivity, setScheduleActivity] = useState('Weidegang');
   const [pastureStartTime, setPastureStartTime] = useState('08:00');
   const [pastureEndTime, setPastureEndTime] = useState('12:00');
   const [pastureLocationId, setPastureLocationId] = useState('');
@@ -80,15 +82,17 @@ export function LocationsView() {
   async function fetchData() {
     setIsLoading(true);
     try {
-      const [locRes, boxRes, horseRes] = await Promise.all([
+      const [locRes, boxRes, horseRes, schRes] = await Promise.all([
         supabase.from('locations').select('*').order('created_at', { ascending: true }),
         supabase.from('boxes').select('*, horse:horses(name)'),
-        supabase.from('horses').select('*')
+        supabase.from('horses').select('*'),
+        supabase.from('horse_schedules').select('*, horse:horses(name)')
       ]);
 
       if (locRes.data) setLocations(locRes.data);
       if (boxRes.data) setBoxes(boxRes.data);
       if (horseRes.data) setHorses(horseRes.data);
+      if (schRes.data) setSchedules(schRes.data);
     } catch (err) {
       console.error('Error fetching data:', err);
     } finally {
@@ -221,9 +225,10 @@ export function LocationsView() {
   async function handlePastureSchedule(e: React.FormEvent) {
     e.preventDefault();
     try {
-      const { error } = await supabase.from('pasture_schedules').insert([{
+      const { error } = await supabase.from('horse_schedules').insert([{
         horse_id: pastureHorseId,
         location_id: pastureLocationId,
+        activity_type: scheduleActivity,
         start_time: pastureStartTime,
         end_time: pastureEndTime,
         days_of_week: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -231,7 +236,8 @@ export function LocationsView() {
       
       if (!error) {
         setShowPastureModal(false);
-        alert('Weidegang schema opgeslagen!');
+        fetchData();
+        alert('Schema opgeslagen!');
       } else {
         alert(t('products.alert.error'));
       }
@@ -393,6 +399,27 @@ export function LocationsView() {
                         <p className="text-xs font-bold text-slate-400 group-hover:text-slate-600">Nieuwe Box</p>
                       </div>
                     </div>
+
+                    {/* Activity Schedule for this location */}
+                    {schedules.filter(s => s.location_id === loc.id).length > 0 && (
+                      <div className="mt-8 border-t border-slate-200 pt-6">
+                        <h3 className="text-lg font-bold text-slate-900 mb-4 flex items-center gap-2"><Activity className="w-5 h-5 text-[#C2A878]" /> Dagelijkse Planning</h3>
+                        <div className="space-y-3">
+                          {schedules.filter(s => s.location_id === loc.id).map(sch => (
+                            <div key={sch.id} className="bg-slate-50 p-4 rounded-xl border border-slate-200 flex justify-between items-center shadow-sm">
+                              <div>
+                                <span className="font-bold text-slate-900">{sch.horse?.name || 'Onbekend Paard'}</span>
+                                <span className="mx-2 text-slate-400">•</span>
+                                <span className="text-sm font-medium text-slate-700">{sch.activity_type}</span>
+                              </div>
+                              <div className="bg-white px-3 py-1 rounded-md shadow-sm text-sm font-bold text-[#C2A878]">
+                                {sch.start_time.substring(0, 5)} - {sch.end_time.substring(0, 5)}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                 </div>
@@ -532,6 +559,17 @@ export function LocationsView() {
                 <select required value={pastureLocationId} onChange={e => setPastureLocationId(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md text-slate-900 bg-white">
                   <option value="">Selecteer locatie...</option>
                   {locations.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-bold text-slate-900 mb-1">Activiteit</label>
+                <select required value={scheduleActivity} onChange={e => setScheduleActivity(e.target.value)} className="w-full p-2 border border-slate-300 rounded-md text-slate-900 bg-white">
+                  <option value="Weidegang">Weidegang</option>
+                  <option value="Rijden">Rijden</option>
+                  <option value="Springen">Springen</option>
+                  <option value="Africhten">Africhten</option>
+                  <option value="Stappenmolen">Stappenmolen</option>
+                  <option value="Lunchen">Lunchen</option>
                 </select>
               </div>
               <div className="grid grid-cols-2 gap-4">
