@@ -226,7 +226,9 @@ export function AdministrationView() {
                     Scan
                   </button>
                 </div>
-                <p className="text-xs text-indigo-600/70 mt-2">Plak de website link van de kliniek of leverancier. Onze AI vult automatisch alle adres- en contactgegevens in.</p>
+                <p className="text-xs text-indigo-600/70 mt-2">
+                  {t('admin.modal.magic_help', 'Plak de website link van de kliniek of leverancier. Onze AI vult automatisch alle adres- en contactgegevens in.')}
+                </p>
               </div>
 
               <div>
