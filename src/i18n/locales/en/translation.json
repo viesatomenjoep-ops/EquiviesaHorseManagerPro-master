@@ -499,5 +499,76 @@
       "settings": "System Settings",
       "description": "This module is currently under development and will be available soon."
     }
+  },
+  "pricing": {
+    "title": "Horse Manager App",
+    "pro": "Pro",
+    "subtitle": "Manage literally everything from one place. Choose a complete package or build your own personalized subscription. Start today with a <1>free 30-day trial</1>.",
+    "tabs": {
+      "presets": "Fixed Packages",
+      "custom": "Build Your Own Plan"
+    },
+    "plans": {
+      "most_popular": "Most Popular",
+      "month": "/ month",
+      "trial_btn": "Start 30-Day Free Trial",
+      "basic": {
+        "name": "Basic",
+        "desc": "Perfect for small stables.",
+        "horses": "Up to 5 horses",
+        "features": [
+          "Standard EHR (Health)",
+          "Basic Calendar & Tasks",
+          "Location & Box Management",
+          "Email Support (48h response)",
+          "Standard Forms"
+        ]
+      },
+      "premium": {
+        "name": "Premium",
+        "desc": "For professional stables & breeding.",
+        "horses": "Up to 10 horses",
+        "features": [
+          "Everything in Basic, plus:",
+          "Full ERP (Invoices & Quotes)",
+          "Advanced CRM System",
+          "Extended Breeding Module",
+          "Local SEO Dominance",
+          "Client Portal",
+          "Priority Support (24h response)"
+        ]
+      },
+      "ultra": {
+        "name": "Ultra",
+        "desc": "For the ultimate equestrian enterprise.",
+        "horses": "20+ horses",
+        "features": [
+          "Everything in Premium, plus:",
+          "Complete CMS (Website Manager)",
+          "Custom Website Development",
+          "Custom App Development Options",
+          "AI Customer Service Bots (24/7)",
+          "Logo & Branding Design",
+          "Multi-location Support",
+          "24/7 VIP Phone Support"
+        ]
+      }
+    },
+    "custom": {
+      "title": "Build Your Custom Plan",
+      "subtitle": "Select only the modules your equine business needs.",
+      "total_label": "Your Custom Plan Total",
+      "start_btn": "Start Custom Subscription",
+      "modules": {
+        "ehr": "EHR (Health Records)",
+        "erp": "ERP (Invoices & Quotes)",
+        "crm": "CRM (Client Relations)",
+        "cms": "CMS & Website Development",
+        "css": "CSS & Custom Styling",
+        "branding": "Branding & Logo Design",
+        "ai": "AI Automations & Bots",
+        "breeding": "Breeding Manager"
+      }
+    }
   }
 }

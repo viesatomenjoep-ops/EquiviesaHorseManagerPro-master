@@ -499,5 +499,76 @@
       "settings": "Systeem Instellingen",
       "description": "Deze module wordt momenteel ontwikkeld en is binnenkort beschikbaar."
     }
+  },
+  "pricing": {
+    "title": "Paardenmanager App",
+    "pro": "Pro",
+    "subtitle": "Beheer letterlijk alles vanaf één plek. Kies een compleet pakket of stel je eigen gepersonaliseerde abonnement samen. Start vandaag met een <1>gratis 30-dagen free trial</1>.",
+    "tabs": {
+      "presets": "Vaste Pakketten",
+      "custom": "Bouw Je Eigen Abonnement"
+    },
+    "plans": {
+      "most_popular": "Meest Gekozen",
+      "month": "/ maand",
+      "trial_btn": "Start 30-Dagen Free Trial",
+      "basic": {
+        "name": "Basis",
+        "desc": "Perfect voor kleine stallen.",
+        "horses": "Tot 5 paarden",
+        "features": [
+          "Standaard EHR (Gezondheid)",
+          "Basis Agenda & Taken",
+          "Locatie & Boxbeheer",
+          "Email Support (48u reactie)",
+          "Standaard Formulieren"
+        ]
+      },
+      "premium": {
+        "name": "Premium",
+        "desc": "Voor professionele stallen & fokkerij.",
+        "horses": "Tot 10 paarden",
+        "features": [
+          "Alles uit Basis, plus:",
+          "Volledig ERP (Facturen & Offertes)",
+          "Geavanceerd CRM Systeem",
+          "Uitgebreide Fokkerij Module",
+          "Lokale SEO Dominantie",
+          "Klantportaal (Client Portal)",
+          "Priority Support (24u reactie)"
+        ]
+      },
+      "ultra": {
+        "name": "Ultra",
+        "desc": "Voor de ultieme paardenonderneming.",
+        "horses": "Vanaf 20 paarden",
+        "features": [
+          "Alles uit Premium, plus:",
+          "Compleet CMS (Website Manager)",
+          "Custom Website Development",
+          "Custom App Development Opties",
+          "AI Klantenservice Bots (24/7)",
+          "Logo & Branding Design",
+          "Ondersteuning meerdere vestigingen",
+          "24/7 VIP Telefoon Support"
+        ]
+      }
+    },
+    "custom": {
+      "title": "Bouw Jouw Custom Plan",
+      "subtitle": "Selecteer alleen de modules die jouw paardenbedrijf nodig heeft.",
+      "total_label": "Jouw Custom Plan Totaal",
+      "start_btn": "Start Custom Abonnement",
+      "modules": {
+        "ehr": "EHR (Gezondheidsdossier)",
+        "erp": "ERP (Facturatie & Offertes)",
+        "crm": "CRM (Klantrelaties)",
+        "cms": "CMS & Website Development",
+        "css": "CSS & Custom Styling",
+        "branding": "Branding & Logo Design",
+        "ai": "AI Automations & Bots",
+        "breeding": "Fokkerij Manager"
+      }
+    }
   }
 }
