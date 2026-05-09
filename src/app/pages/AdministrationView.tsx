@@ -170,7 +170,7 @@ export function AdministrationView() {
                     type="url" 
                     value={magicUrl} 
                     onChange={e => setMagicUrl(e.target.value)} 
-                    className="w-full px-3 py-2 rounded-lg border border-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500" 
+                    className="w-full px-3 py-2 rounded-lg border border-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900" 
                     placeholder="https://www.dierenkliniekdebos.nl" 
                   />
                   <button 
@@ -185,11 +185,11 @@ export function AdministrationView() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">{t('admin.modal.type')}</label>
+                <label className="block text-sm font-bold text-slate-900 mb-2">{t('admin.modal.type')}</label>
                 <select 
                   value={editingContact?.type || ''} 
                   onChange={e => setEditingContact({ ...editingContact, type: e.target.value })}
-                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C2A878]"
+                  className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C2A878] text-slate-900"
                 >
                   <option value="clients">{t('admin.modal.type_client')}</option>
                   <option value="vets">{t('admin.modal.type_vet')}</option>
@@ -199,35 +199,35 @@ export function AdministrationView() {
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">{t('admin.modal.company')}</label>
-                <input type="text" value={editingContact?.company || ''} onChange={e => setEditingContact({ ...editingContact, company: e.target.value })} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C2A878]" placeholder="Jansen B.V." />
+                <label className="block text-sm font-bold text-slate-900 mb-2">{t('admin.modal.company')}</label>
+                <input type="text" value={editingContact?.company || ''} onChange={e => setEditingContact({ ...editingContact, company: e.target.value })} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C2A878] text-slate-900" placeholder="Jansen B.V." />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-2">{t('admin.modal.first_name')}</label>
-                  <input type="text" value={editingContact?.firstName || ''} onChange={e => setEditingContact({ ...editingContact, firstName: e.target.value })} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C2A878]" placeholder="Jan" />
+                  <label className="block text-sm font-bold text-slate-900 mb-2">{t('admin.modal.first_name')}</label>
+                  <input type="text" value={editingContact?.firstName || ''} onChange={e => setEditingContact({ ...editingContact, firstName: e.target.value })} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C2A878] text-slate-900" placeholder="Jan" />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-2">{t('admin.modal.last_name')}</label>
-                  <input type="text" value={editingContact?.lastName || ''} onChange={e => setEditingContact({ ...editingContact, lastName: e.target.value })} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C2A878]" placeholder="Jansen" />
+                  <label className="block text-sm font-bold text-slate-900 mb-2">{t('admin.modal.last_name')}</label>
+                  <input type="text" value={editingContact?.lastName || ''} onChange={e => setEditingContact({ ...editingContact, lastName: e.target.value })} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C2A878] text-slate-900" placeholder="Jansen" />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-2">{t('admin.modal.phone')}</label>
-                  <input type="text" value={editingContact?.phone || ''} onChange={e => setEditingContact({ ...editingContact, phone: e.target.value })} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C2A878]" placeholder="+31 6..." />
+                  <label className="block text-sm font-bold text-slate-900 mb-2">{t('admin.modal.phone')}</label>
+                  <input type="text" value={editingContact?.phone || ''} onChange={e => setEditingContact({ ...editingContact, phone: e.target.value })} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C2A878] text-slate-900" placeholder="+31 6..." />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-slate-700 mb-2">{t('admin.modal.email')}</label>
-                  <input type="email" value={editingContact?.email || ''} onChange={e => setEditingContact({ ...editingContact, email: e.target.value })} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C2A878]" placeholder="mail@..." />
+                  <label className="block text-sm font-bold text-slate-900 mb-2">{t('admin.modal.email')}</label>
+                  <input type="email" value={editingContact?.email || ''} onChange={e => setEditingContact({ ...editingContact, email: e.target.value })} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C2A878] text-slate-900" placeholder="mail@..." />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-bold text-slate-700 mb-2">Plaats</label>
-                <input type="text" value={editingContact?.city || ''} onChange={e => setEditingContact({ ...editingContact, city: e.target.value })} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C2A878]" placeholder="Wellington, FL" />
+                <label className="block text-sm font-bold text-slate-900 mb-2">Plaats</label>
+                <input type="text" value={editingContact?.city || ''} onChange={e => setEditingContact({ ...editingContact, city: e.target.value })} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C2A878] text-slate-900" placeholder="Wellington, FL" />
               </div>
 
               <div className="pt-4 border-t border-slate-100 flex justify-end gap-3 pb-4">
