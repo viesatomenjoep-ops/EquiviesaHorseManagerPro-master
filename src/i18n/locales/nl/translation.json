@@ -250,7 +250,10 @@
       "unassigned": "Niet toegewezen",
       "assign_box": "Box Toewijzen",
       "select_box": "Selecteer een box...",
-      "box": "Hoofdstal, Box A{{i}}"
+      "box": "Hoofdstal, Box A{{i}}",
+      "edit": "Bewerk",
+      "no_discipline": "Geen discipline",
+      "years": "Jaar"
     },
     "mock": {
       "jumper": "Springpaard",

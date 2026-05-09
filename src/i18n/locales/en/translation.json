@@ -250,7 +250,10 @@
       "unassigned": "Unassigned",
       "assign_box": "Assign Box",
       "select_box": "Select a box...",
-      "box": "Main Stable, Box A{{i}}"
+      "box": "Main Stable, Box A{{i}}",
+      "edit": "Edit",
+      "no_discipline": "No discipline",
+      "years": "Years"
     },
     "mock": {
       "jumper": "Jumper",

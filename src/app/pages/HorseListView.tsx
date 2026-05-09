@@ -326,10 +326,10 @@ export function HorseListView() {
                       onClick={() => { setEditingHorse(horse); setShowHorseModal(true); }}
                       className="text-xs font-bold text-slate-400 hover:text-[#C2A878] bg-slate-50 px-2 py-1 rounded-md"
                     >
-                      Bewerk
+                      {t('horse_list.card.edit')}
                     </button>
                   </div>
-                  <p className="text-sm text-slate-500 mb-4 line-clamp-1">{horse.discipline || 'Geen discipline'} • {horse.sex} • {horse.age || '?'} Jaar</p>
+                  <p className="text-sm text-slate-500 mb-4 line-clamp-1">{horse.discipline || t('horse_list.card.no_discipline')} • {horse.sex} • {horse.age || '?'} {t('horse_list.card.years')}</p>
                   
                   <div className="flex items-center gap-4 text-xs font-medium text-slate-600 mb-4 flex-1">
                     <div className="flex items-center gap-1.5">
