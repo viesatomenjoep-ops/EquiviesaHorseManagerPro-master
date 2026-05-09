@@ -33,6 +33,12 @@ interface Box {
 interface Horse {
   id: string;
   name: string;
+  discipline?: string;
+  age?: number;
+  sex?: string;
+  image_url?: string;
+  sire?: string;
+  dam?: string;
 }
 
 export function LocationsView() {
@@ -47,6 +53,9 @@ export function LocationsView() {
   const [showLocationModal, setShowLocationModal] = useState(false);
   const [showAssignModal, setShowAssignModal] = useState(false);
   const [showPastureModal, setShowPastureModal] = useState(false);
+  const [showHorseModal, setShowHorseModal] = useState(false);
+  const [editingHorse, setEditingHorse] = useState<Partial<Horse> | null>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   // Forms state
   const [locName, setLocName] = useState('');
@@ -72,7 +81,7 @@ export function LocationsView() {
       const [locRes, boxRes, horseRes] = await Promise.all([
         supabase.from('locations').select('*').order('created_at', { ascending: true }),
         supabase.from('boxes').select('*, horse:horses(name)'),
-        supabase.from('horses').select('id, name')
+        supabase.from('horses').select('*')
       ]);
 
       if (locRes.data) setLocations(locRes.data);
@@ -162,6 +171,38 @@ export function LocationsView() {
     }
   }
 
+  async function handleSaveHorse(e: React.FormEvent) {
+    e.preventDefault();
+    if (!editingHorse || !editingHorse.id) return;
+    try {
+      await supabase.from('horses').update(editingHorse).eq('id', editingHorse.id);
+      setShowHorseModal(false);
+      setEditingHorse(null);
+      fetchData();
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setIsUploading(true);
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'equiviesa_upload');
+      formData.append('cloud_name', import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'daj1lyfgk');
+      const res = await fetch(`https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'daj1lyfgk'}/image/upload`, { method: 'POST', body: formData });
+      const data = await res.json();
+      if (data.secure_url) setEditingHorse(prev => prev ? { ...prev, image_url: data.secure_url } : null);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -221,7 +262,19 @@ export function LocationsView() {
                   <div className="p-5">
                     <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 max-h-[400px] overflow-y-auto">
                       {locBoxes.map(box => (
-                        <div key={box.id} className={`p-4 rounded-xl border ${box.horse_id ? 'bg-white border-slate-200 shadow-sm' : 'bg-slate-50 border-dashed border-slate-300'} flex flex-col items-center justify-center text-center gap-2 transition-transform hover:scale-105 cursor-pointer`}>
+                        <div 
+                          key={box.id} 
+                          onClick={() => {
+                            if (box.horse_id) {
+                              const h = horses.find(h => h.id === box.horse_id);
+                              if (h) {
+                                setEditingHorse(h);
+                                setShowHorseModal(true);
+                              }
+                            }
+                          }}
+                          className={`p-4 rounded-xl border ${box.horse_id ? 'bg-white border-slate-200 shadow-sm' : 'bg-slate-50 border-dashed border-slate-300'} flex flex-col items-center justify-center text-center gap-2 transition-transform hover:scale-105 cursor-pointer`}
+                        >
                           <BoxIcon className={`w-6 h-6 ${box.horse_id ? 'text-[#C2A878]' : 'text-slate-300'}`} />
                           <div>
                             <p className="text-xs font-bold text-slate-400">{t('locations.box')} {box.box_number}</p>
@@ -361,6 +414,75 @@ export function LocationsView() {
               <div className="flex justify-end gap-3 pt-4">
                 <button type="button" onClick={() => setShowPastureModal(false)} className="px-4 py-2 bg-slate-100 rounded-lg">{t('locations.forms.cancel')}</button>
                 <button type="submit" className="px-4 py-2 bg-[#C2A878] text-white rounded-lg">{t('locations.forms.save')}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+      {/* Horse Edit Modal */}
+      {showHorseModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-200">
+            <h2 className="text-xl font-bold mb-4">Bewerk Paard</h2>
+            <form onSubmit={handleSaveHorse} className="space-y-4 max-h-[70vh] overflow-y-auto pr-2">
+              
+              <div className="flex flex-col gap-2 mb-4">
+                <label className="block text-sm font-medium">Profielfoto (Cloudinary)</label>
+                {editingHorse?.image_url && (
+                  <img src={editingHorse.image_url} alt="Preview" className="w-24 h-24 object-cover rounded-xl border border-slate-200" />
+                )}
+                <div className="flex items-center gap-3">
+                  <input type="file" accept="image/*" onChange={handleImageUpload} className="text-sm w-full" disabled={isUploading} />
+                  {isUploading && <span className="text-xs text-[#C2A878] font-semibold animate-pulse">Uploading...</span>}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium mb-1">Naam</label>
+                <input required type="text" value={editingHorse?.name || ''} onChange={e => setEditingHorse({...editingHorse, name: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md" />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Geslacht / Type</label>
+                  <select required value={editingHorse?.sex || ''} onChange={e => setEditingHorse({...editingHorse, sex: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md">
+                    <option value="">Selecteer...</option>
+                    <option value="Mare">Mare (Merrie)</option>
+                    <option value="Gelding">Gelding (Ruin)</option>
+                    <option value="Stallion">Stallion (Hengst)</option>
+                    <option value="Pony">Pony</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Discipline</label>
+                  <select value={editingHorse?.discipline || ''} onChange={e => setEditingHorse({...editingHorse, discipline: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md">
+                    <option value="">Selecteer...</option>
+                    <option value="Jumpers">Jumpers</option>
+                    <option value="Hunters">Hunters</option>
+                    <option value="Equitation">Equitation</option>
+                    <option value="Dressage">Dressage</option>
+                    <option value="Sales">Sales</option>
+                    <option value="Allround">Allround</option>
+                  </select>
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Leeftijd</label>
+                  <input type="number" value={editingHorse?.age || ''} onChange={e => setEditingHorse({...editingHorse, age: parseInt(e.target.value)})} className="w-full p-2 border border-slate-300 rounded-md" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Vader (Sire)</label>
+                  <input type="text" value={editingHorse?.sire || ''} onChange={e => setEditingHorse({...editingHorse, sire: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Moeder (Dam)</label>
+                  <input type="text" value={editingHorse?.dam || ''} onChange={e => setEditingHorse({...editingHorse, dam: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md" />
+                </div>
+              </div>
+              
+              <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                <button type="button" onClick={() => setShowHorseModal(false)} className="px-4 py-2 bg-slate-100 rounded-lg">Annuleren</button>
+                <button type="submit" className="px-4 py-2 bg-[#C2A878] text-white rounded-lg">Opslaan</button>
               </div>
             </form>
           </div>

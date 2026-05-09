@@ -13,6 +13,39 @@ import {
   Home
 } from 'lucide-react';
 
+const JumperIcon = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M12 2L3 11l2 2 3-3 4 4 3-3 2 2 4-4-3-3z"/>
+    <path d="M5 22h14"/>
+    <path d="M9 18v4"/>
+    <path d="M15 18v4"/>
+  </svg>
+);
+
+const DressageIcon = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <circle cx="12" cy="12" r="10"/>
+    <path d="M12 2a10 10 0 0 1 10 10h-20"/>
+    <path d="M12 6v12"/>
+    <path d="M8 12h8"/>
+  </svg>
+);
+
+const HunterIcon = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+    <circle cx="12" cy="11" r="3"/>
+  </svg>
+);
+
+const SalesIcon = ({ className }: { className?: string }) => (
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+    <line x1="7" y1="7" x2="7.01" y2="7"/>
+  </svg>
+);
+
+
 interface Horse {
   id: string;
   name: string;
@@ -144,10 +177,10 @@ export function HorseListView() {
   };
 
   const horseCategories = [
-    { id: 'jumpers', name: t('horse_list.categories.jumpers'), count: 18, icon: Trophy, color: 'text-blue-500', bg: 'bg-blue-50', hover: 'hover:bg-blue-50 hover:border-blue-200' },
-    { id: 'dressage', name: t('horse_list.categories.dressage'), count: 4, icon: Activity, color: 'text-purple-500', bg: 'bg-purple-50', hover: 'hover:bg-purple-50 hover:border-purple-200' },
-    { id: 'sales', name: t('horse_list.categories.sales'), count: 12, icon: Euro, color: 'text-emerald-500', bg: 'bg-emerald-50', hover: 'hover:bg-emerald-50 hover:border-emerald-200' },
-    { id: 'rearing', name: t('horse_list.categories.rearing'), count: 8, icon: Tent, color: 'text-rose-500', bg: 'bg-rose-50', hover: 'hover:bg-rose-50 hover:border-rose-200' },
+    { id: 'jumpers', name: 'Jumpers & Hunters', count: horses.filter(h => h.discipline?.toLowerCase().includes('jump') || h.discipline?.toLowerCase().includes('hunt')).length, icon: JumperIcon, color: 'text-blue-500', bg: 'bg-blue-50', hover: 'hover:bg-blue-50 hover:border-blue-200' },
+    { id: 'dressage', name: 'Dressage', count: horses.filter(h => h.discipline?.toLowerCase().includes('dress')).length, icon: DressageIcon, color: 'text-purple-500', bg: 'bg-purple-50', hover: 'hover:bg-purple-50 hover:border-purple-200' },
+    { id: 'sales', name: 'Sales & Training', count: horses.filter(h => h.discipline?.toLowerCase().includes('sales') || h.discipline?.toLowerCase().includes('train')).length, icon: SalesIcon, color: 'text-emerald-500', bg: 'bg-emerald-50', hover: 'hover:bg-emerald-50 hover:border-emerald-200' },
+    { id: 'rearing', name: 'Rearing & Retirement', count: horses.filter(h => h.discipline?.toLowerCase().includes('rear') || h.discipline?.toLowerCase().includes('retire')).length, icon: HunterIcon, color: 'text-rose-500', bg: 'bg-rose-50', hover: 'hover:bg-rose-50 hover:border-rose-200' },
   ];
 
   // 1. Initial Dashboard View
@@ -175,7 +208,7 @@ export function HorseListView() {
                 </div>
                 <h3 className="text-lg font-bold text-slate-800 text-center">{cat.name}</h3>
                 <div className="mt-3 px-4 py-1.5 bg-slate-100 rounded-full">
-                  <span className="text-sm font-semibold text-slate-600">{cat.count} {t('horse_list.horses_count')}</span>
+                  <span className="text-sm font-semibold text-slate-600">{cat.count} Paarden</span>
                 </div>
               </button>
             );
@@ -189,14 +222,15 @@ export function HorseListView() {
   const activeCatObj = horseCategories.find(c => c.id === selectedCategory);
   const ActiveIcon = activeCatObj?.icon || Trophy;
 
-  // Filter horses for this view (using mock filtering for now if table is small)
-  const displayHorses = horses.length > 0 ? horses : Array.from({ length: 6 }).map((_, i) => ({
-    id: `mock-${i}`,
-    name: selectedCategory === 'sales' ? 'Chacco Blue II' : `Equiviesa's Star #${i + 1}`,
-    discipline: t('horse_list.mock.jumper'),
-    age: 8,
-    sex: t('horse_list.mock.gelding')
-  }));
+  const displayHorses = horses.filter(h => {
+    if (!h.discipline) return false;
+    const d = h.discipline.toLowerCase();
+    if (selectedCategory === 'jumpers') return d.includes('jump') || d.includes('hunt');
+    if (selectedCategory === 'dressage') return d.includes('dress');
+    if (selectedCategory === 'sales') return d.includes('sales') || d.includes('train');
+    if (selectedCategory === 'rearing') return d.includes('rear') || d.includes('retire');
+    return true;
+  });
 
   return (
     <div className="max-w-7xl mx-auto space-y-8">
