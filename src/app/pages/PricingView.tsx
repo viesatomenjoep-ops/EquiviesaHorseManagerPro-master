@@ -162,10 +162,8 @@ export function PricingView() {
     
       {/* CHECKOUT MODAL */}
       {showCheckout && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 animate-in fade-in duration-200">
-            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col md:flex-row max-h-[90vh] mx-auto">
-            
-            {/* Left side: Form */}
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 sm:p-6 animate-in fade-in duration-200">
+            <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl overflow-hidden flex flex-col md:flex-row max-h-[95vh] md:max-h-[90vh] mx-auto">
             <div className="flex-1 p-8 md:p-10 overflow-y-auto">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-extrabold text-slate-900">{t('pricing.checkout.title')}</h2>
@@ -234,7 +232,7 @@ export function PricingView() {
             </div>
 
             {/* Right side: Summary */}
-            <div className="w-full md:w-80 bg-slate-50 p-8 md:p-10 border-t md:border-t-0 md:border-l border-slate-200 flex flex-col relative">
+            <div className="w-full md:w-96 bg-slate-50 p-8 md:p-10 border-t md:border-t-0 md:border-l border-slate-200 flex flex-col relative overflow-y-auto">
               <button onClick={() => setShowCheckout(false)} className="hidden md:flex absolute top-6 right-6 p-2 bg-slate-200/50 rounded-full text-slate-500 hover:bg-slate-200 transition-colors">
                 <X className="w-5 h-5" />
               </button>
