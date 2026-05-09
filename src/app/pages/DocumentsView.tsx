@@ -51,37 +51,18 @@ export function DocumentsView() {
     let completedFiles = 0;
 
       const uploadPromises = Array.from(files).map(async (file) => {
-      let formData = new FormData();
+      const formData = new FormData();
       formData.append('file', file);
-      formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'yibk3vns');
-      formData.append('cloud_name', import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dx21n2mbo');
+      formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || '');
+      formData.append('cloud_name', import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || '');
 
       try {
-        let res = await fetch(`https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dx21n2mbo'}/auto/upload`, {
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/auto/upload`, {
           method: 'POST',
           body: formData,
         });
-        let data = await res.json();
-        
-        if (data.error) {
-          formData = new FormData();
-          formData.append('file', file);
-          formData.append('upload_preset', 'yibk3vns');
-          formData.append('cloud_name', 'dx21n2mbo');
-          res = await fetch('https://api.cloudinary.com/v1_1/dx21n2mbo/auto/upload', {
-            method: 'POST',
-            body: formData,
-          });
-          data = await res.json();
-        }
-        
-        if (data.secure_url) {
-          const type = data.resource_type === 'image' ? 'image' : 'document';
-          await supabase.from('media_assets').insert({
-            url: data.secure_url,
-            type: type,
-            category: 'general',
-          });
+        const data = await res.json();
+        if (data.error) throw new Error(data.error.message););
         }
       } catch (err) {
         console.error('Error uploading media file:', err);

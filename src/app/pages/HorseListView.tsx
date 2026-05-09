@@ -190,30 +190,17 @@ export function HorseListView() {
     setIsUploading(true);
     try {
       const uploadPromises = Array.from(files).map(async (file) => {
-        let formData = new FormData();
+        const formData = new FormData();
         formData.append('file', file);
-        formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || 'yibk3vns');
-        formData.append('cloud_name', import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dx21n2mbo');
+        formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || '');
+        formData.append('cloud_name', import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || '');
 
-        let response = await fetch(`https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || 'dx21n2mbo'}/auto/upload`, {
+        const response = await fetch(`https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/auto/upload`, {
           method: 'POST',
           body: formData,
         });
 
-        let data = await response.json();
-
-        if (data.error) {
-          formData = new FormData();
-          formData.append('file', file);
-          formData.append('upload_preset', 'yibk3vns');
-          formData.append('cloud_name', 'dx21n2mbo');
-          response = await fetch('https://api.cloudinary.com/v1_1/dx21n2mbo/auto/upload', {
-            method: 'POST',
-            body: formData,
-          });
-          data = await response.json();
-        }
-
+        const data = await response.json();
         if (data.error) throw new Error(data.error.message);
         return data.secure_url;
       });
