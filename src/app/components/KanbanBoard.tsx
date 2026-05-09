@@ -126,6 +126,8 @@ export function KanbanBoard() {
 
   const [staff, setStaff] = useState<Staff[]>([]);
   const [selectedStaffId, setSelectedStaffId] = useState('');
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [newTaskTitle, setNewTaskTitle] = useState('');
 
   useEffect(() => {
     fetchData();

@@ -46,47 +46,46 @@ export function DocumentsView() {
     setIsUploading(true);
     setUploadProgress(10);
     
-    // We handle the first file for simplicity, but could loop over multiple
-    const file = files[0];
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || '');
-    formData.append('cloud_name', import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || '');
+    // Process all files
+    const totalFiles = files.length;
+    let completedFiles = 0;
 
-    try {
-      setUploadProgress(50);
-      const res = await fetch(`https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/auto/upload`, {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await res.json();
-      
-      setUploadProgress(90);
+    const uploadPromises = Array.from(files).map(async (file) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || '');
+      formData.append('cloud_name', import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || '');
 
-      if (data.secure_url) {
-        // Automatically determine type
-        const type = data.resource_type === 'image' ? 'image' : 'document';
-        
-        // Save to master SQL
-        const { error } = await supabase.from('media_assets').insert({
-          url: data.secure_url,
-          type: type,
-          category: 'general',
+      try {
+        const res = await fetch(`https://api.cloudinary.com/v1_1/${import.meta.env.VITE_CLOUDINARY_CLOUD_NAME}/auto/upload`, {
+          method: 'POST',
+          body: formData,
         });
+        const data = await res.json();
         
-        if (!error) {
-          fetchMedia();
-        } else {
-          alert("Fout bij opslaan in database.");
+        if (data.secure_url) {
+          const type = data.resource_type === 'image' ? 'image' : 'document';
+          await supabase.from('media_assets').insert({
+            url: data.secure_url,
+            type: type,
+            category: 'general',
+          });
         }
+      } catch (err) {
+        console.error('Error uploading media file:', err);
+      } finally {
+        completedFiles++;
+        setUploadProgress(Math.round((completedFiles / totalFiles) * 100));
       }
-    } catch (err) {
-      console.error('Error uploading media:', err);
-      alert("Fout bij uploaden naar Cloudinary.");
-    } finally {
-      setIsUploading(false);
-      setUploadProgress(0);
-    }
+    });
+
+    await Promise.all(uploadPromises);
+
+    fetchMedia();
+    setIsUploading(false);
+    setUploadProgress(0);
+    // Reset file input
+    if (e.target) e.target.value = '';
   };
 
   async function handleDelete(id: string) {
@@ -122,6 +121,7 @@ export function DocumentsView() {
             type="file" 
             id="media-upload" 
             className="hidden" 
+            multiple
             onChange={handleMediaUpload} 
             disabled={isUploading}
           />
