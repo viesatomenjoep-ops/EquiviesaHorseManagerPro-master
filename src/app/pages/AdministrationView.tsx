@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
+import { supabase } from '../../lib/supabase';
 import { 
   Users, 
   Building2, 
@@ -20,34 +21,42 @@ import {
 } from 'lucide-react';
 
 interface Contact {
-  id: number;
+  id: string; // Now UUID from Supabase
   type: string;
   name: string;
-  phone: string;
-  email: string;
+  general_phone: string;
+  general_email: string;
   city: string;
-  company?: string;
-  firstName?: string;
-  lastName?: string;
+  // Extra fields that could be used for the first contact person
+  first_name?: string;
+  last_name?: string;
 }
-
-const INITIAL_CONTACTS: Contact[] = [
-  { id: 1, type: 'vets', name: 'Dierenkliniek De Bos', phone: '+31 6 12 34 56 78', email: 'info@dierenkliniekdebos.nl', city: 'Amsterdam, NL', company: 'Dierenkliniek De Bos', firstName: 'Pieter', lastName: 'Bos' },
-  { id: 2, type: 'clients', name: 'Equivest Holding B.V.', phone: '+31 6 87 65 43 21', email: 'contact@equivest.nl', city: 'Wellington, FL', company: 'Equivest Holding B.V.' },
-  { id: 3, type: 'suppliers', name: 'Havens Paardenvoeders', phone: '+31 4 78 51 40 00', email: 'info@havens.nl', city: 'Maashees, NL', company: 'Havens' },
-  { id: 4, type: 'companies', name: 'Stal de Muze', phone: '+32 3 77 98 01 22', email: 'info@jorisdebrabander.be', city: 'Sint-Niklaas, BE', company: 'Stal de Muze' },
-];
 
 export function AdministrationView() {
   const { t } = useTranslation();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   
-  const [contacts, setContacts] = useState<Contact[]>(INITIAL_CONTACTS);
+  const [contacts, setContacts] = useState<Contact[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingContact, setEditingContact] = useState<Partial<Contact> | null>(null);
 
   const [magicUrl, setMagicUrl] = useState('');
   const [isScanning, setIsScanning] = useState(false);
+
+  useEffect(() => {
+    fetchContacts();
+  }, []);
+
+  async function fetchContacts() {
+    try {
+      const { data, error } = await supabase.from('crm_companies').select('*');
+      if (!error && data) {
+        setContacts(data as Contact[]);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }
 
   const crmCategories = [
     { id: 'clients', name: t('admin.categories.clients'), count: contacts.filter(c => c.type === 'clients').length, icon: Users, color: 'text-blue-500', bg: 'bg-blue-50', hover: 'hover:bg-blue-50 hover:border-blue-200' },
@@ -60,33 +69,69 @@ export function AdministrationView() {
   const handleMagicScan = () => {
     if (!magicUrl) return;
     setIsScanning(true);
-    // Fake scrape delay
+    
+    // Fake scrape delay that generates realistic data
     setTimeout(() => {
+      const isDeBos = magicUrl.toLowerCase().includes('debos');
+      const isApg = magicUrl.toLowerCase().includes('apg-stables');
+      
+      let newCompany = 'Nieuwe Kliniek B.V.';
+      let newCity = 'Amsterdam, NL';
+      let newEmail = 'info@' + magicUrl.replace('https://www.', '').replace('https://', '').replace('http://', '').split('/')[0];
+      let newPhone = '+31 20 123 4567';
+
+      if (isDeBos) {
+        newCompany = 'Dierenkliniek De Bos';
+        newCity = 'Utrecht, NL';
+      } else if (isApg) {
+        newCompany = 'APG Stables';
+        newCity = 'Wellington, FL';
+        newPhone = '+1 561 555 0198';
+        newEmail = 'info@apg-stables.com';
+      }
+
       setEditingContact(prev => ({
         ...prev,
-        company: magicUrl.includes('debos') ? 'Dierenkliniek De Bos' : 'Nieuwe Kliniek B.V.',
-        name: magicUrl.includes('debos') ? 'Dierenkliniek De Bos' : 'Nieuwe Kliniek B.V.',
-        email: 'info@' + magicUrl.replace('https://www.', '').replace('http://', '').split('/')[0],
-        phone: '+31 20 123 4567',
-        city: 'Amsterdam, NL'
+        name: newCompany,
+        general_email: newEmail,
+        general_phone: newPhone,
+        city: newCity
       }));
       setIsScanning(false);
       setMagicUrl('');
     }, 1500);
   };
 
-  const handleSaveContact = () => {
+  const handleSaveContact = async () => {
     if (!editingContact) return;
     
-    if (editingContact.id) {
-      // Edit existing
-      setContacts(prev => prev.map(c => c.id === editingContact.id ? { ...c, ...editingContact } as Contact : c));
-    } else {
-      // Add new
-      setContacts(prev => [...prev, { ...editingContact, id: Date.now(), type: selectedCategory || 'vets', name: editingContact.company || 'Nieuwe Relatie' } as Contact]);
+    try {
+      if (editingContact.id) {
+        // Edit existing
+        const { error } = await supabase.from('crm_companies').update({
+          name: editingContact.name || 'Nieuwe Relatie',
+          type: editingContact.type || 'vets',
+          general_phone: editingContact.general_phone,
+          general_email: editingContact.general_email,
+          city: editingContact.city
+        }).eq('id', editingContact.id);
+        if (!error) fetchContacts();
+      } else {
+        // Add new
+        const { error } = await supabase.from('crm_companies').insert([{
+          name: editingContact.name || 'Nieuwe Relatie',
+          type: editingContact.type || selectedCategory || 'vets',
+          general_phone: editingContact.general_phone,
+          general_email: editingContact.general_email,
+          city: editingContact.city
+        }]);
+        if (!error) fetchContacts();
+      }
+      setIsModalOpen(false);
+      setEditingContact(null);
+    } catch (err) {
+      console.error(err);
     }
-    setIsModalOpen(false);
-    setEditingContact(null);
   };
 
   const openAddModal = () => {
@@ -171,7 +216,7 @@ export function AdministrationView() {
                     value={magicUrl} 
                     onChange={e => setMagicUrl(e.target.value)} 
                     className="w-full px-3 py-2 rounded-lg border border-indigo-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-slate-900" 
-                    placeholder="https://www.dierenkliniekdebos.nl" 
+                    placeholder="https://apg-stables.com" 
                   />
                   <button 
                     onClick={handleMagicScan} 
@@ -195,33 +240,34 @@ export function AdministrationView() {
                   <option value="vets">{t('admin.modal.type_vet')}</option>
                   <option value="suppliers">{t('admin.modal.type_supplier')}</option>
                   <option value="companies">Bedrijf</option>
+                  <option value="locations">Locatie</option>
                 </select>
               </div>
 
               <div>
                 <label className="block text-sm font-bold text-slate-900 mb-2">{t('admin.modal.company')}</label>
-                <input type="text" value={editingContact?.company || ''} onChange={e => setEditingContact({ ...editingContact, company: e.target.value })} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C2A878] text-slate-900" placeholder="Jansen B.V." />
+                <input type="text" value={editingContact?.name || ''} onChange={e => setEditingContact({ ...editingContact, name: e.target.value })} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C2A878] text-slate-900" placeholder="Jansen B.V." />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-bold text-slate-900 mb-2">{t('admin.modal.first_name')}</label>
-                  <input type="text" value={editingContact?.firstName || ''} onChange={e => setEditingContact({ ...editingContact, firstName: e.target.value })} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C2A878] text-slate-900" placeholder="Jan" />
+                  <label className="block text-sm font-bold text-slate-900 mb-2">{t('admin.modal.first_name')} (Optioneel)</label>
+                  <input type="text" value={editingContact?.first_name || ''} onChange={e => setEditingContact({ ...editingContact, first_name: e.target.value })} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C2A878] text-slate-900" placeholder="Jan" />
                 </div>
                 <div>
-                  <label className="block text-sm font-bold text-slate-900 mb-2">{t('admin.modal.last_name')}</label>
-                  <input type="text" value={editingContact?.lastName || ''} onChange={e => setEditingContact({ ...editingContact, lastName: e.target.value })} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C2A878] text-slate-900" placeholder="Jansen" />
+                  <label className="block text-sm font-bold text-slate-900 mb-2">{t('admin.modal.last_name')} (Optioneel)</label>
+                  <input type="text" value={editingContact?.last_name || ''} onChange={e => setEditingContact({ ...editingContact, last_name: e.target.value })} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C2A878] text-slate-900" placeholder="Jansen" />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-bold text-slate-900 mb-2">{t('admin.modal.phone')}</label>
-                  <input type="text" value={editingContact?.phone || ''} onChange={e => setEditingContact({ ...editingContact, phone: e.target.value })} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C2A878] text-slate-900" placeholder="+31 6..." />
+                  <input type="text" value={editingContact?.general_phone || ''} onChange={e => setEditingContact({ ...editingContact, general_phone: e.target.value })} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C2A878] text-slate-900" placeholder="+31 6..." />
                 </div>
                 <div>
                   <label className="block text-sm font-bold text-slate-900 mb-2">{t('admin.modal.email')}</label>
-                  <input type="email" value={editingContact?.email || ''} onChange={e => setEditingContact({ ...editingContact, email: e.target.value })} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C2A878] text-slate-900" placeholder="mail@..." />
+                  <input type="email" value={editingContact?.general_email || ''} onChange={e => setEditingContact({ ...editingContact, general_email: e.target.value })} className="w-full px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#C2A878] text-slate-900" placeholder="mail@..." />
                 </div>
               </div>
 
@@ -293,7 +339,7 @@ export function AdministrationView() {
             <input
               type="text"
               placeholder={t('admin.search', { cat: activeCatObj?.name })}
-              className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C2A878] transition-shadow"
+              className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C2A878] transition-shadow text-slate-900"
             />
           </div>
           <button 
@@ -326,11 +372,11 @@ export function AdministrationView() {
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex items-center gap-4">
                     <div className="w-12 h-12 bg-slate-100 rounded-full flex items-center justify-center text-xl font-bold text-slate-400">
-                      {contact.name.charAt(0).toUpperCase()}
+                      {contact.name?.charAt(0).toUpperCase() || '?'}
                     </div>
                     <div>
                       <h4 className="text-lg font-bold text-slate-900 pr-10">
-                        {contact.company || contact.name}
+                        {contact.name}
                       </h4>
                       <p className="text-slate-500 text-sm font-medium">{t('admin.card.active')}</p>
                     </div>
@@ -338,17 +384,17 @@ export function AdministrationView() {
                 </div>
                 
                 <div className="space-y-2 mt-4 pt-4 border-t border-slate-50 text-sm">
-                  <div className="flex items-center gap-3 text-slate-600">
+                  <div className="flex items-center gap-3 text-slate-600 font-medium">
                     <Phone className="w-4 h-4 text-slate-400" />
-                    {contact.phone}
+                    {contact.general_phone || '-'}
                   </div>
-                  <div className="flex items-center gap-3 text-slate-600">
+                  <div className="flex items-center gap-3 text-slate-600 font-medium">
                     <Mail className="w-4 h-4 text-slate-400" />
-                    {contact.email}
+                    {contact.general_email || '-'}
                   </div>
-                  <div className="flex items-center gap-3 text-slate-600">
+                  <div className="flex items-center gap-3 text-slate-600 font-medium">
                     <LocationIcon className="w-4 h-4 text-slate-400" />
-                    {contact.city}
+                    {contact.city || '-'}
                   </div>
                 </div>
               </div>
