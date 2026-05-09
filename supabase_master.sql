@@ -762,3 +762,17 @@ INSERT INTO horses (
   'expose@horsescouting.com', 
   'https://horsescouting.com/'
 );
+
+-- HEATHER'S HORSES DATA
+INSERT INTO horses (name, discipline, sex, age) VALUES
+('Victoria', 'Jumpers', 'Mare', 8),
+('Hideaway', 'Hunters', 'Gelding', 7),
+('Sawyer', 'Hunters', 'Gelding', 9),
+('Lips', 'Jumpers', 'Mare', 6),
+('Rolo', 'Jumpers', 'Gelding', 10),
+('Chimi', 'Jumpers', 'Gelding', 8),
+('Cora', 'Hunters', 'Mare', 7),
+('Dia', 'Jumpers', 'Mare', 6),
+('Walker', 'Jumpers', 'Gelding', 9),
+('Godiva', 'Hunters', 'Mare', 5);
+

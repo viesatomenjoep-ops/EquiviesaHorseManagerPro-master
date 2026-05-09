@@ -45,6 +45,9 @@ export function HorseListView() {
   const [activeHorseId, setActiveHorseId] = useState<string | null>(null);
   const [selectedBoxId, setSelectedBoxId] = useState('');
 
+  const [showHorseModal, setShowHorseModal] = useState(false);
+  const [editingHorse, setEditingHorse] = useState<Partial<Horse> | null>(null);
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -82,6 +85,27 @@ export function HorseListView() {
       } else {
         alert(t('products.alert.error'));
       }
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function handleSaveHorse(e: React.FormEvent) {
+    e.preventDefault();
+    if (!editingHorse) return;
+
+    try {
+      if (editingHorse.id && !editingHorse.id.startsWith('mock')) {
+        // Update
+        await supabase.from('horses').update(editingHorse).eq('id', editingHorse.id);
+      } else {
+        // Insert
+        const { id, ...newHorseData } = editingHorse as any;
+        await supabase.from('horses').insert([newHorseData]);
+      }
+      setShowHorseModal(false);
+      setEditingHorse(null);
+      fetchData();
     } catch (err) {
       console.error(err);
     }
@@ -172,7 +196,16 @@ export function HorseListView() {
               className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C2A878] transition-shadow"
             />
           </div>
-          <button className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-2.5 bg-[#111111] hover:bg-slate-800 text-[#C2A878] rounded-xl font-bold text-sm transition-colors shadow-sm">
+          <button 
+            onClick={() => {
+              setEditingHorse({ 
+                discipline: selectedCategory === 'sales' ? 'Sales' : 
+                            (selectedCategory === 'dressage' ? 'Dressage' : 'Jumpers'),
+                sex: 'Mare'
+              }); 
+              setShowHorseModal(true); 
+            }}
+            className="w-full md:w-auto flex items-center justify-center gap-2 px-6 py-2.5 bg-[#111111] hover:bg-slate-800 text-[#C2A878] rounded-xl font-bold text-sm transition-colors shadow-sm">
             <Plus className="w-4 h-4" />
             {t('horse_list.add_horse')}
           </button>
@@ -204,8 +237,14 @@ export function HorseListView() {
                     <h3 className="text-xl font-bold text-slate-900 group-hover:text-[#C2A878] transition-colors cursor-pointer">
                       {horse.name}
                     </h3>
+                    <button 
+                      onClick={() => { setEditingHorse(horse); setShowHorseModal(true); }}
+                      className="text-xs font-bold text-slate-400 hover:text-[#C2A878] bg-slate-50 px-2 py-1 rounded-md"
+                    >
+                      Bewerk
+                    </button>
                   </div>
-                  <p className="text-sm text-slate-500 mb-4 line-clamp-1">Kannan x Balou du Rouet • {horse.sex} • {horse.age} Jaar</p>
+                  <p className="text-sm text-slate-500 mb-4 line-clamp-1">{horse.discipline || 'Geen discipline'} • {horse.sex} • {horse.age || '?'} Jaar</p>
                   
                   <div className="flex items-center gap-4 text-xs font-medium text-slate-600 mb-4 flex-1">
                     <div className="flex items-center gap-1.5">
@@ -261,6 +300,43 @@ export function HorseListView() {
               </div>
               <div className="flex justify-end gap-3 pt-4">
                 <button type="button" onClick={() => setShowAssignModal(false)} className="px-4 py-2 bg-slate-100 rounded-lg">{t('locations.forms.cancel')}</button>
+                <button type="submit" className="px-4 py-2 bg-[#C2A878] text-white rounded-lg">{t('locations.forms.save')}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Add/Edit Horse Modal */}
+      {showHorseModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-3xl shadow-xl w-full max-w-md overflow-hidden p-6 animate-in fade-in zoom-in-95 duration-200">
+            <h2 className="text-xl font-bold mb-4">{editingHorse?.id && !editingHorse.id.startsWith('mock') ? 'Bewerk Paard' : t('horse_list.add_horse')}</h2>
+            <form onSubmit={handleSaveHorse} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Naam</label>
+                <input required type="text" value={editingHorse?.name || ''} onChange={e => setEditingHorse({...editingHorse, name: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Geslacht / Type</label>
+                <select required value={editingHorse?.sex || ''} onChange={e => setEditingHorse({...editingHorse, sex: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md">
+                  <option value="">Selecteer...</option>
+                  <option value="Mare">Mare (Merrie)</option>
+                  <option value="Gelding">Gelding (Ruin)</option>
+                  <option value="Stallion">Stallion (Hengst)</option>
+                  <option value="Pony">Pony</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Leeftijd</label>
+                <input type="number" value={editingHorse?.age || ''} onChange={e => setEditingHorse({...editingHorse, age: parseInt(e.target.value)})} className="w-full p-2 border border-slate-300 rounded-md" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Discipline</label>
+                <input type="text" value={editingHorse?.discipline || ''} onChange={e => setEditingHorse({...editingHorse, discipline: e.target.value})} className="w-full p-2 border border-slate-300 rounded-md" />
+              </div>
+              <div className="flex justify-end gap-3 pt-4">
+                <button type="button" onClick={() => setShowHorseModal(false)} className="px-4 py-2 bg-slate-100 rounded-lg">{t('locations.forms.cancel')}</button>
                 <button type="submit" className="px-4 py-2 bg-[#C2A878] text-white rounded-lg">{t('locations.forms.save')}</button>
               </div>
             </form>
