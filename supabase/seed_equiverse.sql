@@ -23,6 +23,6 @@ BEGIN
         RETURNING id INTO h_id;
 
         INSERT INTO boxes (location_id, horse_id, box_number, status) 
-        VALUES (loc_id, h_id, 'B' || i, 'occupied');
+        VALUES (loc_id, h_id, i::TEXT, 'occupied');
     END LOOP;
 END $$;
