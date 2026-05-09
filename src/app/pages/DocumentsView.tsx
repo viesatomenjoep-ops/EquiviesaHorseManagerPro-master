@@ -6,10 +6,10 @@ import { FolderOpen, UploadCloud, Image as ImageIcon, FileText, Link as LinkIcon
 interface MediaAsset {
   id: string;
   url: string;
-  type: string;
-  category: string;
+  file_type: string;
+  document_category: string;
   created_at: string;
-  title?: string;
+  file_name?: string;
 }
 
 export function DocumentsView() {
@@ -70,9 +70,9 @@ export function DocumentsView() {
 
         const { error: dbError } = await supabase.from('media_assets').insert({
           url: data.secure_url,
-          type: assetType,
-          category: 'upload',
-          title: title
+          file_type: assetType,
+          document_category: 'upload',
+          file_name: title
         });
 
         if (dbError) throw dbError;
@@ -105,8 +105,8 @@ export function DocumentsView() {
   }
 
   const filteredAssets = assets.filter(a => 
-    (a.category && a.category.toLowerCase().includes(searchQuery.toLowerCase())) ||
-    (a.type && a.type.toLowerCase().includes(searchQuery.toLowerCase()))
+    (a.document_category && a.document_category.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (a.file_type && a.file_type.toLowerCase().includes(searchQuery.toLowerCase()))
   );
 
   return (
@@ -164,7 +164,7 @@ export function DocumentsView() {
             {filteredAssets.map((asset) => (
               <div key={asset.id} className="group relative bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden hover:shadow-md hover:border-indigo-300 transition-all">
                 
-                {asset.type === 'image' ? (
+                {asset.file_type === 'image' ? (
                   <div className="aspect-square bg-slate-200 w-full relative">
                     <img src={asset.url} alt="Media" className="w-full h-full object-cover" />
                   </div>
@@ -176,8 +176,8 @@ export function DocumentsView() {
                 )}
                 
                 <div className="p-3">
-                  <p className="text-xs font-bold text-slate-700 truncate mb-1" title={asset.title || asset.category}>
-                    {asset.title || asset.category.toUpperCase()}
+                  <p className="text-xs font-bold text-slate-700 truncate mb-1" title={asset.file_name || asset.document_category}>
+                    {asset.file_name || asset.document_category?.toUpperCase() || 'DOCUMENT'}
                   </p>
                   <div className="flex justify-between items-center">
                     <a href={asset.url} target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:text-indigo-800 p-1 bg-indigo-50 rounded-lg" title="Bekijken/Downloaden">
