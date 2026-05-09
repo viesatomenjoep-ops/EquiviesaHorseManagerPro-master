@@ -143,11 +143,11 @@ export function Dashboard() {
         <h2 className="text-xl font-bold text-slate-900 mb-4">{t('dashboard.quick_menu_title')}</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
           {[
-            { title: t('dashboard.quick_menu.stable'), path: "/horses", icon: Home, color: "from-blue-600 to-blue-400" },
-            { title: t('dashboard.quick_menu.care'), path: "/health", icon: HeartPulse, color: "from-rose-600 to-rose-400" },
-            { title: t('dashboard.quick_menu.admin'), path: "/contacts", icon: Briefcase, color: "from-purple-600 to-purple-400" },
-            { title: t('dashboard.quick_menu.breeding'), path: "/breeding/mares", icon: Dna, color: "from-pink-600 to-pink-400" },
-            { title: t('dashboard.quick_menu.analytics'), path: "/reports", icon: Activity, color: "from-emerald-600 to-emerald-400" }
+            { title: t('dashboard.quick_menu.stable'), path: "/app/horses", icon: Home, color: "from-blue-600 to-blue-400" },
+            { title: t('dashboard.quick_menu.care'), path: "/app/health", icon: HeartPulse, color: "from-rose-600 to-rose-400" },
+            { title: t('dashboard.quick_menu.admin'), path: "/app/contacts", icon: Briefcase, color: "from-purple-600 to-purple-400" },
+            { title: t('dashboard.quick_menu.breeding'), path: "/app/breeding/mares", icon: Dna, color: "from-pink-600 to-pink-400" },
+            { title: t('dashboard.quick_menu.analytics'), path: "/app/reports", icon: Activity, color: "from-emerald-600 to-emerald-400" }
           ].map((mod, idx) => {
             const Icon = mod.icon;
             return (
@@ -225,7 +225,7 @@ export function Dashboard() {
           </h3>
           <ul className="space-y-4">
             <li 
-              onClick={() => navigate('/health')}
+              onClick={() => navigate('/app/health')}
               className="flex items-start gap-3 cursor-pointer p-2 -mx-2 rounded-lg hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100"
             >
               <div className="w-2 h-2 rounded-full bg-rose-500 mt-1.5"></div>
@@ -235,7 +235,7 @@ export function Dashboard() {
               </div>
             </li>
             <li 
-              onClick={() => navigate('/health')}
+              onClick={() => navigate('/app/health')}
               className="flex items-start gap-3 cursor-pointer p-2 -mx-2 rounded-lg hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100"
             >
               <div className="w-2 h-2 rounded-full bg-amber-500 mt-1.5"></div>
@@ -245,7 +245,7 @@ export function Dashboard() {
               </div>
             </li>
           </ul>
-          <button onClick={() => navigate('/health')} className="w-full mt-4 py-2 bg-rose-50 text-rose-600 rounded-lg text-sm font-semibold hover:bg-rose-100 transition-colors">
+          <button onClick={() => navigate('/app/health')} className="w-full mt-4 py-2 bg-rose-50 text-rose-600 rounded-lg text-sm font-semibold hover:bg-rose-100 transition-colors">
             {t('dashboard.alerts.btn')}
           </button>
         </div>
@@ -312,7 +312,7 @@ export function Dashboard() {
               </div>
             ))}
           </div>
-          <button onClick={() => navigate('/finance/invoices')} className="w-full mt-4 text-xs font-bold text-slate-400 hover:text-[#C2A878] transition-colors">
+          <button onClick={() => navigate('/app/invoices')} className="w-full mt-4 text-xs font-bold text-slate-400 hover:text-[#C2A878] transition-colors">
             {t('dashboard.invoices.btn_all')} &rarr;
           </button>
         </div>
