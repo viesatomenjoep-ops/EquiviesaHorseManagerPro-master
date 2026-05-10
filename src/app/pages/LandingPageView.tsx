@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 import { Menu, X, ChevronRight, Play, Shield, Zap, Globe, Smartphone } from 'lucide-react';
 import { LanguageSelector } from '../components/LanguageSelector';
+import { useTranslation } from 'react-i18next';
 
 export function LandingPageView() {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [showDemo, setShowDemo] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
