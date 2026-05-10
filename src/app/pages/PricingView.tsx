@@ -283,7 +283,7 @@ export function PricingView() {
                 </div>
               </div>
             </div>
-
+            </div>
           </div>
         </div>
       )}
