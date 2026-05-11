@@ -4,9 +4,13 @@
   import "./i18n/config";
   import "./styles/index.css";
   import { BrowserRouter } from "react-router";
+  import { ErrorBoundary } from "./app/components/ErrorBoundary";
+
   createRoot(document.getElementById("root")!).render(
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </ErrorBoundary>
   );
   
