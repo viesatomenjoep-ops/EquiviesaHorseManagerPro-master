@@ -5,11 +5,14 @@
   import "./styles/index.css";
   import { BrowserRouter } from "react-router";
   import { ErrorBoundary } from "./app/components/ErrorBoundary";
+  import { ThemeProvider } from "next-themes";
 
   createRoot(document.getElementById("root")!).render(
     <ErrorBoundary>
       <BrowserRouter>
-        <App />
+        <ThemeProvider attribute="class" defaultTheme="light">
+          <App />
+        </ThemeProvider>
       </BrowserRouter>
     </ErrorBoundary>
   );

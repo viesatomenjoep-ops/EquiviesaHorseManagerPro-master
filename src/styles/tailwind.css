@@ -1,6 +1,8 @@
 @import 'tailwindcss' source(none);
 @source '../**/*.{js,ts,jsx,tsx}';
 
+@custom-variant dark (&:is(.dark *));
+
 @theme inline {
   --font-sans: 'Quicksand', sans-serif;
   --font-serif: 'Quicksand', sans-serif;

@@ -593,5 +593,44 @@
       "pay_after": "Daarna per maand",
       "success": "Welkom bij Equiviesa Pro! Je account is succesvol aangemaakt."
     }
+  },
+  "landing": {
+    "nav": {
+      "solutions": "Oplossingen",
+      "pricing": "Prijzen",
+      "contact": "Contact",
+      "login": "Inloggen",
+      "start_free": "Start 22 Dagen Gratis"
+    },
+    "hero": {
+      "badge": "The Global Equestrian Ecosystem",
+      "title_1": "Van Chaos Naar",
+      "title_2": "Controle",
+      "subtitle": "Vervang gefragmenteerde tools door het meest complete, schaalbare alles-in-één platform voor moderne stallen.",
+      "start_trial": "Start Je Proefperiode",
+      "login_direct": "Direct Inloggen"
+    },
+    "features": {
+      "title": "Alles Wat Je Stal Nodig Heeft",
+      "subtitle": "Vier krachtige modules die naadloos samenwerken op één overzichtelijk platform.",
+      "f1_title": "Stable & Horse Management",
+      "f1_desc": "Digitaal gezondheidsdossier, interactieve stalborden en taakdelegatie voor grooms via de mobiele app.",
+      "f2_title": "IoT Tracker & Billing Engine",
+      "f2_desc": "Automatische facturatie: paard in de stapmolen = automatische toevoeging op de maandfactuur via Stripe.",
+      "f3_title": "Equine Media Vault",
+      "f3_desc": "Ongelimiteerde cloudopslag voor 4K trainingsvideo's, auto-tagging op paardnaam, en geïntegreerde watermerken.",
+      "f4_title": "Social CMS & SEO Tools",
+      "f4_desc": "Plan en publiceer direct naar Instagram/Facebook en domineer zoekmachines met onze geautomatiseerde lokale SEO."
+    },
+    "cta": {
+      "title": "Klaar Om Je Stal Te Moderniseren?",
+      "subtitle": "Start direct met het stroomlijnen van je operatie. Geen creditcard nodig voor de proefperiode.",
+      "btn": "Probeer Equiviesa Pro Gratis"
+    },
+    "footer": {
+      "rights": "Alle rechten voorbehouden.",
+      "privacy": "Privacy",
+      "terms": "Voorwaarden"
+    }
   }
 }

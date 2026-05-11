@@ -76,24 +76,28 @@ export function FeedingView() {
     if (!url) return;
     setIsScraping(true);
     
+    const urls = url.split('\n').map(u => u.trim()).filter(u => u.length > 0);
+    
     // Simulate scraping delay
     setTimeout(async () => {
-      // Mock scraped product
-      const scrapedName = url.includes('pavo') ? 'Pavo SportsFit' : url.includes('agradi') ? 'Agradi HealthMash' : 'Scraped Product';
-      
       try {
-        await supabase.from('feed_products').insert({
-          name: scrapedName,
-          brand: 'Imported',
-          category: 'feed',
-          stock_quantity: 0,
-          unit: 'kg',
-          source_url: url
+        const insertPromises = urls.map(async (u) => {
+          const scrapedName = u.includes('pavo') ? 'Pavo SportsFit' : u.includes('agradi') ? 'Agradi HealthMash' : 'Scraped Product ' + Math.floor(Math.random() * 100);
+          return supabase.from('feed_products').insert({
+            name: scrapedName,
+            brand: 'Imported',
+            category: 'feed',
+            stock_quantity: 0,
+            unit: 'kg',
+            source_url: u
+          });
         });
+        
+        await Promise.all(insertPromises);
         
         setIsScraping(false);
         setUrl('');
-        alert(t('feeding.magic_link.success') || 'Product successfully imported!');
+        alert(`${urls.length} items successfully imported!`);
         fetchData(); // reload
       } catch (err) {
         console.error(err);
@@ -240,12 +244,12 @@ export function FeedingView() {
             </p>
             <div className="space-y-3 relative z-10">
               <div className="relative">
-                <input
-                  type="text"
+                <textarea
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
-                  placeholder={t('feeding.magic_link.placeholder')}
-                  className="w-full pl-4 pr-4 py-3 bg-black/20 border border-white/20 rounded-xl text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-white/50"
+                  placeholder={t('feeding.magic_link.placeholder') + ' (Plaats meerdere links op nieuwe regels voor 100+ items)'}
+                  rows={4}
+                  className="w-full pl-4 pr-4 py-3 bg-black/20 border border-white/20 rounded-xl text-sm text-white placeholder:text-white/50 focus:outline-none focus:ring-2 focus:ring-white/50 resize-none"
                 />
               </div>
               <button 
